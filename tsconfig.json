@@ -22,6 +22,6 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/app/page.jsx", "src/components/find-talent-section.jsx", "src/components/trusted-brands-section.jsx", "src/components/why-businesses-section.jsx"],
   "exclude": ["node_modules"]
 }
