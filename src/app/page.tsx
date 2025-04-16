@@ -16,7 +16,7 @@ export default function Home() {
       {/* Top Banner */}
       <div className="bg-primary/10 py-2 text-center text-sm">
         <p>
-          Bienvenue sur Oakland |{" "}
+          Bienvenue sur Okland |{" "}
           <span className="font-medium">
             Inscrivez-vous aujourd'hui et obtenez 20% de réduction sur votre première mission
           </span>
@@ -446,7 +446,7 @@ export default function Home() {
                       ))}
                     </div>
                     <p className="mb-4 text-sm">
-                      "Oakland m'a permis de trouver rapidement des clients de qualité. La plateforme est
+                      "Okland m'a permis de trouver rapidement des clients de qualité. La plateforme est
                       intuitive et le système de paiement sécurisé me donne une tranquillité d'esprit."
                     </p>
                     <div className="flex items-center gap-3">
@@ -508,7 +508,7 @@ export default function Home() {
                       ))}
                     </div>
                     <p className="mb-4 text-sm">
-                      "La qualité des projets sur Oakland est impressionnante. J'ai pu développer mon portfolio
+                      "La qualité des projets sur Okland est impressionnante. J'ai pu développer mon portfolio
                       et augmenter mes revenus de façon significative."
                     </p>
                     <div className="flex items-center gap-3">

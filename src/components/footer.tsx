@@ -17,7 +17,7 @@ export default function Footer() {
         <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
           {/* Navigation */}
           <div className="space-y-4">
-            <h3 className="text-lg font-medium">Oakland</h3>
+            <h3 className="text-lg font-medium">Okland</h3>
             <nav className="flex flex-col space-y-2">
               <Link href="/" className="text-muted-foreground hover:text-foreground">
                 {t("nav.home")}
@@ -113,7 +113,7 @@ export default function Footer() {
         <div className="mt-8 border-t pt-8">
           <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
             <p className="text-sm text-muted-foreground">
-              &copy; {currentYear} Oakland. {t("footer.rights")}
+              &copy; {currentYear} Okland. {t("footer.rights")}
             </p>
             <div className="flex space-x-4 text-sm text-muted-foreground">
               <Link href="/contact" className="hover:text-foreground">

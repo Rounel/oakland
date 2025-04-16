@@ -35,7 +35,7 @@ export default function Navbar() {
       <div className="container flex h-16 items-center justify-between mx-auto">
         <div className="flex items-center gap-6 md:gap-10">
           <Link href="/" className="flex items-center space-x-2">
-            <span className="hidden font-bold sm:inline-block">Oakland</span>
+            <span className="hidden font-bold sm:inline-block">Okland</span>
           </Link>
 
           {/* Desktop Navigation */}
