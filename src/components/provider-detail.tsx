@@ -1,7 +1,7 @@
 "use client"
 import { useRouter } from "next/navigation"
 import Image from "next/image"
-import { motion } from "framer-motion"
+import { motion } from "motion/react"
 import { Star, MapPin, Phone, Mail, Globe, Facebook, Instagram, Twitter, Check } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"

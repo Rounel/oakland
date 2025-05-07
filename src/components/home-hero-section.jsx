@@ -8,7 +8,7 @@ import { Input } from './ui/input';
 import { Button } from './ui/button';
 import StatisticsBar from './stats-section';
 import Image from 'next/image';
-import { motion } from "framer-motion"
+import { motion } from "motion/react"
 import { useGeolocation } from "@/hooks/use-geolocation"
 
 export default function HomeHeroSection() {

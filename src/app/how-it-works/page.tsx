@@ -2,7 +2,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { ChevronDown, Star } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { CategoryCard } from "@/components/category-card"
+import CategoryCard from "@/components/category-card"
 import { Timeline } from "@/components/ui/timeline"
 
 export default function Home() {
