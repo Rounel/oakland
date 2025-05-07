@@ -20,7 +20,7 @@ export default function ProviderDetail({ provider, reviews }: ProviderDetailProp
       <div className="container mx-auto px-4 py-20 text-center">
         <h1 className="text-2xl font-bold mb-4">Prestataire non trouvé</h1>
         <p className="mb-8">Le prestataire que vous recherchez n'existe pas ou a été supprimé.</p>
-        <Button onClick={() => router.push("/recherche")}>Retour à la recherche</Button>
+        <Button onClick={() => router.push("/search")}>Retour à la recherche</Button>
       </div>
     )
   }

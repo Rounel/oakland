@@ -274,7 +274,7 @@ import { Suspense } from "react"
 import SearchContent from "@/components/search-content"
 import { getProviders, getCategories } from "@/services/supabase-service"
 
-export default async function SearchPage({ searchParams }) {
+export default async function SearchPage(searchParams: {categorie: string; profession: string; location: string}) {
   // Accéder directement aux propriétés de searchParams
   const categorySlug = searchParams?.categorie || ""
   const profession = searchParams?.profession || ""

@@ -40,7 +40,7 @@ export function FeaturedFreelancers({
           <Heart className="h-4 w-4" />
           <span className="sr-only">Ajouter aux favoris</span>
         </Button>
-        <Link href={`/providers/${name.toLowerCase().replace(/\s+/g, "-")}`}>
+        <Link href={`/professionals/${name.toLowerCase().replace(/\s+/g, "-")}`}>
           <Image
             src={imageSrc || "/placeholder.svg"}
             alt={name}
@@ -52,7 +52,7 @@ export function FeaturedFreelancers({
       </div>
       <CardContent className="p-4">
         <div className="flex justify-between items-center">
-          <Link href={`/providers/${name.toLowerCase().replace(/\s+/g, "-")}`} className="hover:underline">
+          <Link href={`/professionals/${name.toLowerCase().replace(/\s+/g, "-")}`} className="hover:underline">
             <h3 className="font-medium">{name}</h3>
           </Link>
         </div>
@@ -70,7 +70,7 @@ export function FeaturedFreelancers({
           <p className="text-xs text-muted-foreground">à partir de</p>
         </div>
         <Button variant="outline" size="sm" asChild>
-          <Link href={`/providers/${name.toLowerCase().replace(/\s+/g, "-")}`}>Voir profil</Link>
+          <Link href={`/professionals/${name.toLowerCase().replace(/\s+/g, "-")}`}>Voir profil</Link>
         </Button>
       </CardFooter>
     </Card>

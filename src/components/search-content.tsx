@@ -71,7 +71,7 @@ export default function SearchContent({ initialCategories, initialProviders, ini
     if (category) params.set("categorie", category)
 
     // Update the URL without reloading the page
-    const url = `/recherche?${params.toString()}`
+    const url = `/search?${params.toString()}`
     router.push(url)
   }
 
@@ -82,7 +82,7 @@ export default function SearchContent({ initialCategories, initialProviders, ini
     setDistance([20])
 
     // Reset the URL
-    router.push("/recherche")
+    router.push("/search")
   }
 
   const handleLocationPermissionAllow = () => {

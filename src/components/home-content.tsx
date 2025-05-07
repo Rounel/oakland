@@ -22,7 +22,7 @@ export default function HomeContent({ initialCategories, initialProviders }: Hom
   const router = useRouter()
 
   return (
-    <div className="pt-16">
+    <div className="flex min-h-screen flex-col overflow-x-hidden">
       {/* Hero Section */}
       <HomeHeroSection />
 
