@@ -10,6 +10,7 @@ import StatisticsBar from './stats-section';
 import Image from 'next/image';
 import { motion } from "motion/react"
 import { useGeolocation } from "@/hooks/use-geolocation"
+import LocationPermissionDialog from './location-permission-dialog';
 
 export default function HomeHeroSection() {
   const [isVisible, setIsVisible] = useState(false);
@@ -109,6 +110,14 @@ export default function HomeHeroSection() {
     return result;
   }
 
+  const handleLocationPermissionAllow = () => {
+    setShowPermissionDialog(false)
+    getCurrentPosition()
+  }
+
+  const handleLocationPermissionDeny = () => {
+    setShowPermissionDialog(false)
+  }
   return (
     <div className=" min-h-[100dvh] w-full overflow-hidden items-center bg-white relative">
       {/* Hero Content */}

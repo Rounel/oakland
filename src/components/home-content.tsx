@@ -3,8 +3,6 @@
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
-import { useGeolocation } from "@/hooks/use-geolocation"
-import LocationPermissionDialog from "@/components/location-permission-dialog"
 import type { Category, Provider } from "@/services/supabase-service"
 import  HomeHeroSection  from "@/components/home-hero-section"
 import  HowItWorksSection  from "@/components/how-it-works"
