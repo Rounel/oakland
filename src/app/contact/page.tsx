@@ -41,7 +41,7 @@ export default function ContactPage() {
       phone: "",
       subject: "",
       message: "",
-      acceptTerms: false,
+      acceptTerms: true,
     },
     mode: "onChange",
   })
