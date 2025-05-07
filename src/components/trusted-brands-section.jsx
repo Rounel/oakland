@@ -60,7 +60,7 @@ export default function TrustedBrandsSection() {
             </div>
 
             <p className="text-orange-100 mb-8 text-lg">
-              "One of the advantages of utilizing freelancers is finding talent with different skills quickly as our
+              "One of the advantages of utilizing providers is finding talent with different skills quickly as our
               needs change."
             </p>
 

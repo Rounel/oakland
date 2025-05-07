@@ -17,57 +17,51 @@ import {
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import { Menu, Globe, Search } from "lucide-react"
 import { cn } from "@/lib/utils"
+import { categories } from "@/constants/categories"
 
 export default function Navbar() {
   const { language, setLanguage, t } = useLanguage()
   const [isSearchOpen, setIsSearchOpen] = useState(false)
-
-  const categories = [
-    { key: "category.tech", href: "/categories/tech" },
-    { key: "category.design", href: "/categories/design" },
-    { key: "category.marketing", href: "/categories/marketing" },
-    { key: "category.writing", href: "/categories/writing" },
-    { key: "category.audio", href: "/categories/audio" },
-  ]
+  
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-16 items-center justify-between mx-auto">
-        <div className="flex items-center gap-6 md:gap-10">
+        <div className="ml-2  flex items-center gap-6 md:gap-10">
           <Link href="/" className="flex items-center space-x-2">
-            <span className="hidden font-bold sm:inline-block">Okland</span>
+            <span className="font-bold sm:inline-block text-3xl">Okland</span>
           </Link>
 
           {/* Desktop Navigation */}
           <NavigationMenu className="hidden md:flex">
             <NavigationMenuList>
-              <NavigationMenuItem>
+              {/* <NavigationMenuItem>
                 <Link href="/" legacyBehavior passHref>
                   <NavigationMenuLink className={navigationMenuTriggerStyle()}>{t("nav.home")}</NavigationMenuLink>
                 </Link>
-              </NavigationMenuItem>
+              </NavigationMenuItem> */}
               <NavigationMenuItem>
-                <Link href="/explore" legacyBehavior passHref>
+                <Link href="/search" legacyBehavior passHref>
                   <NavigationMenuLink className={navigationMenuTriggerStyle()}>{t("nav.explore")}</NavigationMenuLink>
                 </Link>
               </NavigationMenuItem>
-              <NavigationMenuItem>
+              {/* <NavigationMenuItem>
                 <Link href="/post-project" legacyBehavior passHref>
                   <NavigationMenuLink className={navigationMenuTriggerStyle()}>{t("nav.post")}</NavigationMenuLink>
                 </Link>
-              </NavigationMenuItem>
+              </NavigationMenuItem> */}
               <NavigationMenuItem>
                 <NavigationMenuTrigger>{t("nav.categories")}</NavigationMenuTrigger>
                 <NavigationMenuContent>
-                  <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
+                  <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-4 lg:w-[1000px]">
                     {categories.map((category) => (
-                      <li key={category.key}>
+                      <li key={category.name}>
                         <NavigationMenuLink asChild>
                           <Link
-                            href={category.href}
+                            href={category.path}
                             className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
                           >
-                            <div className="text-sm font-medium leading-none">{t(category.key)}</div>
+                            <div className="text-sm font-medium leading-none">{category.name}</div>
                           </Link>
                         </NavigationMenuLink>
                       </li>
@@ -112,10 +106,10 @@ export default function Navbar() {
           {/* Auth Buttons - Desktop */}
           <div className="hidden md:flex md:items-center md:gap-2">
             <Button variant="ghost" asChild>
-              <Link href="/login">{t("nav.login")}</Link>
+              <Link href="/auth/login">{t("nav.login")}</Link>
             </Button>
             <Button asChild>
-              <Link href="/signup">{t("nav.signup")}</Link>
+              <Link href="/auth/register">{t("nav.signup")}</Link>
             </Button>
           </div>
 
@@ -132,29 +126,29 @@ export default function Navbar() {
                 <Link href="/" className="text-lg font-medium">
                   {t("nav.home")}
                 </Link>
-                <Link href="/explore" className="text-lg font-medium">
+                <Link href="/search" className="text-lg font-medium">
                   {t("nav.explore")}
                 </Link>
-                <Link href="/post-project" className="text-lg font-medium">
-                  {t("nav.post")}
+                <Link href="/about" className="text-lg font-medium">
+                  {t("nav.about")}
                 </Link>
-                <div className="py-2">
+                {/* <Link href="/post-project" className="text-lg font-medium">
+                  {t("nav.post")}
+                </Link> */}
+                {/* <div className="py-2">
                   <h3 className="mb-2 text-lg font-medium">{t("nav.categories")}</h3>
                   <div className="flex flex-col gap-2 pl-2">
                     {categories.map((category) => (
                       <Link
-                        key={category.key}
-                        href={category.href}
+                        key={category.name}
+                        href={category.path}
                         className="text-muted-foreground hover:text-foreground"
                       >
-                        {t(category.key)}
+                        {t(category.name)}
                       </Link>
                     ))}
                   </div>
-                </div>
-                <Link href="/about" className="text-lg font-medium">
-                  {t("nav.about")}
-                </Link>
+                </div> */}
                 <div className="flex flex-col gap-2 pt-4">
                   <Button asChild variant="outline">
                     <Link href="/login">{t("nav.login")}</Link>

@@ -105,7 +105,7 @@ export default function FreelancerDashboard() {
           <p className="text-muted-foreground">Manage your projects and client relationships</p>
         </div>
         <Button asChild>
-          <Link href="/explore">
+          <Link href="/search">
             <Search className="mr-2 h-4 w-4" /> Find Projects
           </Link>
         </Button>

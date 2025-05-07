@@ -11,7 +11,7 @@ const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
   title: "Okland | Find Freelancers & Projects",
-  description: "Connect with top freelancers or find your next project on our bilingual freelancing platform",
+  description: "Connect with top providers or find your next project on our bilingual freelancing platform",
     generator: 'v0.dev'
 }
 

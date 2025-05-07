@@ -80,7 +80,7 @@ export default function ClientDashboard() {
       <div className="mb-8 flex flex-col justify-between gap-4 md:flex-row md:items-center">
         <div>
           <h1 className="text-3xl font-bold tracking-tight">Client Dashboard</h1>
-          <p className="text-muted-foreground">Manage your projects and freelancers</p>
+          <p className="text-muted-foreground">Manage your projects and providers</p>
         </div>
         <Button asChild>
           <Link href="/post-project">
@@ -133,7 +133,7 @@ export default function ClientDashboard() {
           <TabsList>
             <TabsTrigger value="projects">Projects</TabsTrigger>
             <TabsTrigger value="messages">Messages</TabsTrigger>
-            <TabsTrigger value="freelancers">Freelancers</TabsTrigger>
+            <TabsTrigger value="providers">Freelancers</TabsTrigger>
           </TabsList>
           <TabsContent value="projects" className="mt-6">
             <Card>
@@ -194,7 +194,7 @@ export default function ClientDashboard() {
             <Card>
               <CardHeader>
                 <CardTitle>Recent Messages</CardTitle>
-                <CardDescription>Stay in touch with your freelancers</CardDescription>
+                <CardDescription>Stay in touch with your providers</CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
@@ -232,7 +232,7 @@ export default function ClientDashboard() {
               </CardContent>
             </Card>
           </TabsContent>
-          <TabsContent value="freelancers" className="mt-6">
+          <TabsContent value="providers" className="mt-6">
             <Card>
               <CardHeader>
                 <CardTitle>Your Freelancers</CardTitle>

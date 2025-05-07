@@ -12,7 +12,7 @@ export function Testimonials() {
     {
       id: 1,
       content:
-        "Working with freelancers on this platform has transformed our business. We found the perfect developer who understood our vision.",
+        "Working with providers on this platform has transformed our business. We found the perfect developer who understood our vision.",
       author: {
         name: "Sarah Johnson",
         role: "Marketing Director",
@@ -52,7 +52,7 @@ export function Testimonials() {
       <div className="mx-auto max-w-6xl">
         <div className="mb-10 text-center">
           <h2 className="text-2xl font-bold tracking-tight md:text-3xl">{t("testimonials.title")}</h2>
-          <p className="mt-2 text-muted-foreground">Hear from our satisfied clients and freelancers</p>
+          <p className="mt-2 text-muted-foreground">Hear from our satisfied clients and providers</p>
         </div>
 
         <div className="grid grid-cols-1 gap-6 md:grid-cols-3">

@@ -5,6 +5,7 @@ import { useLanguage } from "./language-provider"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Facebook, Instagram, Linkedin, Twitter } from "lucide-react"
+import { categories } from "@/constants/categories"
 
 export default function Footer() {
   const { t } = useLanguage()
@@ -14,44 +15,48 @@ export default function Footer() {
   return (
     <footer className="border-t bg-background mx-auto">
       <div className="container py-8 md:py-12">
-        <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
+        <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4 px-2">
           {/* Navigation */}
           <div className="space-y-4">
-            <h3 className="text-lg font-medium">Okland</h3>
+            <h3 className="text-lg font-medium">
+              <Link href="/" className="text-muted-foreground hover:text-foreground text-2xl">
+                Okland
+              </Link>
+            </h3>
+
+            {/* Social Media */}
+            <div className="flex space-x-4 pt-2">
+              <Link href="#" className="text-muted-foreground hover:text-foreground">
+                <Facebook className="h-5 w-5" />
+                <span className="sr-only">Facebook</span>
+              </Link>
+              <Link href="#" className="text-muted-foreground hover:text-foreground">
+                <Twitter className="h-5 w-5" />
+                <span className="sr-only">Twitter</span>
+              </Link>
+              <Link href="#" className="text-muted-foreground hover:text-foreground">
+                <Instagram className="h-5 w-5" />
+                <span className="sr-only">Instagram</span>
+              </Link>
+              <Link href="#" className="text-muted-foreground hover:text-foreground">
+                <Linkedin className="h-5 w-5" />
+                <span className="sr-only">LinkedIn</span>
+              </Link>
+            </div>
+          </div>
+
+          {/* Quick links */}
+          <div className="space-y-4">
+            <h3 className="text-lg font-medium">Quick links</h3>
             <nav className="flex flex-col space-y-2">
-              <Link href="/" className="text-muted-foreground hover:text-foreground">
-                {t("nav.home")}
-              </Link>
-              <Link href="/explore" className="text-muted-foreground hover:text-foreground">
+              <Link href="/search" className="text-muted-foreground hover:text-foreground">
                 {t("nav.explore")}
-              </Link>
-              <Link href="/post-project" className="text-muted-foreground hover:text-foreground">
-                {t("nav.post")}
               </Link>
               <Link href="/about" className="text-muted-foreground hover:text-foreground">
                 {t("nav.about")}
               </Link>
-            </nav>
-          </div>
-
-          {/* Categories */}
-          <div className="space-y-4">
-            <h3 className="text-lg font-medium">{t("nav.categories")}</h3>
-            <nav className="flex flex-col space-y-2">
-              <Link href="/categories/tech" className="text-muted-foreground hover:text-foreground">
-                {t("category.tech")}
-              </Link>
-              <Link href="/categories/design" className="text-muted-foreground hover:text-foreground">
-                {t("category.design")}
-              </Link>
-              <Link href="/categories/marketing" className="text-muted-foreground hover:text-foreground">
-                {t("category.marketing")}
-              </Link>
-              <Link href="/categories/writing" className="text-muted-foreground hover:text-foreground">
-                {t("category.writing")}
-              </Link>
-              <Link href="/categories/audio" className="text-muted-foreground hover:text-foreground">
-                {t("category.audio")}
+              <Link href="/how-it-works" className="text-muted-foreground hover:text-foreground">
+                {t("footer.hiw")}
               </Link>
             </nav>
           </div>
@@ -87,42 +92,36 @@ export default function Footer() {
                 <Button type="submit">{t("footer.newsletter.button")}</Button>
               </div>
             </div>
-
-            {/* Social Media */}
-            <div className="flex space-x-4 pt-2">
-              <Link href="#" className="text-muted-foreground hover:text-foreground">
-                <Facebook className="h-5 w-5" />
-                <span className="sr-only">Facebook</span>
-              </Link>
-              <Link href="#" className="text-muted-foreground hover:text-foreground">
-                <Twitter className="h-5 w-5" />
-                <span className="sr-only">Twitter</span>
-              </Link>
-              <Link href="#" className="text-muted-foreground hover:text-foreground">
-                <Instagram className="h-5 w-5" />
-                <span className="sr-only">Instagram</span>
-              </Link>
-              <Link href="#" className="text-muted-foreground hover:text-foreground">
-                <Linkedin className="h-5 w-5" />
-                <span className="sr-only">LinkedIn</span>
-              </Link>
-            </div>
           </div>
         </div>
 
+        {/* Categories */}
+        <div className="space-y-4 border-t mt-8 pt-8 px-2">
+          <h3 className="text-lg font-medium">{t("nav.categories")}</h3>
+          <nav className="grid grid-cols-1 gap-2 md:grid-cols-2 lg:grid-cols-4">
+            {
+              categories.map(category => (
+                <Link key={category.name} href={category.path} className="text-muted-foreground hover:text-foreground">
+                  {category.name}
+                </Link>
+              ))
+            }
+          </nav>
+        </div>
+
         <div className="mt-8 border-t pt-8">
-          <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
+          <div className="flex flex-col items-center justify-center gap-4 md:flex-row">
             <p className="text-sm text-muted-foreground">
               &copy; {currentYear} Okland. {t("footer.rights")}
             </p>
-            <div className="flex space-x-4 text-sm text-muted-foreground">
+            {/* <div className="flex space-x-4 text-sm text-muted-foreground">
               <Link href="/contact" className="hover:text-foreground">
                 Contact
               </Link>
               <Link href="/sitemap" className="hover:text-foreground">
                 Sitemap
               </Link>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>

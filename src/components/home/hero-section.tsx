@@ -26,7 +26,7 @@ export function HeroSection() {
         {/* CTA Buttons */}
         <div className="mt-6 flex flex-col gap-4 sm:flex-row">
           <Button asChild size="lg">
-            <Link href="/explore">{t("hero.cta.find")}</Link>
+            <Link href="/search">{t("hero.cta.find")}</Link>
           </Button>
           <Button asChild variant="outline" size="lg">
             <Link href="/post-project">{t("hero.cta.post")}</Link>

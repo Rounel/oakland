@@ -17,7 +17,7 @@ export function RecentBlogPosts() {
       date: "2023-10-15",
       category: "Productivity",
       image: "/placeholder.svg?height=200&width=400",
-      slug: "10-tips-for-freelancers",
+      slug: "10-tips-for-providers",
     },
     {
       id: 2,
@@ -32,7 +32,7 @@ export function RecentBlogPosts() {
     {
       id: 3,
       title: "The Future of Remote Work and Freelancing",
-      excerpt: "Explore the trends shaping the future of work and how freelancers can position themselves for success.",
+      excerpt: "Explore the trends shaping the future of work and how providers can position themselves for success.",
       date: "2023-09-30",
       category: "Trends",
       image: "/placeholder.svg?height=200&width=400",
@@ -45,7 +45,7 @@ export function RecentBlogPosts() {
       <div className="mx-auto max-w-6xl">
         <div className="mb-10 text-center">
           <h2 className="text-2xl font-bold tracking-tight md:text-3xl">{t("blog.title")}</h2>
-          <p className="mt-2 text-muted-foreground">Insights and tips for freelancers and clients</p>
+          <p className="mt-2 text-muted-foreground">Insights and tips for providers and clients</p>
         </div>
 
         <div className="grid grid-cols-1 gap-6 md:grid-cols-3">

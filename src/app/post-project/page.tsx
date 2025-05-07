@@ -18,7 +18,7 @@ export default function PostProjectPage() {
         <CardHeader>
           <CardTitle>Project Details</CardTitle>
           <CardDescription>
-            Provide information about your project to help freelancers understand your needs.
+            Provide information about your project to help providers understand your needs.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
@@ -102,7 +102,7 @@ export default function PostProjectPage() {
             <div className="flex items-center space-x-2">
               <Checkbox id="nda" />
               <Label htmlFor="nda" className="text-sm font-normal">
-                Require freelancers to sign an NDA before viewing details
+                Require providers to sign an NDA before viewing details
               </Label>
             </div>
           </div>

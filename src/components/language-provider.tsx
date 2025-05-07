@@ -114,6 +114,10 @@ const translations: Translations = {
     en: "Latest from Our Blog",
     fr: "Derniers Articles de Notre Blog",
   },
+  "footer.hiw": {
+    en: "How it works",
+    fr: "Comment ça fonctionne",
+  },
 }
 
 type LanguageContextType = {
