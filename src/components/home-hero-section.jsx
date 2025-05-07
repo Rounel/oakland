@@ -79,7 +79,7 @@ export default function HomeHeroSection() {
     }
 
     const queryString = searchParams.toString()
-    const url = `/recherche${queryString ? `?${queryString}` : ""}`
+    const url = `/search${queryString ? `?${queryString}` : ""}`
 
     router.push(url)
   }
@@ -176,7 +176,7 @@ export default function HomeHeroSection() {
                 </div>
               )}
             </div>
-            <Button type="submit" className="md:w-auto">
+            <Button type="submit" className="md:w-auto cursor-pointer">
               Rechercher
             </Button>
           </form>
