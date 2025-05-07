@@ -2,35 +2,49 @@
 
 import type React from "react"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { motion } from "motion/react"
-import { Lock, Mail } from "lucide-react"
+import { Lock, Mail, AlertCircle } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Alert, AlertDescription } from "@/components/ui/alert"
+import { useAuth } from "@/contexts/auth-context"
 
 export default function AdminLoginPage() {
   const router = useRouter()
+  const { user, signIn } = useAuth()
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [error, setError] = useState("")
   const [isLoading, setIsLoading] = useState(false)
+
+  // Redirect if already logged in
+  useEffect(() => {
+    if (user) {
+      router.push("/admin/dashboard")
+    }
+  }, [user, router])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError("")
     setIsLoading(true)
 
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1000))
+    try {
+      const { error } = await signIn(email, password)
 
-    // Demo credentials
-    if (email === "admin@example.com" && password === "password") {
-      router.push("/admin/dashboard")
-    } else {
-      setError("Identifiants incorrects. Veuillez réessayer.")
+      if (error) {
+        setError(error.message || "Identifiants incorrects. Veuillez réessayer.")
+        setIsLoading(false)
+        return
+      }
+
+      // Successful login will trigger the useEffect above to redirect
+    } catch (err) {
+      console.error("Error during login:", err)
+      setError("Une erreur est survenue. Veuillez réessayer.")
       setIsLoading(false)
     }
   }
@@ -51,6 +65,7 @@ export default function AdminLoginPage() {
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6 md:p-8">
           {error && (
             <Alert variant="destructive" className="mb-6">
+              <AlertCircle className="h-4 w-4" />
               <AlertDescription>{error}</AlertDescription>
             </Alert>
           )}

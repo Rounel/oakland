@@ -277,7 +277,10 @@ export default function SearchContent({ initialCategories, initialProviders, ini
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.3, delay: index * 0.05 }}
                     >
-                      <ProviderCard provider={provider} />
+                      <ProviderCard provider={{
+                        ...provider,
+                        image: provider.image || undefined
+                      }} />
                     </motion.div>
                   ))
                 ) : (
