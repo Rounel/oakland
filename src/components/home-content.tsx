@@ -3,9 +3,7 @@
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
-import { useGeolocation } from "@/hooks/use-geolocation"
-import LocationPermissionDialog from "@/components/location-permission-dialog"
-import type { Category, Provider } from "@/services/supabase-service"
+
 import  HomeHeroSection  from "@/components/home-hero-section"
 import  HowItWorksSection  from "@/components/how-it-works"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -13,16 +11,12 @@ import { ChevronRight } from "lucide-react"
 import Link from "next/link"
 import { FeaturedFreelancers } from "./home/featured-freelancers"
 
-interface HomeContentProps {
-  initialCategories: Category[]
-  initialProviders: Provider[]
-}
 
-export default function HomeContent({ initialCategories, initialProviders }: HomeContentProps) {
+export default function HomeContent() {
   const router = useRouter()
 
   return (
-    <div className="pt-16">
+    <div className="">
       {/* Hero Section */}
       <HomeHeroSection />
 

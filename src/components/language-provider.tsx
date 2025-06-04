@@ -19,8 +19,8 @@ const translations: Translations = {
     fr: "Accueil",
   },
   "nav.explore": {
-    en: "Explore Freelancers",
-    fr: "Explorer les Freelances",
+    en: "Search",
+    fr: "Chercher",
   },
   "nav.post": {
     en: "Post a Project",

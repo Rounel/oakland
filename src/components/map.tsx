@@ -1,18 +1,10 @@
 "use client"
 
+import { ProviderProps } from "@/types/datatypes"
 import { useEffect, useRef } from "react"
 
 interface MapProps {
-  providers: Array<{
-    id: string
-    name: string
-    profession: string
-    location: string
-    coordinates?: {
-      lat: number
-      lng: number
-    }
-  }>
+  providers: Array<ProvidersProps>
 }
 
 export default function Map({ providers }: MapProps) {

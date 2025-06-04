@@ -1,8 +1,8 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { useRouter } from "next/navigation"
-import { motion } from "framer-motion"
+import { useRouter, useSearchParams } from "next/navigation"
+import { motion } from "motion/react"
 import { Search, MapPin, Filter, ChevronDown } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -15,29 +15,58 @@ import ProviderCard from "@/components/provider-card"
 import Map from "@/components/map"
 import { useGeolocation } from "@/hooks/use-geolocation"
 import LocationPermissionDialog from "@/components/location-permission-dialog"
-import type { Category, Provider } from "@/services/supabase-service"
+import { useGeolocationWithRadius } from "@/hooks/useGeolocation"
+import { Label } from "./ui/label"
+import { BASE_API_URL, searchProviders } from "@/services/services"
+import { ProvidersProps } from "@/types/datatypes"
 
-interface SearchContentProps {
-  initialCategories: Category[]
-  initialProviders: Provider[]
-  initialFilters: {
-    categorySlug: string
-    profession: string
-    location: string
-  }
+interface Category {
+  id: string
+  name: string
+  slug: string
 }
 
-export default function SearchContent({ initialCategories, initialProviders, initialFilters }: SearchContentProps) {
+export default function SearchContent() {
   const router = useRouter()
-  const [profession, setProfession] = useState(initialFilters.profession)
-  const [location, setLocation] = useState(initialFilters.location)
-  const [category, setCategory] = useState(initialFilters.categorySlug)
+  const searchParams = useSearchParams()
+  const [profession, setProfession] = useState("")
+  const [location, setLocation] = useState("")
+  const [category, setCategory] = useState("")
+
+  useEffect(() => {
+    const prof = searchParams.get("profession")
+    if (prof) setProfession(prof)
+  
+    const loc = searchParams.get("location")
+    if (loc) setLocation(loc)
+  
+    const cat = searchParams.get("categorie")
+    if (cat) setCategory(cat)
+  }, [searchParams])
+
   const [distance, setDistance] = useState([20])
   const [showMap, setShowMap] = useState(false)
   const [filtersOpen, setFiltersOpen] = useState(false)
-  const [categories, setCategories] = useState(initialCategories)
-  const [providers, setProviders] = useState(initialProviders)
+  const [categories, setCategories] = useState<Category[]>([])
+  const [providers, setProviders] = useState<ProvidersProps[]>([])
   const [showPermissionDialog, setShowPermissionDialog] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
+  
+
+  const { location: geoLoc, radius, setRadius, error: geoError } = useGeolocationWithRadius()
+
+  useEffect(() => {
+    if (geoLoc) {
+      const params = new URLSearchParams()
+      params.set("lat", geoLoc.lat.toString())
+      params.set("lng", geoLoc.lng.toString())
+      params.set("radius", radius.toString())
+
+      fetch(`${BASE_API_URL}/providers/search/?${params.toString()}`)
+        .then(res => res.json())
+        .then(data => {console.log(data);setProviders(data || [])})
+    }
+  }, [geoLoc, radius])
 
   const {
     loading: locationLoading,
@@ -46,6 +75,29 @@ export default function SearchContent({ initialCategories, initialProviders, ini
     permissionState,
     getCurrentPosition,
   } = useGeolocation()
+
+
+  // Load providers when filters change
+  useEffect(() => {
+    const loadProviders = async () => {
+      setIsLoading(true)
+      try {
+        const params = {
+          profession,
+          location,
+          category,
+          distance: distance[0],
+        }
+        const data = await searchProviders(params)
+        setProviders(data.results || [])
+      } catch (error) {
+        console.error("Error loading providers:", error)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+    loadProviders()
+  }, [profession, location, category, distance])
 
   // Show permission dialog if needed
   useEffect(() => {
@@ -71,7 +123,7 @@ export default function SearchContent({ initialCategories, initialProviders, ini
     if (category) params.set("categorie", category)
 
     // Update the URL without reloading the page
-    const url = `/recherche?${params.toString()}`
+    const url = `/explore?${params.toString()}`
     router.push(url)
   }
 
@@ -82,7 +134,7 @@ export default function SearchContent({ initialCategories, initialProviders, ini
     setDistance([20])
 
     // Reset the URL
-    router.push("/recherche")
+    router.push("/explore")
   }
 
   const handleLocationPermissionAllow = () => {
@@ -143,7 +195,7 @@ export default function SearchContent({ initialCategories, initialProviders, ini
           </div>
 
           {/* Filters Sidebar */}
-          <motion.aside
+          <motion.div
             className={`lg:w-64 bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6 ${filtersOpen ? "block" : "hidden lg:block"}`}
             initial={{ x: -20, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
@@ -205,6 +257,18 @@ export default function SearchContent({ initialCategories, initialProviders, ini
                 <Slider value={distance} onValueChange={setDistance} max={100} step={5} />
               </div>
 
+              <div className="space-y-4">
+                <Label className="text-sm font-medium">Rayon de recherche (km)</Label>
+                <Slider
+                  value={[radius]}
+                  onValueChange={(val) => setRadius(val[0])}
+                  min={1}
+                  max={100}
+                  step={1}
+                />
+                <span className="text-sm text-muted-foreground">{radius} km</span>
+              </div>
+
               {/* Availability Filter */}
               <div>
                 <label className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 block">Disponibilité</label>
@@ -246,7 +310,7 @@ export default function SearchContent({ initialCategories, initialProviders, ini
                 </Select>
               </div>
             </div>
-          </motion.aside>
+          </motion.div>
 
           {/* Main Content */}
           <div className="flex-1">

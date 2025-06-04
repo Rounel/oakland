@@ -25,11 +25,13 @@ export default function RootLayout({
       <body className={inter.className}>
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
           <LanguageProvider>
-            <div className="flex min-h-screen flex-col">
-              <Navbar />
-              <main className="flex-1 flex justify-center">{children}</main>
-              <Footer />
-            </div>
+            <AuthProvider>
+              <div className="flex min-h-screen flex-col">
+                <Navbar />
+                <main className="flex-1 flex justify-center">{children}</main>
+                <Footer />
+              </div>
+            </AuthProvider>
           </LanguageProvider>
         </ThemeProvider>
       </body>
@@ -40,3 +42,4 @@ export default function RootLayout({
 
 
 import './globals.css'
+import { AuthProvider } from "@/contexts/authContext"

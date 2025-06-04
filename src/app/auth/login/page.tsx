@@ -2,47 +2,80 @@
 
 import type React from "react"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import Link from "next/link"
-import { useRouter } from "next/navigation"
-import { motion } from "framer-motion"
+import { usePathname, useRouter } from "next/navigation"
+import { motion } from "motion/react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Facebook, Github, Loader2 } from "lucide-react"
+import { login } from "@/services/services"
+import { useAuth } from "@/contexts/authContext"
 
 export default function LoginPage() {
+  const {setUser, user} = useAuth()
   const router = useRouter()
   const [isLoading, setIsLoading] = useState(false)
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
+  const [error, setError] = useState<string | null>(null)
+  const pathname = usePathname()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsLoading(true)
+    setError(null)
 
-    // Simulate API call
-    setTimeout(() => {
+    try {
+      const response = await login( email, password )
+      console.log("RESPONSE", response)
+      
+      if (response.error) {
+        setError(response.error.message || "Une erreur est survenue lors de la connexion")
+        return
+      }
+
+      // Redirection basée sur le type d'utilisateur
+      if (response.user) {
+        console.log("USER", response.user)
+        setUser(response.user)
+        router.push(`/provider/me`)
+      }
+    } catch (err) {
+      console.error("Login error:", err)
+      setError("Une erreur inattendue est survenue. Veuillez réessayer.")
+    } finally {
       setIsLoading(false)
-      router.push("/dashboard/client")
-    }, 1500)
+    }
   }
+
+  useEffect(() => {
+    if (user) {
+      router.push('/provider/me')
+    }
+  }, [user, router])
 
   return (
     <div className="container max-w-md py-16">
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
         <Card>
           <CardHeader className="space-y-1">
-            <CardTitle className="text-2xl font-bold text-center">Sign in to your account</CardTitle>
+            <CardTitle className="text-2xl font-bold text-center">Connexion</CardTitle>
             <CardDescription className="text-center">
-              Enter your email and password to access your account
+              Entrez votre email et mot de passe pour accéder à votre compte
             </CardDescription>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit}>
               <div className="grid gap-4">
+                {error && (
+                  <div className="bg-destructive/15 text-destructive text-sm p-3 rounded-md">
+                    {error}
+                  </div>
+                )}
                 <div className="grid gap-2">
                   <Label htmlFor="email">Email</Label>
                   <Input
@@ -56,12 +89,12 @@ export default function LoginPage() {
                 </div>
                 <div className="grid gap-2">
                   <div className="flex items-center justify-between">
-                    <Label htmlFor="password">Password</Label>
+                    <Label htmlFor="password">Mot de passe</Label>
                     <Link
                       href="/auth/password-recovery"
                       className="text-sm text-primary underline-offset-4 hover:underline"
                     >
-                      Forgot password?
+                      Mot de passe oublié ?
                     </Link>
                   </div>
                   <Input
@@ -75,46 +108,26 @@ export default function LoginPage() {
                 <div className="flex items-center space-x-2">
                   <Checkbox id="remember" />
                   <Label htmlFor="remember" className="text-sm font-normal">
-                    Remember me for 30 days
+                    Se souvenir de moi pendant 30 jours
                   </Label>
                 </div>
                 <Button type="submit" className="w-full" disabled={isLoading}>
                   {isLoading ? (
                     <>
-                      <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Please wait
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Connexion en cours...
                     </>
                   ) : (
-                    "Sign In"
+                    "Se connecter"
                   )}
                 </Button>
               </div>
             </form>
-
-            <div className="relative my-6">
-              <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-gray-200"></div>
-              </div>
-              <div className="relative flex justify-center text-xs uppercase">
-                <span className="bg-white px-2 text-muted-foreground">Or continue with</span>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-2 gap-4">
-              <Button variant="outline" className="w-full">
-                <Github className="mr-2 h-4 w-4" />
-                Github
-              </Button>
-              <Button variant="outline" className="w-full">
-                <Facebook className="mr-2 h-4 w-4" />
-                Facebook
-              </Button>
-            </div>
           </CardContent>
           <CardFooter className="flex flex-col">
             <div className="text-center text-sm text-muted-foreground mt-2">
-              Don&apos;t have an account?{" "}
+              Vous n'avez pas de compte ?{" "}
               <Link href="/auth/register" className="text-primary underline-offset-4 hover:underline">
-                Sign up
+                S'inscrire
               </Link>
             </div>
           </CardFooter>

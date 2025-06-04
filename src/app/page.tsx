@@ -524,15 +524,12 @@
 
 import { Suspense } from "react"
 import HomeContent from "@/components/home-content"
-import { getFeaturedProviders, getCategories } from "@/services/supabase-service"
 
 export default async function Home() {
   // Fetch data in parallel
-  const [categoriesPromise, providersPromise] = await Promise.all([getCategories(), getFeaturedProviders(3)])
-
   return (
     <Suspense fallback={<div>Chargement...</div>}>
-      <HomeContent initialCategories={categoriesPromise} initialProviders={providersPromise} />
+      <HomeContent  />
     </Suspense>
   )
 }

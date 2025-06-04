@@ -1,8 +1,8 @@
 "use client"
 
-import { useState } from "react"
+import { useRef, useState } from "react"
 import { useRouter } from "next/navigation"
-import { motion } from "framer-motion"
+import { motion } from "motion/react"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import * as z from "zod"
@@ -13,8 +13,14 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Checkbox } from "@/components/ui/checkbox"
-import { registerProvider } from "@/services/supabase-service"
-import type { Category } from "@/services/supabase-service"
+import { categories } from "@/constants/categories"
+import { registerProvider, uploadImage } from "@/services/services"
+
+interface Category {
+  id: string
+  name: string
+  slug: string
+}
 
 // Form schema
 const formSchema = z.object({
@@ -22,8 +28,12 @@ const formSchema = z.object({
   firstName: z.string().min(2, { message: "Le prénom doit contenir au moins 2 caractères" }),
   lastName: z.string().min(2, { message: "Le nom doit contenir au moins 2 caractères" }),
   email: z.string().email({ message: "Adresse email invalide" }),
-  password: z.string().min(6, { message: "Le mot de passe doit contenir au moins 6 caractères" }),
+  password: z.string().min(8, { message: "Le mot de passe doit contenir au moins 8 caractères" }),
+  confirmPassword: z.string().min(8, { message: "Le mot de passe doit contenir au moins 8 caractères" }),
   phone: z.string().min(10, { message: "Numéro de téléphone invalide" }),
+
+  // Photo de profil dans l'étape 1
+  profilePhoto: z.any().optional(),
 
   // Step 2: Professional Information
   companyName: z.string().min(2, { message: "Le nom commercial doit contenir au moins 2 caractères" }),
@@ -33,29 +43,23 @@ const formSchema = z.object({
   city: z.string().min(2, { message: "La ville doit contenir au moins 2 caractères" }),
   postalCode: z.string().min(5, { message: "Code postal invalide" }),
 
-  // Step 3: Documents
-  idCard: z.any().optional(),
-  businessProof: z.any().optional(),
-  portfolioImages: z.any().optional(),
-
   // Step 4: Social Media
   website: z.string().url({ message: "URL invalide" }).optional().or(z.literal("")),
   facebook: z.string().url({ message: "URL invalide" }).optional().or(z.literal("")),
-  instagram: z.string().url({ message: "URL invalide" }).optional().or(z.literal("")),
 
   // Step 5: Terms
   termsAccepted: z.literal(true, {
     errorMap: () => ({ message: "Vous devez accepter les conditions générales" }),
   }),
-})
+}).refine((data) => data.password === data.confirmPassword, {
+  message: "Les mots de passe ne correspondent pas",
+  path: ["confirmPassword"],
+});
 
 type FormValues = z.infer<typeof formSchema>
 
-interface ProviderRegistrationFormProps {
-  categories: Category[]
-}
-
-export default function ProviderRegistrationForm({ categories }: ProviderRegistrationFormProps) {
+export default function ProviderRegistrationForm() {
+  const input_file = useRef<HTMLInputElement>(null)
   const router = useRouter()
   const [step, setStep] = useState(1)
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -69,17 +73,18 @@ export default function ProviderRegistrationForm({ categories }: ProviderRegistr
       lastName: "",
       email: "",
       password: "",
+      confirmPassword: "",
       phone: "",
       companyName: "",
       description: "",
       category: "",
+      profilePhoto: "",
       address: "",
       city: "",
       postalCode: "",
       website: "",
       facebook: "",
-      instagram: "",
-      termsAccepted: false,
+      termsAccepted: true,
     },
     mode: "onChange",
   })
@@ -119,24 +124,54 @@ export default function ProviderRegistrationForm({ categories }: ProviderRegistr
   const onSubmit = async (data: FormValues) => {
     setIsSubmitting(true)
     setError(null)
+    console.log("Form submitted 0:", data)
+
+    const toSend = {
+      "email": data.email,
+      "username": data.firstName.toLowerCase().replace("'", "") + '-' + data.lastName.toLowerCase().replace("'", ""),
+      "first_name": data.firstName,
+      "last_name": data.lastName,
+      "password": data.password,
+      "confirm_password": data.confirmPassword,
+      "phone": data.phone,
+      "profile_photo": data.profilePhoto,
+      "provider_application": {
+        "company_name": data.companyName,
+        "description": data.description,
+        "category": data.category,
+        "address": data.address,
+        "city": data.city,
+        "postal_code": data.postalCode.replace(/\s/g, ''),
+        "website": data.website,
+        "facebook": data.facebook,
+      }
+    }
+    console.log("Form submitted 1:", toSend)
 
     try {
-      // Register provider using Supabase
-      const result = await registerProvider(data)
-
-      if (result.error) {
-        setError(result.error.message || "Une erreur est survenue lors de l'inscription")
-        setIsSubmitting(false)
-        return
+      if (data.profilePhoto) {
+        const res_upload = await uploadImage(data.profilePhoto)
+        console.log("Upload response:", res_upload)
+        toSend.profile_photo = res_upload.path
       }
+    } catch (err_up) {
+      console.error("Error during upload:", err_up)
+      setError("Une erreur inattendue est survenue. Veuillez réessayer. (upload)")
+      setIsSubmitting(false)
+      return
+    }
+    console.log("Form submitted 2:", toSend)
 
+    try {
+      const response = await registerProvider(toSend)
+      console.log("Registration response:", response)
       setIsSubmitted(true)
       setIsSubmitting(false)
 
       // Redirect to login page after 3 seconds
       setTimeout(() => {
-        router.push("/admin")
-      }, 3000)
+        router.push(`/provider/me`)
+      }, 1000)
     } catch (err) {
       console.error("Error during registration:", err)
       setError("Une erreur inattendue est survenue. Veuillez réessayer.")
@@ -148,7 +183,7 @@ export default function ProviderRegistrationForm({ categories }: ProviderRegistr
     return (
       <div className="flex justify-center mb-8">
         <div className="flex items-center">
-          {[1, 2, 3, 4, 5].map((i) => (
+          {[1, 2, 3, 4].map((i) => (
             <div key={i} className="flex items-center">
               <div
                 className={`w-8 h-8 rounded-full flex items-center justify-center ${
@@ -161,7 +196,7 @@ export default function ProviderRegistrationForm({ categories }: ProviderRegistr
               >
                 {i < step ? <Check size={16} /> : i}
               </div>
-              {i < 5 && (
+              {i < 4 && (
                 <div className={`w-12 h-1 ${i < step ? "bg-green-500" : "bg-gray-200 dark:bg-gray-700"}`}></div>
               )}
             </div>
@@ -188,7 +223,9 @@ export default function ProviderRegistrationForm({ categories }: ProviderRegistr
             Votre demande d'inscription a été envoyée et sera examinée dans les 48h. Vous recevrez un email de
             confirmation dès que votre profil sera validé.
           </p>
-          <Button onClick={() => router.push("/")}>Retour à l'accueil</Button>
+          <Button asChild>
+            <a href="/">Retour à l'accueil</a>
+          </Button>
         </motion.div>
       )
     }
@@ -196,12 +233,6 @@ export default function ProviderRegistrationForm({ categories }: ProviderRegistr
     return (
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-          {error && (
-            <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 p-4 rounded-md text-red-800 dark:text-red-400 mb-6">
-              {error}
-            </div>
-          )}
-
           {step === 1 && (
             <motion.div
               initial={{ opacity: 0, x: 20 }}
@@ -263,9 +294,22 @@ export default function ProviderRegistrationForm({ categories }: ProviderRegistr
                   <FormItem>
                     <FormLabel>Mot de passe</FormLabel>
                     <FormControl>
-                      <Input type="password" placeholder="••••••••" {...field} />
+                      <Input type="password" placeholder="********" {...field} />
                     </FormControl>
-                    <FormDescription>Au moins 6 caractères</FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="confirmPassword"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Confirmer le mot de passe</FormLabel>
+                    <FormControl>
+                      <Input type="password" placeholder="********" {...field} />
+                    </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -280,6 +324,43 @@ export default function ProviderRegistrationForm({ categories }: ProviderRegistr
                     <FormControl>
                       <Input placeholder="01 23 45 67 89" {...field} />
                     </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="profilePhoto"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Photo de profil</FormLabel>
+                    <div className="border-2 border-dashed border-gray-300 dark:border-gray-700 rounded-lg p-6 text-center">
+                      <div className="mb-4">
+                        <Upload className="mx-auto h-12 w-12 text-gray-400" />
+                      </div>
+                      <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
+                        Téléchargez une photo de profil professionnelle
+                      </p>
+                      <Button variant="outline" type="button" onClick={(e) => {
+                        e.preventDefault()
+                        if (input_file.current) {
+                          input_file?.current.click()
+                        }
+                      }}>
+                        Parcourir
+                      </Button>
+                      <input
+                        type="file"
+                        className="hidden"
+                        ref={input_file}
+                        accept="image/*"
+                        onChange={(e) => {
+                          const file = e.target.files?.[0]
+                          field.onChange(file)
+                        }}
+                      />
+                    </div>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -344,7 +425,7 @@ export default function ProviderRegistrationForm({ categories }: ProviderRegistr
                       </FormControl>
                       <SelectContent>
                         {categories.map((category) => (
-                          <SelectItem key={category.id} value={category.id}>
+                          <SelectItem key={category.id} value={String(category.id)}>
                             {category.name}
                           </SelectItem>
                         ))}
@@ -409,62 +490,6 @@ export default function ProviderRegistrationForm({ categories }: ProviderRegistr
               transition={{ duration: 0.3 }}
               className="space-y-6"
             >
-              <h2 className="text-2xl font-bold mb-6 text-gray-900 dark:text-white">Pièces justificatives</h2>
-
-              <div className="space-y-6">
-                <div className="border-2 border-dashed border-gray-300 dark:border-gray-700 rounded-lg p-6 text-center">
-                  <div className="mb-4">
-                    <Upload className="mx-auto h-12 w-12 text-gray-400" />
-                  </div>
-                  <h3 className="text-lg font-medium mb-2 text-gray-900 dark:text-white">Carte d'identité</h3>
-                  <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
-                    Téléchargez une copie de votre carte d'identité (recto-verso)
-                  </p>
-                  <Button variant="outline" type="button">
-                    Parcourir
-                  </Button>
-                  <input type="file" className="hidden" />
-                </div>
-
-                <div className="border-2 border-dashed border-gray-300 dark:border-gray-700 rounded-lg p-6 text-center">
-                  <div className="mb-4">
-                    <Upload className="mx-auto h-12 w-12 text-gray-400" />
-                  </div>
-                  <h3 className="text-lg font-medium mb-2 text-gray-900 dark:text-white">Justificatif d'activité</h3>
-                  <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
-                    Téléchargez un justificatif d'activité (extrait Kbis, attestation URSSAF, etc.)
-                  </p>
-                  <Button variant="outline" type="button">
-                    Parcourir
-                  </Button>
-                  <input type="file" className="hidden" />
-                </div>
-
-                <div className="border-2 border-dashed border-gray-300 dark:border-gray-700 rounded-lg p-6 text-center">
-                  <div className="mb-4">
-                    <Upload className="mx-auto h-12 w-12 text-gray-400" />
-                  </div>
-                  <h3 className="text-lg font-medium mb-2 text-gray-900 dark:text-white">Photos de vos réalisations</h3>
-                  <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
-                    Téléchargez jusqu'à 3 photos de vos réalisations
-                  </p>
-                  <Button variant="outline" type="button">
-                    Parcourir
-                  </Button>
-                  <input type="file" multiple className="hidden" />
-                </div>
-              </div>
-            </motion.div>
-          )}
-
-          {step === 4 && (
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -20 }}
-              transition={{ duration: 0.3 }}
-              className="space-y-6"
-            >
               <h2 className="text-2xl font-bold mb-6 text-gray-900 dark:text-white">Liens et réseaux sociaux</h2>
               <p className="text-gray-600 dark:text-gray-400 mb-6">
                 Ces informations sont facultatives mais permettent d'améliorer votre visibilité.
@@ -507,33 +532,10 @@ export default function ProviderRegistrationForm({ categories }: ProviderRegistr
                   </FormItem>
                 )}
               />
-
-              <FormField
-                control={form.control}
-                name="instagram"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Instagram</FormLabel>
-                    <div className="flex">
-                      <div className="flex items-center px-3 bg-gray-100 dark:bg-gray-800 border border-r-0 border-gray-300 dark:border-gray-600 rounded-l-md">
-                        <Instagram size={18} className="text-gray-500" />
-                      </div>
-                      <FormControl>
-                        <Input
-                          placeholder="https://www.instagram.com/votrecompte"
-                          className="rounded-l-none"
-                          {...field}
-                        />
-                      </FormControl>
-                    </div>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
             </motion.div>
           )}
 
-          {step === 5 && (
+          {step === 4 && (
             <motion.div
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
@@ -589,7 +591,7 @@ export default function ProviderRegistrationForm({ categories }: ProviderRegistr
               </Button>
             )}
 
-            {step < 5 && (
+            {step < 4 && (
               <Button type="button" onClick={nextStep} className="ml-auto">
                 Suivant
                 <ChevronRight className="ml-2 h-4 w-4" />

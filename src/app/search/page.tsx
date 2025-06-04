@@ -272,35 +272,13 @@
 
 import { Suspense } from "react"
 import SearchContent from "@/components/search-content"
-import { getProviders, getCategories } from "@/services/supabase-service"
 
-export default async function SearchPage({ searchParams }) {
-  // Accéder directement aux propriétés de searchParams
-  const categorySlug = searchParams?.categorie || ""
-  const profession = searchParams?.profession || ""
-  const location = searchParams?.location || ""
 
-  // Fetch data in parallel
-  const [categoriesPromise, providersPromise] = await Promise.all([
-    getCategories(),
-    getProviders({
-      categorySlug: categorySlug || undefined,
-      searchQuery: profession || undefined,
-      location: location || undefined,
-    }),
-  ])
+export default async function SearchPage() {
 
   return (
     <Suspense fallback={<div>Chargement...</div>}>
-      <SearchContent
-        initialCategories={categoriesPromise}
-        initialProviders={providersPromise}
-        initialFilters={{
-          categorySlug,
-          profession,
-          location,
-        }}
-      />
+      <SearchContent />
     </Suspense>
   )
 }

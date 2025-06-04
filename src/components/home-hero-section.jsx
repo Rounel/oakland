@@ -21,6 +21,16 @@ export default function HomeHeroSection() {
   const [profession, setProfession] = useState("")
   const [location, setLocation] = useState("")
 
+
+  const allCategories = [...categories.filter(item => item.img), ...categories.filter(item => item.img), ...categories.filter(item => item.img), ...categories.filter(item => item.img), ...categories.filter(item => item.img), ...categories.filter(item => item.img)];
+  const [allCategories2, setAllCategories2] = useState([]);
+  const [allCategories3, setAllCategories3] = useState([]);
+  
+  useEffect(() => {
+    setAllCategories2(shuffleArray(allCategories));
+    setAllCategories3(shuffleArray(allCategories));
+  }, []);
+
   const {
     loading: locationLoading,
     error: locationError,
@@ -45,8 +55,7 @@ export default function HomeHeroSection() {
       setLocation(address)
     }
   }, [address, location])
-
-  const allCategories = [...categories, ...categories, ...categories];
+  
 
   useEffect(() => {
     setIsVisible(true);
@@ -187,9 +196,9 @@ export default function HomeHeroSection() {
       <div className="mb-4">
         {
           [
-            [...allCategories.filter(item => item.img),...allCategories.filter(item => item.img),...allCategories.filter(item => item.img),...allCategories.filter(item => item.img),...allCategories.filter(item => item.img)],
-            shuffleArray([...allCategories.filter(item => item.img),...allCategories.filter(item => item.img),...allCategories.filter(item => item.img),...allCategories.filter(item => item.img),...allCategories.filter(item => item.img)]),
-            shuffleArray([...allCategories.filter(item => item.img),...allCategories.filter(item => item.img),...allCategories.filter(item => item.img),...allCategories.filter(item => item.img),...allCategories.filter(item => item.img)])
+            allCategories,
+            allCategories2,
+            allCategories3
           ].map((t, index) => (
             <div key={`carou${index}`} className="w-full overflow-hidden h-full relative">
               {/* Gradient overlays for fade effect */}
@@ -256,9 +265,9 @@ export default function HomeHeroSection() {
       {/* How it works section */}
       <StatisticsBar />
       
-      {showPermissionDialog && (
+      {/* {showPermissionDialog && (
         <LocationPermissionDialog onAllow={handleLocationPermissionAllow} onDeny={handleLocationPermissionDeny} />
-      )}
+      )} */}
     </div>
   );
 }

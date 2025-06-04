@@ -32,14 +32,14 @@ export function FeaturedFreelancers({
         {isFeatured && (
           <Badge className="absolute left-3 top-3 z-10 bg-emerald-700 text-primary-foreground">Disponible</Badge>
         )}
-        <Button
+        {/* <Button
           variant="ghost"
           size="icon"
           className="absolute right-3 top-3 z-10 h-8 w-8 rounded-full bg-white/80 text-muted-foreground hover:bg-white hover:text-red-500"
         >
           <Heart className="h-4 w-4" />
           <span className="sr-only">Ajouter aux favoris</span>
-        </Button>
+        </Button> */}
         <Link href={`/providers/${name.toLowerCase().replace(/\s+/g, "-")}`}>
           <Image
             src={imageSrc || "/placeholder.svg"}
@@ -50,18 +50,20 @@ export function FeaturedFreelancers({
           />
         </Link>
       </div>
-      <CardContent className="p-4">
+      <CardContent className="p-4 flex flex-col gap-1">
         <div className="flex justify-between items-center">
           <Link href={`/providers/${name.toLowerCase().replace(/\s+/g, "-")}`} className="hover:underline">
             <h3 className="font-medium">{name}</h3>
           </Link>
+          <div className="flex items-center gap-1">
+            <Star className="h-4 w-4 fill-amber-400 text-amber-400" />
+            <span className="text-sm font-medium">{rating}</span>
+            <span className="text-xs text-muted-foreground">({reviews} avis)</span>
+          </div>
         </div>
-        <p className="text-sm text-muted-foreground">{title}</p>
-        <p className="text-sm text-muted-foreground flex items-center gap-1"> <MapPin className="size-4"/>Cocody Danga</p>
-        <div className="mt-2 flex items-center gap-1">
-          <Star className="h-4 w-4 fill-amber-400 text-amber-400" />
-          <span className="text-sm font-medium">{rating}</span>
-          <span className="text-xs text-muted-foreground">({reviews} avis)</span>
+        <div className="flex justify-between items-center">
+          <p className="text-sm text-muted-foreground">{title}</p>
+          <p className="text-sm text-muted-foreground flex items-center gap-1"> <MapPin className="size-4"/>Cocody Danga</p>
         </div>
       </CardContent>
       <CardFooter className="flex flex-col md:flex-row items-center justify-between border-t p-4">
@@ -69,7 +71,7 @@ export function FeaturedFreelancers({
           <p className="text-sm font-bold">{hourlyRate}</p>
           <p className="text-xs text-muted-foreground">à partir de</p>
         </div>
-        <Button variant="outline" size="sm" asChild>
+        <Button variant="outline" size="sm" asChild className="bg-purple-950 text-white hover:bg-purple-800 hover:text-white">
           <Link href={`/providers/${name.toLowerCase().replace(/\s+/g, "-")}`}>Voir profil</Link>
         </Button>
       </CardFooter>

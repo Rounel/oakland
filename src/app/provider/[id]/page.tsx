@@ -577,20 +577,22 @@
 
 import { Suspense } from "react"
 import ProviderDetail from "@/components/provider-detail"
-import { getProviderBySlug, getReviewsByProviderId } from "@/services/supabase-service"
+import { BASE_API_URL, getProviderDetail, getProviderReviews } from "@/services/services"
 
-export default async function ProviderPage({ params }) {
-  const { slug } = params
+export default async function ProviderPage({ params }: {params: {id: number}}) {
+  const { id } =  await params
 
-  // Fetch provider data
-  const provider = await getProviderBySlug(slug)
+console.log("THIS IS ID:", id)
+  // Fetch provider data and reviews
+  const provider = await getProviderDetail(id)
 
-  // If provider exists, fetch reviews
-  const reviews = provider ? await getReviewsByProviderId(provider.id) : []
+  if (!provider?.reviews) {
+    provider.reviews = await getProviderReviews(id)
+  }
 
   return (
     <Suspense fallback={<div>Chargement...</div>}>
-      <ProviderDetail provider={provider} reviews={reviews} />
+      <ProviderDetail provider={provider} reviews={provider.reviews} />
     </Suspense>
   )
 }
