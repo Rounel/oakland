@@ -38,6 +38,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
+import { categories } from "@/constants/categories"
 
 interface Provider {
   id: number
@@ -297,7 +298,7 @@ export default function ProvidersPage() {
                     <br />
                     <span className="text-sm text-gray-500">{provider.address}, {provider.postal_code}</span>
                   </TableCell>
-                  <TableCell>{provider.category}</TableCell>
+                  <TableCell>{categories.filter(item => item.id === Number(provider?.category))[0].name}</TableCell>
                   <TableCell>{provider.city}</TableCell>
                   <TableCell>
                     <Badge

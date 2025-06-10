@@ -101,11 +101,6 @@ export default function AdminLoginPage() {
             </Button>
           </form>
 
-          <div className="mt-6 text-center text-sm text-gray-500 dark:text-gray-400">
-            <p>Pour la démo, utilisez :</p>
-            <p className="font-medium">Email: admin@example.com</p>
-            <p className="font-medium">Mot de passe: password</p>
-          </div>
         </div>
       </motion.div>
     </div>

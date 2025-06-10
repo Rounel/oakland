@@ -238,7 +238,8 @@ interface ContactStatus {
 
 interface VisitorContact {
   id: number;
-  provider: {
+  provider: number
+  provider_details: {
     id: number;
     company_name: string;
     user: {
@@ -326,9 +327,11 @@ export const contactService = {
   },
 
   getContactStats: async (): Promise<ContactStats> => {
+    console.log('FROM GETTING CONTACT STATS', localStorage.getItem('token'))
     const response = await fetch(`${API_URL}/admin/visitor-contacts/stats/`, {
       headers: {
-        'Authorization': `Bearer ${localStorage.getItem('access_token')}`,
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${localStorage.getItem('token')}`,
       },
     })
     if (!response.ok) {
@@ -341,7 +344,7 @@ export const contactService = {
     const response = await fetch(`${API_URL}/admin/visitor-contacts/${id}/accept/`, {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${localStorage.getItem('access_token')}`,
+        'Authorization': `Bearer ${localStorage.getItem('token')}`,
       },
     })
     if (!response.ok) {
@@ -354,7 +357,7 @@ export const contactService = {
     const response = await fetch(`${API_URL}/admin/visitor-contacts/${id}/reject/`, {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${localStorage.getItem('access_token')}`,
+        'Authorization': `Bearer ${localStorage.getItem('token')}`,
       },
     })
     if (!response.ok) {
@@ -367,7 +370,7 @@ export const contactService = {
     const response = await fetch(`${API_URL}/admin/visitor-contacts/${id}/`, {
       method: 'DELETE',
       headers: {
-        'Authorization': `Bearer ${localStorage.getItem('access_token')}`,
+        'Authorization': `Bearer ${localStorage.getItem('token')}`,
       },
     })
     if (!response.ok) {

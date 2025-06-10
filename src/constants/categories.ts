@@ -1,4 +1,4 @@
-interface CategoriesProps {
+export interface CategoriesProps {
     id:number;
     name:string;
     category:string;

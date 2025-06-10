@@ -25,13 +25,24 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip"
-import { Check, X, Trash2, TrendingUp, TrendingDown } from "lucide-react"
+import { Check, X, Trash2, TrendingUp, TrendingDown, Loader2 } from "lucide-react"
 import { contactService } from "@/services/api"
 import { toast } from "sonner"
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog"
 
 interface VisitorContact {
   id: number
-  provider: {
+  provider: number
+  provider_details: {
     id: number
     company_name: string
     user: {
@@ -71,6 +82,9 @@ export default function RequestsPage() {
   const [isLoading, setIsLoading] = useState(true)
   const [totalCount, setTotalCount] = useState(0)
   const [stats, setStats] = useState<ContactStats | null>(null)
+  const [loadingActions, setLoadingActions] = useState<{ [key: number]: string }>({})
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
+  const [contactToDelete, setContactToDelete] = useState<number | null>(null)
 
   useEffect(() => {
     loadContacts()
@@ -100,36 +114,64 @@ export default function RequestsPage() {
 
   const handleAccept = async (id: number) => {
     try {
+      setLoadingActions(prev => ({ ...prev, [id]: 'accept' }))
       await contactService.acceptContact(id)
       toast.success("Demande de contact acceptée avec succès")
       loadContacts()
       loadStats()
     } catch (error) {
       toast.error("Erreur lors de l'acceptation de la demande")
+    } finally {
+      setLoadingActions(prev => {
+        const newState = { ...prev }
+        delete newState[id]
+        return newState
+      })
     }
   }
 
   const handleReject = async (id: number) => {
     try {
+      setLoadingActions(prev => ({ ...prev, [id]: 'reject' }))
       await contactService.rejectContact(id)
       toast.success("Demande de contact rejetée avec succès")
       loadContacts()
       loadStats()
     } catch (error) {
       toast.error("Erreur lors du rejet de la demande")
+    } finally {
+      setLoadingActions(prev => {
+        const newState = { ...prev }
+        delete newState[id]
+        return newState
+      })
     }
   }
 
   const handleDelete = async (id: number) => {
-    if (!confirm("Êtes-vous sûr de vouloir supprimer cette demande de contact ?")) return
+    setContactToDelete(id)
+    setDeleteDialogOpen(true)
+  }
+
+  const confirmDelete = async () => {
+    if (!contactToDelete) return
 
     try {
-      await contactService.deleteContact(id)
+      setLoadingActions(prev => ({ ...prev, [contactToDelete]: 'delete' }))
+      await contactService.deleteContact(contactToDelete)
       toast.success("Demande de contact supprimée avec succès")
       loadContacts()
       loadStats()
     } catch (error) {
       toast.error("Erreur lors de la suppression de la demande")
+    } finally {
+      setLoadingActions(prev => {
+        const newState = { ...prev }
+        delete newState[contactToDelete]
+        return newState
+      })
+      setDeleteDialogOpen(false)
+      setContactToDelete(null)
     }
   }
 
@@ -213,10 +255,10 @@ export default function RequestsPage() {
                     <span className="text-sm text-gray-500">{contact.phone}</span>
                   </TableCell>
                   <TableCell>
-                    {contact.provider.company_name}
+                    {contact.provider_details.company_name}
                     <br />
                     <span className="text-sm text-gray-500">
-                      {contact.provider.user.email}
+                      {contact.provider_details.user.email}
                     </span>
                   </TableCell>
                   <TableCell className="max-w-xs truncate">
@@ -249,8 +291,13 @@ export default function RequestsPage() {
                                 size="icon"
                                 className="rounded-full"
                                 onClick={() => handleAccept(contact.id)}
+                                disabled={!!loadingActions[contact.id]}
                               >
-                                <Check className="size-3 text-green-600" />
+                                {loadingActions[contact.id] === "accept" ? (
+                                  <Loader2 className="size-4 animate-spin text-green-600" />
+                                ) : (
+                                  <Check className="size-4 text-green-600" />
+                                )}
                               </Button>
                             </TooltipTrigger>
                             <TooltipContent>
@@ -265,8 +312,13 @@ export default function RequestsPage() {
                                 size="icon"
                                 className="rounded-full"
                                 onClick={() => handleReject(contact.id)}
+                                disabled={!!loadingActions[contact.id]}
                               >
-                                <X className="size-3 text-red-600" />
+                                {loadingActions[contact.id] === "reject" ? (
+                                  <Loader2 className="size-4 animate-spin text-red-600" />
+                                ) : (
+                                  <X className="size-4 text-red-600" />
+                                )}
                               </Button>
                             </TooltipTrigger>
                             <TooltipContent>
@@ -283,8 +335,13 @@ export default function RequestsPage() {
                               size="icon"
                               className="rounded-full"
                               onClick={() => handleDelete(contact.id)}
+                              disabled={!!loadingActions[contact.id]}
                             >
-                              <Trash2 className="size-3 text-white" />
+                              {loadingActions[contact.id] === "delete" ? (
+                                <Loader2 className="size-4 animate-spin text-white" />
+                              ) : (
+                                <Trash2 className="size-4 text-white" />
+                              )}
                             </Button>
                           </TooltipTrigger>
                           <TooltipContent>
@@ -300,6 +357,26 @@ export default function RequestsPage() {
           </Table>
         </CardContent>
       </Card>
+
+      <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Êtes-vous sûr ?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Cette action est irréversible. Cela supprimera définitivement la demande de contact.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Annuler</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={confirmDelete}
+              className="bg-red-600 hover:bg-red-700"
+            >
+              Supprimer
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   )
 } 

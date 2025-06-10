@@ -838,9 +838,50 @@ class AdminVisitorContactViewSet(viewsets.ModelViewSet):
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
     search_fields = ['name', 'email', 'message', 'provider__company_name']
     ordering_fields = ['created_at', 'status']
+    ordering = ['-created_at']  # Default ordering by created_at descending
 
     def get_queryset(self):
-        return VisitorContact.objects.all()
+        return VisitorContact.objects.all().order_by('-created_at')
+
+    @action(detail=False, methods=['get'])
+    def stats(self, request):
+        """Récupère les statistiques des contacts visiteurs"""
+        if not request.user.is_staff:
+            return Response(
+                {'detail': 'You do not have permission to perform this action.'},
+                status=status.HTTP_403_FORBIDDEN
+            )
+
+        total_contacts = VisitorContact.objects.count()
+        pending_contacts = VisitorContact.objects.filter(status='pending').count()
+        accepted_contacts = VisitorContact.objects.filter(status='accepted').count()
+        rejected_contacts = VisitorContact.objects.filter(status='rejected').count()
+
+        # Calculer le pourcentage de variation du mois dernier
+        last_month = timezone.now() - timezone.timedelta(days=30)
+        new_contacts_this_month = VisitorContact.objects.filter(created_at__gte=last_month).count()
+        new_contacts_last_month = VisitorContact.objects.filter(
+            created_at__gte=last_month - timezone.timedelta(days=30),
+            created_at__lt=last_month
+        ).count()
+
+        monthly_growth = 0
+        if new_contacts_last_month > 0:
+            monthly_growth = ((new_contacts_this_month - new_contacts_last_month) / new_contacts_last_month) * 100
+
+        # Calculer le taux d'acceptation
+        acceptance_rate = 0
+        if total_contacts > 0:
+            acceptance_rate = (accepted_contacts / total_contacts) * 100
+
+        return Response({
+            'total_contacts': total_contacts,
+            'pending_contacts': pending_contacts,
+            'accepted_contacts': accepted_contacts,
+            'rejected_contacts': rejected_contacts,
+            'monthly_growth': round(monthly_growth, 1),
+            'acceptance_rate': round(acceptance_rate, 1)
+        })
 
     @action(detail=True, methods=['post'])
     def accept(self, request, pk=None):
