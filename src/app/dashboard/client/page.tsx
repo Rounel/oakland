@@ -14,7 +14,7 @@ export default function ClientDashboard() {
       title: "E-commerce Website Redesign",
       freelancer: {
         name: "Alex Morgan",
-        avatar: "/placeholder.svg?height=40&width=40",
+        avatar: "/ap.png?height=40&width=40",
         initials: "AM",
       },
       status: "In Progress",
@@ -27,7 +27,7 @@ export default function ClientDashboard() {
       title: "Content Writing for Blog Series",
       freelancer: {
         name: "Emma Rodriguez",
-        avatar: "/placeholder.svg?height=40&width=40",
+        avatar: "/ap.png?height=40&width=40",
         initials: "ER",
       },
       status: "Review",
@@ -40,7 +40,7 @@ export default function ClientDashboard() {
       title: "Social Media Marketing Campaign",
       freelancer: {
         name: "Marcus Johnson",
-        avatar: "/placeholder.svg?height=40&width=40",
+        avatar: "/ap.png?height=40&width=40",
         initials: "MJ",
       },
       status: "In Progress",
@@ -55,7 +55,7 @@ export default function ClientDashboard() {
       id: 1,
       from: {
         name: "Alex Morgan",
-        avatar: "/placeholder.svg?height=40&width=40",
+        avatar: "/ap.png?height=40&width=40",
         initials: "AM",
       },
       message: "I've completed the wireframes for the homepage. Please review when you have a moment.",
@@ -66,7 +66,7 @@ export default function ClientDashboard() {
       id: 2,
       from: {
         name: "Emma Rodriguez",
-        avatar: "/placeholder.svg?height=40&width=40",
+        avatar: "/ap.png?height=40&width=40",
         initials: "ER",
       },
       message: "Just submitted the first three blog articles for your review. Let me know your thoughts!",

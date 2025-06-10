@@ -14,6 +14,8 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Facebook, Github, Loader2 } from "lucide-react"
 import { login } from "@/services/services"
 import { useAuth } from "@/contexts/authContext"
+import Image from "next/image"
+import { Separator } from "@/components/ui/separator"
 
 export default function LoginPage() {
   const {setUser, user} = useAuth()
@@ -59,11 +61,17 @@ export default function LoginPage() {
   }, [user, router])
 
   return (
-    <div className="container max-w-md py-16">
-      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
-        <Card>
+    <div className="w-full flex justify-center items-center bg-amber-70">
+      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="h-full flex items-center justify-center z-40">
+        <Card className=" shadow-xl">
           <CardHeader className="space-y-1">
-            <CardTitle className="text-2xl font-bold text-center">Connexion</CardTitle>
+            <CardTitle className="text-2xl font-bold text-center flex flex-col gap-5">
+              <Link href={"/"} className="text-5xl font-bold bg-linear-to-b/hsl from-purple-600 to-purple-900 rounded-2xl py-8 text-white">
+                Okland
+              </Link>
+              <Separator />
+              Connexion
+            </CardTitle>
             <CardDescription className="text-center">
               Entrez votre email et mot de passe pour accéder à votre compte
             </CardDescription>
@@ -133,6 +141,12 @@ export default function LoginPage() {
           </CardFooter>
         </Card>
       </motion.div>
+      <Image
+        src={"/loginbg.jpg"}
+        alt="illus"
+        fill
+        className="object-cover"
+      />
     </div>
   )
 }

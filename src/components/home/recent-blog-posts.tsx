@@ -16,7 +16,7 @@ export function RecentBlogPosts() {
       excerpt: "Learn how to maximize your productivity and earnings as a freelancer with these proven strategies.",
       date: "2023-10-15",
       category: "Productivity",
-      image: "/placeholder.svg?height=200&width=400",
+      image: "/ap.png?height=200&width=400",
       slug: "10-tips-for-providers",
     },
     {
@@ -26,7 +26,7 @@ export function RecentBlogPosts() {
         "Stand out from the competition with these proposal writing techniques that will help you win more projects.",
       date: "2023-10-08",
       category: "Business",
-      image: "/placeholder.svg?height=200&width=400",
+      image: "/ap.png?height=200&width=400",
       slug: "winning-client-proposal",
     },
     {
@@ -35,7 +35,7 @@ export function RecentBlogPosts() {
       excerpt: "Explore the trends shaping the future of work and how providers can position themselves for success.",
       date: "2023-09-30",
       category: "Trends",
-      image: "/placeholder.svg?height=200&width=400",
+      image: "/ap.png?height=200&width=400",
       slug: "future-of-remote-work",
     },
   ]
@@ -53,7 +53,7 @@ export function RecentBlogPosts() {
             <Card key={post.id} className="h-full overflow-hidden">
               <div className="aspect-video w-full overflow-hidden">
                 <img
-                  src={post.image || "/placeholder.svg"}
+                  src={post.image || "/ap.png"}
                   alt={post.title}
                   className="h-full w-full object-cover transition-transform duration-300 hover:scale-105"
                 />

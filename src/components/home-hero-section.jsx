@@ -10,6 +10,7 @@ import StatisticsBar from './stats-section';
 import Image from 'next/image';
 import { motion } from "framer-motion"
 import { useGeolocation } from "@/hooks/use-geolocation"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
 export default function HomeHeroSection() {
   const [isVisible, setIsVisible] = useState(false);
@@ -162,13 +163,19 @@ export default function HomeHeroSection() {
           <form onSubmit={handleSearch} className="flex flex-col md:flex-row gap-4">
             <div className="flex-1 relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
-              <Input
-                type="text"
-                placeholder="Quel service recherchez-vous ?"
-                className="pl-10"
-                value={profession}
-                onChange={(e) => setProfession(e.target.value)}
-              />
+              <Select>
+                <SelectTrigger className='pl-10'>
+                  <SelectValue placeholder="Toutes les catégories" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">Toutes les catégories</SelectItem>
+                  {categories.map((cat) => (
+                    <SelectItem key={`cfs${cat.id}`} value={String(cat.id)}>
+                      {cat.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
             <div className="flex-1 relative">
               <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />

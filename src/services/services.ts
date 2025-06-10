@@ -97,27 +97,28 @@ export async function confirmPasswordReset(uid: string, token: string, password:
 }
 
 interface SearchParams {
+    profession?: string;
     location?: string;
+    category?: string;
+    selectedCity?: string;
     min_rating?: number;
     availability?: string;
-    categories?: string[];
-    lat?: number;
-    lng?: number;
-    radius?: number;
 }
 
 export async function searchProviders(params: SearchParams) {
     const query = new URLSearchParams();
-
-    if (params.location) query.append('location', params.location);
+    console.log('WITH PARAMS')
+    if (params.profession) query.append('profession', params.profession);
+    if (params.selectedCity && params.selectedCity !== 'all') {
+        query.append('location', params.selectedCity);
+    } else if (params.location) {
+        query.append('location', params.location);
+    }
+    if (params.category && params.category !== 'all') {
+        query.append('category', params.category);
+    }
     if (params.min_rating !== undefined) query.append('min_rating', params.min_rating.toString());
     if (params.availability) query.append('availability', params.availability);
-    if (params.lat !== undefined) query.append('lat', params.lat.toString());
-    if (params.lng !== undefined) query.append('lng', params.lng.toString());
-    if (params.radius !== undefined) query.append('radius', params.radius.toString());
-    if (params.categories) {
-        params.categories.forEach(c => query.append('categories', c));
-    }
 
     const res = await fetch(`${BASE_API_URL}/providers/search/?${query.toString()}`);
     return res.json();
@@ -125,6 +126,7 @@ export async function searchProviders(params: SearchParams) {
 
 export async function getCurrentUser() {
     const access = localStorage.getItem("access_token")
+    console.log(access)
     const res = await fetch(`${BASE_API_URL}/users/me/`, {
       headers: {
         Authorization: `Bearer ${access}`,

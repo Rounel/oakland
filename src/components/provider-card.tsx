@@ -20,7 +20,7 @@ export default function ProviderCard({ provider }: ProviderCardProps) {
       whileHover={{ y: -5 }}
     >
       <div className="relative h-48">
-        <Image src={provider?.user.profile_photo ? (MEDIA_API_URL + provider?.user.profile_photo) : "/placeholder.svg"} alt={provider ? (provider?.user.first_name + " " + provider?.user.last_name) : "profile picture"} fill className="object-cover" />
+        <Image src={provider?.user.profile_photo ? (MEDIA_API_URL + provider?.user.profile_photo) : "/ap.png"} alt={provider ? (provider?.user.first_name + " " + provider?.user.last_name) : "profile picture"} fill className="object-cover" />
       </div>
       <div className="p-6">
         <div className="flex items-center justify-between mb-2">

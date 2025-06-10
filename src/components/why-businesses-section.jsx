@@ -187,7 +187,7 @@ export default function WhyBusinessesSection() {
                 transition={{ duration: 0.8, ease: "easeOut", delay: 0.7 }}
               >
                 <Image
-                  src="/placeholder.svg?height=400&width=300"
+                  src="/ap.png?height=400&width=300"
                   alt="Professional freelancer"
                   width={300}
                   height={400}

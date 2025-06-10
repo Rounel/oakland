@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import Link from "next/link"
 import { useLanguage } from "./language-provider"
 import { Button } from "@/components/ui/button"
@@ -15,7 +15,7 @@ import {
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
-import { Menu, Globe, Search, LogOut, Dot } from "lucide-react"
+import { Menu, Globe, Search, LogOut, Dot, MessageSquare, Loader2 } from "lucide-react"
 import { cn, getInitials } from "@/lib/utils"
 import { categories } from "@/constants/categories"
 import { useAuth } from "@/contexts/authContext"
@@ -25,9 +25,26 @@ import {
   AvatarFallback,
   AvatarImage,
 } from "@/components/ui/avatar"
-import { logout, MEDIA_API_URL } from "@/services/services"
+import { logout, MEDIA_API_URL, BASE_API_URL } from "@/services/services"
 import { usePathname, useRouter } from "next/navigation"
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
+import { Badge } from "@/components/ui/badge"
 
+// Helper function for API calls
+const apiCall = async (endpoint: string, options: RequestInit = {}) => {
+  const response = await fetch(`${BASE_API_URL}${endpoint}`, {
+    ...options,
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${localStorage.getItem('token')}` || '',
+      ...options.headers,
+    },
+  })
+  if (!response.ok) {
+    throw new Error(`API call failed: ${response.statusText}`)
+  }
+  return response.json()
+}
 
 export default function Navbar() {
   const pathname = usePathname()
@@ -37,6 +54,44 @@ export default function Navbar() {
   const { language, setLanguage, t } = useLanguage()
   const [isSearchOpen, setIsSearchOpen] = useState(false)
   const { user, loading, setUser } = useAuth()
+  const [contacts, setContacts] = useState<any[]>([])
+  const [isLoadingContacts, setIsLoadingContacts] = useState(false)
+  const [showContacts, setShowContacts] = useState(false)
+  const [unreadCount, setUnreadCount] = useState(0)
+
+  // Fetch contacts
+  const fetchContacts = async () => {
+    try {
+      setIsLoadingContacts(true)
+      const response = await apiCall('/visitor-contacts/')
+      setContacts(response?.results)
+      // Count unread contacts (status === 'pending')
+      setUnreadCount(response?.results.filter((contact: any) => contact.status === 'pending').length)
+    } catch (err) {
+      console.error("Erreur lors du chargement des contacts:", err)
+    } finally {
+      setIsLoadingContacts(false)
+    }
+  }
+
+  // Handle contact status update
+  const handleContactStatus = async (contactId: number, status: 'accept' | 'reject') => {
+    try {
+      await apiCall(`/visitor-contacts/${contactId}/${status}/`, {
+        method: 'POST'
+      })
+      await fetchContacts() // Refresh contacts after update
+    } catch (err) {
+      console.error("Erreur lors de la mise à jour du statut du contact:", err)
+    }
+  }
+
+  // Fetch contacts when user is loaded
+  useEffect(() => {
+    if (user) {
+      fetchContacts()
+    }
+  }, [user])
 
   const handleLogout = async () => {
     const res = await logout()
@@ -174,7 +229,16 @@ export default function Navbar() {
                                 Profile
                               </Link>
                             </DropdownMenuItem>
-                            <DropdownMenuItem>Prise de contacts</DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => setShowContacts(true)}>
+                              <div className="flex items-center justify-between w-full">
+                                <span>Prise de contacts</span>
+                                {unreadCount > 0 && (
+                                  <Badge variant="destructive" className="ml-2">
+                                    {unreadCount}
+                                  </Badge>
+                                )}
+                              </div>
+                            </DropdownMenuItem>
                             <DropdownMenuSeparator />
                             <DropdownMenuItem className="text-red-600" onClick={() => handleLogout()}>
                               <LogOut />
@@ -254,6 +318,71 @@ export default function Navbar() {
           </header>
         )
       }
+
+      {/* Contacts Modal */}
+      <Dialog open={showContacts} onOpenChange={setShowContacts}>
+        <DialogContent className="max-w-3xl max-h-[80vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>Demandes de contact</DialogTitle>
+          </DialogHeader>
+          
+          {isLoadingContacts ? (
+            <div className="flex justify-center items-center py-8">
+              <Loader2 className="h-8 w-8 animate-spin text-primary" />
+            </div>
+          ) : contacts.length === 0 ? (
+            <p className="text-center text-gray-500 py-8">Aucune demande de contact</p>
+          ) : (
+            <div className="space-y-4">
+              {contacts.map((contact) => (
+                <div
+                  key={contact.id}
+                  className="bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700"
+                >
+                  <div className="flex justify-between items-start mb-4">
+                    <div>
+                      <h3 className="font-semibold text-lg">{contact.name}</h3>
+                      <p className="text-sm text-gray-500">{contact.email}</p>
+                      <p className="text-sm text-gray-500">{contact.phone}</p>
+                    </div>
+                    <div className="flex gap-2">
+                      {contact.status === 'pending' && (
+                        <>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => handleContactStatus(contact.id, 'accept')}
+                          >
+                            Accepter
+                          </Button>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="text-red-500 hover:text-red-600"
+                            onClick={() => handleContactStatus(contact.id, 'reject')}
+                          >
+                            Refuser
+                          </Button>
+                        </>
+                      )}
+                      {contact.status === 'accepted' && (
+                        <span className="text-green-500 text-sm">Accepté</span>
+                      )}
+                      {contact.status === 'rejected' && (
+                        <span className="text-red-500 text-sm">Refusé</span>
+                      )}
+                    </div>
+                  </div>
+                  <p className="text-gray-700 dark:text-gray-300">{contact.message}</p>
+                  <p className="text-xs text-gray-500 mt-2">
+                    Reçu le {new Date(contact.created_at).toLocaleDateString()}
+                  </p>
+                </div>
+              ))}
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
     </>
   )
 }

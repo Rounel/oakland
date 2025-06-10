@@ -50,7 +50,6 @@ export interface ProviderInfoProps {
     postal_code: string
     latitude: number
     longitude: number
-    website: string
     status: 'pending' | 'approved' | 'rejected'
     rating: number
 }
@@ -80,7 +79,6 @@ export interface ProviderProps {
     postal_code?: string
     latitude?: number
     longitude?: number
-    website?: string
     status?: 'pending' | 'approved' | 'rejected'
     rating?: number
     reviews: ReviewProps[] | null
@@ -129,7 +127,6 @@ export interface ProvidersProps {
     postal_code?: string
     latitude?: number
     longitude?: number
-    website?: string
     status?: 'pending' | 'approved' | 'rejected'
     rating?: number
     reviews: ReviewProps[] | null

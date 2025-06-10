@@ -16,7 +16,7 @@ export function CategoryShowcase({ title, count, imageSrc, href }: CategoryShowc
         <CardContent className="p-0">
           <div className="relative">
             <Image
-              src={imageSrc || "/placeholder.svg"}
+              src={imageSrc || "/ap.png"}
               alt={title}
               width={200}
               height={200}

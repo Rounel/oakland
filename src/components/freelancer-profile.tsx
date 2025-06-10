@@ -42,7 +42,7 @@ export function FreelancerProfile({ freelancer }: FreelancerProfileProps) {
             <div className="flex-shrink-0">
               <div className="w-24 h-24 md:w-32 md:h-32 rounded-full overflow-hidden">
                 <Image
-                  src="/placeholder.svg?height=128&width=128"
+                  src="/ap.png?height=128&width=128"
                   alt={freelancer.name}
                   width={128}
                   height={128}
@@ -158,7 +158,7 @@ export function FreelancerProfile({ freelancer }: FreelancerProfileProps) {
               {freelancer.clients.map((client, index) => (
                 <div key={index} className="h-8">
                   <Image
-                    src={client.logo || "/placeholder.svg?height=32&width=80"}
+                    src={client.logo || "/ap.png?height=32&width=80"}
                     alt={client.name}
                     width={80}
                     height={32}
@@ -176,7 +176,7 @@ export function FreelancerProfile({ freelancer }: FreelancerProfileProps) {
             <div className="flex items-center gap-3 mb-4">
               <div className="w-10 h-10 rounded-full overflow-hidden">
                 <Image
-                  src="/placeholder.svg?height=40&width=40"
+                  src="/ap.png?height=40&width=40"
                   alt={freelancer.name}
                   width={40}
                   height={40}

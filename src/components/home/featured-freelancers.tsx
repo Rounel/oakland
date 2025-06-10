@@ -42,7 +42,7 @@ export function FeaturedFreelancers({
         </Button> */}
         <Link href={`/providers/${name.toLowerCase().replace(/\s+/g, "-")}`}>
           <Image
-            src={imageSrc || "/placeholder.svg"}
+            src={imageSrc || "/ap.png"}
             alt={name}
             width={300}
             height={300}

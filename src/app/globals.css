@@ -121,6 +121,10 @@
   }
 }
 
+button {
+  cursor: pointer;
+}
+
 .loader {
   width: 48px;
   height: 48px;

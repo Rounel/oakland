@@ -1,111 +1,173 @@
 "use client"
 
-import { useState } from "react"
-import Image from "next/image"
-import { Search, Filter, CheckCircle, XCircle } from "lucide-react"
+import { useEffect, useState } from "react"
+import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Select, SelectContent, SelectItem, SelectTrigger } from "@/components/ui/select"
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table"
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip"
+import { Check, X, Trash2, TrendingUp, TrendingDown, Loader2 } from "lucide-react"
+import { providerService } from "@/services/api"
+import { toast } from "sonner"
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog"
 
-// Mock data for providers
-const providers = [
-  {
-    id: "1",
-    name: "Jean Dupont",
-    company: "Dupont Électricité",
-    category: "Électricien",
-    location: "Paris",
-    date: "2023-05-15",
-    status: "pending",
-    image: "/diverse-group.png",
-  },
-  {
-    id: "2",
-    name: "Marie Martin",
-    company: "Martin Plomberie",
-    category: "Plombier",
-    location: "Lyon",
-    date: "2023-05-14",
-    status: "approved",
-    image: "/diverse-group.png",
-  },
-  {
-    id: "3",
-    name: "Pierre Durand",
-    company: "Durand Peinture",
-    category: "Peintre",
-    location: "Marseille",
-    date: "2023-05-13",
-    status: "rejected",
-    image: "/diverse-group.png",
-  },
-]
+interface Provider {
+  id: number
+  user: {
+    id: number
+    email: string
+    first_name: string
+    last_name: string
+    phone: string
+    profile_photo: string
+    is_provider: boolean
+    is_validated: boolean
+  }
+  company_name: string
+  category: string
+  city: string
+  status: string
+  created_at: string
+  description: string
+  address: string
+  postal_code: string
+  rating: string
+}
+
+interface ProvidersResponse {
+  count: number
+  next: string | null
+  previous: string | null
+  results: Provider[]
+}
+
+interface ProviderStats {
+  total_providers: number
+  pending_providers: number
+  today_visits: number
+  conversion_rate: number
+  monthly_growth: number
+  visits_growth: number
+  conversion_change: number
+}
 
 export default function ProvidersPage() {
-  const [searchTerm, setSearchTerm] = useState("")
-  const [statusFilter, setStatusFilter] = useState("all")
+  const router = useRouter()
+  const [providers, setProviders] = useState<Provider[]>([])
+  const [isLoading, setIsLoading] = useState(true)
+  const [totalCount, setTotalCount] = useState(0)
+  const [stats, setStats] = useState<ProviderStats | null>(null)
+  const [loadingActions, setLoadingActions] = useState<{ [key: number]: string }>({})
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
+  const [providerToDelete, setProviderToDelete] = useState<number | null>(null)
 
-  const handleApprove = (id: string) => {
-    // Handle provider approval
-    console.log("Approve provider:", id)
-  }
+  useEffect(() => {
+    loadProviders()
+    loadStats()
+  }, [])
 
-  const handleReject = (id: string) => {
-    // Handle provider rejection
-    console.log("Reject provider:", id)
-  }
-
-  const filteredProviders = providers.filter((provider) => {
-    const matchesSearch =
-      provider.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      provider.company.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      provider.category.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      provider.location.toLowerCase().includes(searchTerm.toLowerCase())
-
-    if (statusFilter === "all") return matchesSearch
-    return matchesSearch && provider.status === statusFilter
-  })
-
-  const getStatusBadge = (status: string) => {
-    switch (status) {
-      case "pending":
-        return (
-          <Badge
-            variant="outline"
-            className="bg-yellow-50 text-yellow-700 border-yellow-200 dark:bg-yellow-900/20 dark:text-yellow-400 dark:border-yellow-800"
-          >
-            En attente
-          </Badge>
-        )
-      case "approved":
-        return (
-          <Badge
-            variant="outline"
-            className="bg-green-50 text-green-700 border-green-200 dark:bg-green-900/20 dark:text-green-400 dark:border-green-800"
-          >
-            Approuvé
-          </Badge>
-        )
-      case "rejected":
-        return (
-          <Badge
-            variant="outline"
-            className="bg-red-50 text-red-700 border-red-200 dark:bg-red-900/20 dark:text-red-400 dark:border-red-800"
-          >
-            Refusé
-          </Badge>
-        )
-      default:
-        return null
+  const loadProviders = async () => {
+    try {
+      const data: ProvidersResponse = await providerService.getPending()
+      setProviders(data.results)
+      setTotalCount(data.count)
+    } catch (error) {
+      toast.error("Erreur lors du chargement des prestataires")
+    } finally {
+      setIsLoading(false)
     }
   }
 
+  const loadStats = async () => {
+    try {
+      const data = await providerService.getStats()
+      setStats(data)
+    } catch (error) {
+      toast.error("Erreur lors du chargement des statistiques")
+    }
+  }
+
+  const handleValidate = async (id: number, status: "approved" | "rejected") => {
+    try {
+      setLoadingActions(prev => ({ ...prev, [id]: status }))
+      await providerService.validate(id, status)
+      toast.success(`Prestataire ${status === "approved" ? "approuvé" : "rejeté"} avec succès`)
+      loadProviders()
+      loadStats()
+    } catch (error) {
+      toast.error("Erreur lors de la validation du prestataire")
+    } finally {
+      setLoadingActions(prev => {
+        const newState = { ...prev }
+        delete newState[id]
+        return newState
+      })
+    }
+  }
+
+  const handleDelete = async (id: number) => {
+    setProviderToDelete(id)
+    setDeleteDialogOpen(true)
+  }
+
+  const confirmDelete = async () => {
+    if (!providerToDelete) return
+
+    try {
+      setLoadingActions(prev => ({ ...prev, [providerToDelete]: 'delete' }))
+      await providerService.delete(providerToDelete)
+      toast.success("Prestataire supprimé avec succès")
+      loadProviders()
+      loadStats()
+    } catch (error) {
+      toast.error("Erreur lors de la suppression du prestataire")
+    } finally {
+      setLoadingActions(prev => {
+        const newState = { ...prev }
+        delete newState[providerToDelete]
+        return newState
+      })
+      setDeleteDialogOpen(false)
+      setProviderToDelete(null)
+    }
+  }
+
+  if (isLoading) {
+    return <div>Chargement...</div>
+  }
+
   return (
-    <>
+    <div className="container mx-auto py-10">
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
         <Card>
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium text-gray-500 dark:text-gray-400">
@@ -113,9 +175,22 @@ export default function ProvidersPage() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">124</div>
-            <p className="text-xs text-green-500 flex items-center mt-1">
-              <span>+12% ce mois</span>
+            <div className="text-2xl font-bold">{stats?.total_providers || 0}</div>
+            <p className={`text-xs flex items-center mt-1 ${
+              (stats?.monthly_growth || 0) >= 0 ? "text-green-500" : "text-red-500"
+            }`}>
+              {stats?.monthly_growth ? (
+                <>
+                  {stats.monthly_growth >= 0 ? (
+                    <TrendingUp className="h-3 w-3 mr-1" />
+                  ) : (
+                    <TrendingDown className="h-3 w-3 mr-1" />
+                  )}
+                  <span>{Math.abs(stats.monthly_growth)}% ce mois</span>
+                </>
+              ) : (
+                <span>Pas de données</span>
+              )}
             </p>
           </CardContent>
         </Card>
@@ -127,23 +202,36 @@ export default function ProvidersPage() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">5</div>
+            <div className="text-2xl font-bold">{stats?.pending_providers || 0}</div>
             <p className="text-xs text-yellow-500 flex items-center mt-1">
               <span>Nécessite votre attention</span>
             </p>
           </CardContent>
         </Card>
 
-        <Card>
+        {/* <Card>
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium text-gray-500 dark:text-gray-400">
               Visites aujourd'hui
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">842</div>
-            <p className="text-xs text-green-500 flex items-center mt-1">
-              <span>+18% vs hier</span>
+            <div className="text-2xl font-bold">{stats?.today_visits || 0}</div>
+            <p className={`text-xs flex items-center mt-1 ${
+              (stats?.visits_growth || 0) >= 0 ? "text-green-500" : "text-red-500"
+            }`}>
+              {stats?.visits_growth ? (
+                <>
+                  {stats.visits_growth >= 0 ? (
+                    <TrendingUp className="h-3 w-3 mr-1" />
+                  ) : (
+                    <TrendingDown className="h-3 w-3 mr-1" />
+                  )}
+                  <span>{Math.abs(stats.visits_growth)}% vs hier</span>
+                </>
+              ) : (
+                <span>Pas de données</span>
+              )}
             </p>
           </CardContent>
         </Card>
@@ -155,169 +243,175 @@ export default function ProvidersPage() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">3.2%</div>
-            <p className="text-xs text-red-500 flex items-center mt-1">
-              <span>-0.5% vs semaine dernière</span>
+            <div className="text-2xl font-bold">{stats?.conversion_rate?.toFixed(1) || 0}%</div>
+            <p className={`text-xs flex items-center mt-1 ${
+              (stats?.conversion_change || 0) >= 0 ? "text-green-500" : "text-red-500"
+            }`}>
+              {stats?.conversion_change ? (
+                <>
+                  {stats.conversion_change >= 0 ? (
+                    <TrendingUp className="h-3 w-3 mr-1" />
+                  ) : (
+                    <TrendingDown className="h-3 w-3 mr-1" />
+                  )}
+                  <span>{Math.abs(stats.conversion_change)}% vs semaine dernière</span>
+                </>
+              ) : (
+                <span>Pas de données</span>
+              )}
             </p>
           </CardContent>
-        </Card>
+        </Card> */}
       </div>
+      
       <Card>
         <CardHeader>
           <CardTitle>Gestion des prestataires</CardTitle>
-          <CardDescription>Gérez les prestataires et leurs statuts d'inscription.</CardDescription>
+          <CardDescription>
+            {totalCount} prestataire{totalCount > 1 ? "s" : ""} en attente de validation
+          </CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="flex items-center space-x-2 mb-4">
-            <div className="relative flex-1">
-              <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-gray-500 dark:text-gray-400" />
-              <Input
-                type="search"
-                placeholder="Rechercher un prestataire..."
-                className="pl-8"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
-            </div>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Nom</TableHead>
+                <TableHead>Entreprise</TableHead>
+                <TableHead>Catégorie</TableHead>
+                <TableHead>Ville</TableHead>
+                <TableHead>Statut</TableHead>
+                <TableHead>Date</TableHead>
+                <TableHead>Actions</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {providers.map((provider) => (
+                <TableRow key={provider.id}>
+                  <TableCell>
+                    {provider.user.first_name} {provider.user.last_name}
+                    <br />
+                    <span className="text-sm text-gray-500">{provider.user.email}</span>
+                  </TableCell>
+                  <TableCell>
+                    {provider.company_name}
+                    <br />
+                    <span className="text-sm text-gray-500">{provider.address}, {provider.postal_code}</span>
+                  </TableCell>
+                  <TableCell>{provider.category}</TableCell>
+                  <TableCell>{provider.city}</TableCell>
+                  <TableCell>
+                    <Badge
+                      variant={
+                        provider.status === "approved"
+                          ? "default"
+                          : provider.status === "rejected"
+                          ? "destructive"
+                          : "outline"
+                      }
+                    >
+                      {provider.status}
+                    </Badge>
+                  </TableCell>
+                  <TableCell>
+                    {new Date(provider.created_at).toLocaleDateString()}
+                  </TableCell>
+                  <TableCell>
+                    <div className="flex space-x-2">
+                      {provider.status === "pending" && (
+                        <TooltipProvider>
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <Button
+                                variant="outline"
+                                size="icon"
+                                className="rounded-full"
+                                onClick={() => handleValidate(provider.id, "approved")}
+                                disabled={!!loadingActions[provider.id]}
+                              >
+                                {loadingActions[provider.id] === "approved" ? (
+                                  <Loader2 className="size-4 animate-spin text-green-600" />
+                                ) : (
+                                  <Check className="size-4 text-green-600" />
+                                )}
+                              </Button>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                              <p>Approuver</p>
+                            </TooltipContent>
+                          </Tooltip>
 
-            <Select value={statusFilter} onValueChange={setStatusFilter}>
-              <SelectTrigger className="w-[130px]">
-                <div className="flex items-center">
-                  <Filter className="mr-2 h-4 w-4" />
-                  <span>Filtrer</span>
-                </div>
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">Tous</SelectItem>
-                <SelectItem value="pending">En attente</SelectItem>
-                <SelectItem value="approved">Approuvés</SelectItem>
-                <SelectItem value="rejected">Refusés</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-
-          <div className="rounded-md border">
-            <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-              <thead className="bg-gray-50 dark:bg-gray-800">
-                <tr>
-                  <th
-                    scope="col"
-                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider"
-                  >
-                    Prestataire
-                  </th>
-                  <th
-                    scope="col"
-                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider"
-                  >
-                    Catégorie
-                  </th>
-                  <th
-                    scope="col"
-                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider"
-                  >
-                    Localisation
-                  </th>
-                  <th
-                    scope="col"
-                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider"
-                  >
-                    Date
-                  </th>
-                  <th
-                    scope="col"
-                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider"
-                  >
-                    Statut
-                  </th>
-                  <th
-                    scope="col"
-                    className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider"
-                  >
-                    Actions
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
-                {filteredProviders.map((provider) => (
-                  <tr key={provider.id}>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="flex items-center">
-                        <div className="flex-shrink-0 h-10 w-10">
-                          <Image
-                            className="h-10 w-10 rounded-full"
-                            src={provider.image || "/placeholder.svg"}
-                            alt={provider.name}
-                            width={40}
-                            height={40}
-                          />
-                        </div>
-                        <div className="ml-4">
-                          <div className="text-sm font-medium text-gray-900 dark:text-white">
-                            {provider.name}
-                          </div>
-                          <div className="text-sm text-gray-500 dark:text-gray-400">{provider.company}</div>
-                        </div>
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-gray-900 dark:text-white">{provider.category}</div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-gray-900 dark:text-white">{provider.location}</div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-gray-500 dark:text-gray-400">
-                        {new Date(provider.date).toLocaleDateString("fr-FR")}
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">{getStatusBadge(provider.status)}</td>
-                    <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                      <div className="flex justify-end space-x-2">
-                        {provider.status === "pending" && (
-                          <>
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <Button
+                                variant="outline"
+                                size="icon"
+                                className="rounded-full"
+                                onClick={() => handleValidate(provider.id, "rejected")}
+                                disabled={!!loadingActions[provider.id]}
+                              >
+                                {loadingActions[provider.id] === "rejected" ? (
+                                  <Loader2 className="size-4 animate-spin text-red-600" />
+                                ) : (
+                                  <X className="size-4 text-red-600" />
+                                )}
+                              </Button>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                              <p>Rejeter</p>
+                            </TooltipContent>
+                          </Tooltip>
+                        </TooltipProvider>
+                      )}
+                      <TooltipProvider>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
                             <Button
-                              size="sm"
-                              variant="outline"
-                              className="text-green-600 hover:text-green-800 dark:text-green-500 dark:hover:text-green-400"
-                              onClick={() => handleApprove(provider.id)}
+                              variant="destructive"
+                              size="icon"
+                              className="rounded-full"
+                              onClick={() => handleDelete(provider.id)}
+                              disabled={!!loadingActions[provider.id]}
                             >
-                              <CheckCircle className="h-4 w-4 mr-1" />
-                              Approuver
+                              {loadingActions[provider.id] === "delete" ? (
+                                <Loader2 className="size-4 animate-spin text-white" />
+                              ) : (
+                                <Trash2 className="size-4 text-white" />
+                              )}
                             </Button>
-                            <Button
-                              size="sm"
-                              variant="outline"
-                              className="text-red-600 hover:text-red-800 dark:text-red-500 dark:hover:text-red-400"
-                              onClick={() => handleReject(provider.id)}
-                            >
-                              <XCircle className="h-4 w-4 mr-1" />
-                              Refuser
-                            </Button>
-                          </>
-                        )}
-                        {provider.status !== "pending" && (
-                          <Button size="sm" variant="outline">
-                            Voir détails
-                          </Button>
-                        )}
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-
-                {filteredProviders.length === 0 && (
-                  <tr>
-                    <td colSpan={6} className="px-6 py-4 text-center text-sm text-gray-500 dark:text-gray-400">
-                      Aucun prestataire trouvé
-                    </td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
-          </div>
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            <p>Supprimer</p>
+                          </TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
         </CardContent>
       </Card>
-    </>
+
+      <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Êtes-vous sûr ?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Cette action est irréversible. Cela supprimera définitivement le prestataire.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Annuler</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={confirmDelete}
+              className="bg-red-600 hover:bg-red-700"
+            >
+              Supprimer
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+    </div>
   )
 } 

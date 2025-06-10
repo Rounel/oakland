@@ -4,6 +4,7 @@ from django.utils.translation import gettext_lazy as _
 from django.contrib.auth import get_user_model
 from .models import *
 from django.core.validators import MinValueValidator, MaxValueValidator
+import re
 
 User = get_user_model()
 
@@ -15,12 +16,11 @@ class UserSerializer(BaseModelSerializer):
     gallery = serializers.SerializerMethodField()
     services = serializers.SerializerMethodField()
     schedules = serializers.SerializerMethodField()
-    social_media = serializers.SerializerMethodField()
     provider_info = serializers.SerializerMethodField()
 
     class Meta:
         model = User
-        fields = ['id', 'email', 'username', 'first_name', 'last_name', 'phone', 'profile_photo', 'is_provider', 'is_validated', 'created_at', 'updated_at', 'gallery', 'services', 'schedules', 'social_media', 'provider_info']
+        fields = ['id', 'email', 'username', 'first_name', 'last_name', 'phone', 'profile_photo', 'is_provider', 'is_validated', 'created_at', 'updated_at', 'gallery', 'services', 'schedules', 'provider_info']
         read_only_fields = ['is_provider', 'is_validated']
 
     def get_gallery(self, obj):
@@ -53,16 +53,6 @@ class UserSerializer(BaseModelSerializer):
         except:
             return []
 
-    def get_social_media(self, obj):
-        try:
-            provider = obj.provider_application
-            if provider and provider.status == 'approved':
-                social_media = SocialMedia.objects.filter(provider=provider).first()
-                return SocialMediaSerializer(social_media).data if social_media else {}
-            return {}
-        except:
-            return {}
-
     def get_provider_info(self, obj):
         try:
             provider = obj.provider_application
@@ -76,13 +66,23 @@ class UserSerializer(BaseModelSerializer):
                     'postal_code': provider.postal_code,
                     'latitude': provider.latitude,
                     'longitude': provider.longitude,
-                    'website': provider.website,
                     'status': provider.status,
                     'rating': provider.rating
                 }
             return {}
         except:
             return {}
+
+def validate_password_strength(password):
+    if len(password) < 8:
+        raise serializers.ValidationError("Le mot de passe doit contenir au moins 8 caractères.")
+    if not re.search(r'[A-Z]', password):
+        raise serializers.ValidationError("Le mot de passe doit contenir au moins une lettre majuscule.")
+    if not re.search(r'[0-9]', password):
+        raise serializers.ValidationError("Le mot de passe doit contenir au moins un chiffre.")
+    if not re.search(r'[!@#$%^&*(),.?":{}|<>]', password):
+        raise serializers.ValidationError("Le mot de passe doit contenir au moins un symbole (!@#$%^&*(),.?\":{}|<>).")
+    return password
 
 class RegisterSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True, min_length=8)
@@ -96,6 +96,7 @@ class RegisterSerializer(serializers.ModelSerializer):
     def validate(self, data):
         if data['password'] != data['confirm_password']:
             raise serializers.ValidationError({"confirm_password": "Les mots de passe ne correspondent pas."})
+        validate_password_strength(data['password'])
         return data
 
     def create(self, validated_data):
@@ -148,17 +149,6 @@ class GallerySerializer(BaseModelSerializer):
         fields = ['id', 'image', 'description', 'created_at']
         read_only_fields = ['created_at']
 
-class SocialMediaSerializer(BaseModelSerializer):
-    class Meta:
-        model = SocialMedia
-        fields = ['facebook', 'instagram', 'twitter', 'website']
-
-    def validate(self, data):
-        for field, value in data.items():
-            if value and not value.startswith(('http://', 'https://')):
-                data[field] = f'https://{value}'
-        return data
-
 class ScheduleSerializer(BaseModelSerializer):
     class Meta:
         model = Schedule
@@ -195,7 +185,6 @@ class ProviderApplicationSerializer(BaseModelSerializer):
     services = ServiceSerializer(many=True, read_only=True)
     reviews = ReviewSerializer(many=True, read_only=True)
     schedules = ScheduleSerializer(many=True, read_only=True)
-    social_media = SocialMediaSerializer(read_only=True)
     gallery = GallerySerializer(many=True, read_only=True)
     rating = serializers.DecimalField(max_digits=3, decimal_places=1, read_only=True)
     postal_code = serializers.CharField(max_length=5, min_length=5)
@@ -235,6 +224,8 @@ class ProviderRegistrationSerializer(serializers.ModelSerializer):
         print("Validation des données:", data)
         if data['password'] != data['confirm_password']:
             raise serializers.ValidationError({"confirm_password": "Les mots de passe ne correspondent pas."})
+        
+        validate_password_strength(data['password'])
         
         # Vérifier si l'email existe déjà
         if User.objects.filter(email=data['email']).exists():
@@ -283,3 +274,94 @@ class ProviderRegistrationSerializer(serializers.ModelSerializer):
         except Exception as e:
             print("Erreur lors de la création:", str(e))
             raise serializers.ValidationError(f"Erreur lors de la création: {str(e)}")
+
+class ContactRequestSerializer(serializers.ModelSerializer):
+    user_name = serializers.SerializerMethodField()
+    provider_name = serializers.SerializerMethodField()
+
+    class Meta:
+        model = ContactRequest
+        fields = ['id', 'provider', 'user', 'user_name', 'provider_name', 'subject', 'message', 'status', 'created_at', 'updated_at']
+        read_only_fields = ['user', 'provider', 'created_at', 'updated_at']
+
+    def get_user_name(self, obj):
+        return obj.user.get_full_name()
+
+    def get_provider_name(self, obj):
+        return obj.provider.company_name
+
+class VisitorContactSerializer(serializers.ModelSerializer):
+    provider = serializers.PrimaryKeyRelatedField(queryset=ProviderApplication.objects.all())
+    provider_details = serializers.SerializerMethodField()
+    provider_contact_info = serializers.SerializerMethodField()
+    can_view_contact = serializers.SerializerMethodField()
+
+    class Meta:
+        model = VisitorContact
+        fields = [
+            'id',
+            'provider',
+            'provider_details',
+            'name',
+            'email',
+            'phone',
+            'message',
+            'visitor_ip',
+            'status',
+            'created_at',
+            'updated_at',
+            'provider_contact_info',
+            'can_view_contact'
+        ]
+        read_only_fields = [
+            'id',
+            'status',
+            'created_at',
+            'updated_at',
+            'visitor_ip',
+            'provider_contact_info',
+            'can_view_contact',
+            'provider_details'
+        ]
+
+    def get_provider_details(self, obj):
+        return {
+            'id': obj.provider.id,
+            'company_name': obj.provider.company_name,
+            'user': {
+                'email': obj.provider.user.email,
+                'phone': obj.provider.user.phone
+            }
+        }
+
+    def get_provider_contact_info(self, obj):
+        request = self.context.get('request')
+        if not request:
+            return None
+
+        # Vérifier si le visiteur a déjà un contact accepté avec ce prestataire
+        visitor_ip = request.META.get('REMOTE_ADDR')
+        has_accepted_contact = VisitorContact.objects.filter(
+            provider=obj.provider,
+            visitor_ip=visitor_ip,
+            status='accepted'
+        ).exists()
+
+        if has_accepted_contact:
+            return {
+                'email': obj.provider.user.email,
+                'phone': obj.provider.user.phone
+            }
+        return None
+
+    def get_can_view_contact(self, obj):
+        request = self.context.get('request')
+        if not request:
+            return False
+
+        visitor_ip = request.META.get('REMOTE_ADDR')
+        return VisitorContact.objects.filter(
+            provider=obj.provider,
+            visitor_ip=visitor_ip,
+            status='accepted'
+        ).exists()

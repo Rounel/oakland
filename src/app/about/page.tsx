@@ -275,7 +275,7 @@ export default function AboutPage() {
               className="text-center"
             >
               <div className="relative w-32 h-32 mx-auto mb-4 rounded-full overflow-hidden">
-                <Image src="/placeholder.svg?key=3rgi7" alt="Marketing" fill className="object-cover" />
+                <Image src="/ap.png?key=3rgi7" alt="Marketing" fill className="object-cover" />
               </div>
               <h3 className="text-xl font-semibold mb-1 text-gray-900 dark:text-white">Lucas Bernard</h3>
               <p className="text-primary mb-2">Responsable Marketing</p>

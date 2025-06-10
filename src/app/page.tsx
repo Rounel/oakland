@@ -259,7 +259,7 @@
 //                     rating={4.9}
 //                     reviews={124}
 //                     hourlyRate="4500 FCFA"
-//                     imageSrc="/placeholder.svg?height=300&width=300"
+//                     imageSrc="/ap.png?height=300&width=300"
 //                     isFeatured={true}
 //                   />
 //                   <FeaturedFreelancers
@@ -268,7 +268,7 @@
 //                     rating={4.8}
 //                     reviews={76}
 //                     hourlyRate="5000 FCFA"
-//                     imageSrc="/placeholder.svg?height=300&width=300"
+//                     imageSrc="/ap.png?height=300&width=300"
 //                   />
 //                   <FeaturedFreelancers
 //                     name="Alexandre Petit"
@@ -276,7 +276,7 @@
 //                     rating={4.6}
 //                     reviews={58}
 //                     hourlyRate="4000 FCFA"
-//                     imageSrc="/placeholder.svg?height=300&width=300"
+//                     imageSrc="/ap.png?height=300&width=300"
 //                   />
 //                   <FeaturedFreelancers
 //                     name="Camille Durand"
@@ -284,7 +284,7 @@
 //                     rating={4.7}
 //                     reviews={82}
 //                     hourlyRate="4500 FCFA"
-//                     imageSrc="/placeholder.svg?height=300&width=300"
+//                     imageSrc="/ap.png?height=300&width=300"
 //                   />
 //                 </div>
 //               </TabsContent>
@@ -298,7 +298,7 @@
 //                     rating={4.8}
 //                     reviews={87}
 //                     hourlyRate="5500 FCFA"
-//                     imageSrc="/placeholder.svg?height=300&width=300"
+//                     imageSrc="/ap.png?height=300&width=300"
 //                     isFeatured={true}
 //                   />
 //                   {/* More designers would be listed here */}
@@ -322,7 +322,7 @@
 //                   </Button>
 //                 </div>
 //                 <Image
-//                   src="/placeholder.svg?height=200&width=200"
+//                   src="/ap.png?height=200&width=200"
 //                   alt="Development"
 //                   width={200}
 //                   height={200}
@@ -339,7 +339,7 @@
 //                   </Button>
 //                 </div>
 //                 <Image
-//                   src="/placeholder.svg?height=200&width=200"
+//                   src="/ap.png?height=200&width=200"
 //                   alt="Design"
 //                   width={200}
 //                   height={200}
@@ -415,7 +415,7 @@
 //                     </p>
 //                     <div className="flex items-center gap-3">
 //                       <Image
-//                         src="/placeholder.svg?height=40&width=40"
+//                         src="/ap.png?height=40&width=40"
 //                         alt="User"
 //                         width={40}
 //                         height={40}
@@ -446,7 +446,7 @@
 //                     </p>
 //                     <div className="flex items-center gap-3">
 //                       <Image
-//                         src="/placeholder.svg?height=40&width=40"
+//                         src="/ap.png?height=40&width=40"
 //                         alt="User"
 //                         width={40}
 //                         height={40}
@@ -477,7 +477,7 @@
 //                     </p>
 //                     <div className="flex items-center gap-3">
 //                       <Image
-//                         src="/placeholder.svg?height=40&width=40"
+//                         src="/ap.png?height=40&width=40"
 //                         alt="User"
 //                         width={40}
 //                         height={40}

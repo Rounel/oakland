@@ -3,132 +3,73 @@
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
+import { use } from "react"
 import { BASE_API_URL } from "@/services/services"
 
-export default function ConfirmEmailPage({
-  params,
-}: {
-  params: { uid: string; token: string }
+export default function ConfirmEmailWithTokenPage({ 
+  params 
+}: { 
+  params: Promise<{ uid: string; token: string }> 
 }) {
   const router = useRouter()
-  const [status, setStatus] = useState<"loading" | "success" | "error">("loading")
-  const [message, setMessage] = useState("")
+  const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+  const { uid, token } = use(params)
 
   useEffect(() => {
     const confirmEmail = async () => {
       try {
-        const response = await fetch(`${BASE_API_URL}/auth/confirm-email/`, {
-          method: "POST",
+        const response = await fetch(`${BASE_API_URL}/auth/confirm_email/`, {
+          method: 'POST',
           headers: {
-            "Content-Type": "application/json",
+            'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            uid: params.uid,
-            token: params.token,
+            uid: uid,
+            token: token,
           }),
         })
 
-        const data = await response.json()
-
-        if (response.ok) {
-          setStatus("success")
-          setMessage(data.detail)
-        } else {
-          setStatus("error")
-          setMessage(data.detail || "Une erreur est survenue lors de la confirmation de votre email.")
+        if (!response.ok) {
+          throw new Error('Erreur lors de la confirmation de l\'email')
         }
-      } catch (error) {
-        setStatus("error")
-        setMessage("Une erreur est survenue lors de la confirmation de votre email.")
+
+        setIsLoading(false)
+      } catch (err) {
+        setError('Une erreur est survenue lors de la confirmation de votre email')
+        setIsLoading(false)
       }
     }
 
     confirmEmail()
-  }, [params.uid, params.token])
+  }, [uid, token])
+
+  if (isLoading) {
+    return (
+      <div className="container mx-auto px-4 py-20 text-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
+        <p className="mt-4">Confirmation de votre email en cours...</p>
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div className="container mx-auto px-4 py-20 text-center">
+        <h1 className="text-2xl font-bold mb-4 text-red-600">Erreur</h1>
+        <p className="mb-8">{error}</p>
+        <Button onClick={() => router.push("/auth/login")}>Retour à la connexion</Button>
+      </div>
+    )
+  }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8">
-        <div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900 dark:text-white">
-            Confirmation de votre email
-          </h2>
-        </div>
-
-        <div className="mt-8 space-y-6">
-          {status === "loading" && (
-            <div className="text-center">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
-              <p className="mt-4 text-gray-600 dark:text-gray-400">
-                Confirmation de votre email en cours...
-              </p>
-            </div>
-          )}
-
-          {status === "success" && (
-            <div className="rounded-md bg-green-50 dark:bg-green-900 p-4">
-              <div className="flex">
-                <div className="flex-shrink-0">
-                  <svg
-                    className="h-5 w-5 text-green-400"
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                    aria-hidden="true"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                </div>
-                <div className="ml-3">
-                  <p className="text-sm font-medium text-green-800 dark:text-green-200">
-                    {message}
-                  </p>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {status === "error" && (
-            <div className="rounded-md bg-red-50 dark:bg-red-900 p-4">
-              <div className="flex">
-                <div className="flex-shrink-0">
-                  <svg
-                    className="h-5 w-5 text-red-400"
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                    aria-hidden="true"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                </div>
-                <div className="ml-3">
-                  <p className="text-sm font-medium text-red-800 dark:text-red-200">
-                    {message}
-                  </p>
-                </div>
-              </div>
-            </div>
-          )}
-
-          <div className="flex justify-center">
-            <Button
-              onClick={() => router.push("/auth/login")}
-              className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
-            >
-              Retour à la connexion
-            </Button>
-          </div>
-        </div>
-      </div>
+    <div className="container mx-auto px-4 py-20 text-center">
+      <h1 className="text-2xl font-bold mb-4">Email confirmé avec succès !</h1>
+      <p className="mb-8">
+        Votre email a été confirmé avec succès. Vous pouvez maintenant vous connecter à votre compte.
+      </p>
+      <Button onClick={() => router.push("/auth/login")}>Se connecter</Button>
     </div>
   )
 } 

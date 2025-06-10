@@ -4,7 +4,6 @@ import Link from "next/link"
 import { useLanguage } from "./language-provider"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Facebook, Instagram, Linkedin, Twitter } from "lucide-react"
 import { categories } from "@/constants/categories"
 import { usePathname } from "next/navigation"
 
@@ -30,26 +29,6 @@ export default function Footer() {
                       Okland
                     </Link>
                   </h3>
-
-                  {/* Social Media */}
-                  <div className="flex space-x-4 pt-2">
-                    <Link href="#" className="text-muted-foreground hover:text-foreground">
-                      <Facebook className="h-5 w-5" />
-                      <span className="sr-only">Facebook</span>
-                    </Link>
-                    <Link href="#" className="text-muted-foreground hover:text-foreground">
-                      <Twitter className="h-5 w-5" />
-                      <span className="sr-only">Twitter</span>
-                    </Link>
-                    <Link href="#" className="text-muted-foreground hover:text-foreground">
-                      <Instagram className="h-5 w-5" />
-                      <span className="sr-only">Instagram</span>
-                    </Link>
-                    <Link href="#" className="text-muted-foreground hover:text-foreground">
-                      <Linkedin className="h-5 w-5" />
-                      <span className="sr-only">LinkedIn</span>
-                    </Link>
-                  </div>
                 </div>
 
                 {/* Quick links */}

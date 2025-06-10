@@ -90,8 +90,6 @@ class ProviderApplication(models.Model):
             )
         ]
     )
-    website = models.URLField(blank=True, null=True, default='')
-    facebook = models.URLField(blank=True, null=True, default='')
     submitted_at = models.DateTimeField(default=timezone.now)
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='pending')
     rating = models.DecimalField(
@@ -246,17 +244,15 @@ class Schedule(models.Model):
         self.updated_at = timezone.now()
         super().save(*args, **kwargs)
 
-class SocialMedia(models.Model):
-    provider = models.OneToOneField(ProviderApplication, on_delete=models.CASCADE, related_name='social_media')
-    facebook = models.URLField(blank=True, null=True, default='')
-    instagram = models.URLField(blank=True, null=True, default='')
-    twitter = models.URLField(blank=True, null=True, default='')
-    website = models.URLField(blank=True, null=True, default='')
+class Gallery(models.Model):
+    provider = models.ForeignKey(ProviderApplication, on_delete=models.CASCADE, related_name='gallery')
+    image = models.ImageField(upload_to='gallery/')
+    description = models.CharField(max_length=255, blank=True, null=True)
     created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
-        return f"Social Media - {self.provider}"
+        return f"Image de {self.provider}"
 
     def save(self, *args, **kwargs):
         if not self.id:
@@ -264,15 +260,74 @@ class SocialMedia(models.Model):
         self.updated_at = timezone.now()
         super().save(*args, **kwargs)
 
-class Gallery(models.Model):
-    provider = models.ForeignKey(ProviderApplication, on_delete=models.CASCADE, related_name='gallery')
-    image = models.ImageField(upload_to='gallery/')
-    description = models.CharField(max_length=200, blank=True, null=True, default='')
+class ContactRequest(models.Model):
+    STATUS_CHOICES = (
+        ('new', 'Nouvelle'),
+        ('in_progress', 'En cours'),
+        ('completed', 'Terminée'),
+    )
+
+    provider = models.ForeignKey(ProviderApplication, on_delete=models.CASCADE, related_name='contact_requests')
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='contact_requests')
+    subject = models.CharField(max_length=255)
+    message = models.TextField()
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='new')
     created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(default=timezone.now)
 
+    class Meta:
+        indexes = [
+            models.Index(fields=['provider']),
+            models.Index(fields=['user']),
+            models.Index(fields=['status']),
+            models.Index(fields=['created_at']),
+        ]
+
     def __str__(self):
-        return f"Gallery Image - {self.provider}"
+        return f"Demande de contact de {self.user.get_full_name()} à {self.provider.company_name}"
+
+    def save(self, *args, **kwargs):
+        if not self.id:
+            self.created_at = timezone.now()
+        self.updated_at = timezone.now()
+        super().save(*args, **kwargs)
+
+class VisitorContact(models.Model):
+    STATUS_CHOICES = (
+        ('pending', 'En attente'),
+        ('accepted', 'Accepté'),
+        ('rejected', 'Refusé'),
+    )
+
+    provider = models.ForeignKey(ProviderApplication, on_delete=models.CASCADE, related_name='visitor_contacts')
+    name = models.CharField(max_length=255)
+    email = models.EmailField()
+    phone = models.CharField(
+        max_length=20,
+        validators=[
+            RegexValidator(
+                regex=r'^\+?1?\d{9,15}$',
+                message="Le numéro de téléphone doit être au format: '+999999999'."
+            )
+        ]
+    )
+    message = models.TextField()
+    visitor_ip = models.GenericIPAddressField()
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
+    created_at = models.DateTimeField(default=timezone.now)
+    updated_at = models.DateTimeField(default=timezone.now)
+
+    class Meta:
+        indexes = [
+            models.Index(fields=['provider']),
+            models.Index(fields=['status']),
+            models.Index(fields=['created_at']),
+            models.Index(fields=['visitor_ip']),
+        ]
+        unique_together = ('provider', 'visitor_ip')
+
+    def __str__(self):
+        return f"Contact de {self.name} à {self.provider.company_name}"
 
     def save(self, *args, **kwargs):
         if not self.id:

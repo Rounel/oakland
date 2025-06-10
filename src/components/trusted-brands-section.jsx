@@ -91,7 +91,7 @@ export default function TrustedBrandsSection() {
           >
             <div className="h-full flex flex-col justify-center">
               <Image
-                src="/placeholder.svg?height=300&width=400"
+                src="/ap.png?height=300&width=400"
                 alt="Professional working"
                 width={400}
                 height={300}

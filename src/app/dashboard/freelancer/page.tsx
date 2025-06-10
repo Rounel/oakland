@@ -14,7 +14,7 @@ export default function FreelancerDashboard() {
       title: "E-commerce Website Redesign",
       client: {
         name: "Global Retail Inc.",
-        avatar: "/placeholder.svg?height=40&width=40",
+        avatar: "/ap.png?height=40&width=40",
         initials: "GR",
       },
       status: "In Progress",
@@ -27,7 +27,7 @@ export default function FreelancerDashboard() {
       title: "Mobile App UI Design",
       client: {
         name: "Tech Startup Ltd.",
-        avatar: "/placeholder.svg?height=40&width=40",
+        avatar: "/ap.png?height=40&width=40",
         initials: "TS",
       },
       status: "Review",
@@ -75,7 +75,7 @@ export default function FreelancerDashboard() {
       id: 1,
       client: {
         name: "Sarah Thompson",
-        avatar: "/placeholder.svg?height=40&width=40",
+        avatar: "/ap.png?height=40&width=40",
         initials: "ST",
       },
       project: "Brand Identity Design",
@@ -87,7 +87,7 @@ export default function FreelancerDashboard() {
       id: 2,
       client: {
         name: "Michael Chen",
-        avatar: "/placeholder.svg?height=40&width=40",
+        avatar: "/ap.png?height=40&width=40",
         initials: "MC",
       },
       project: "Website Redesign",

@@ -16,7 +16,7 @@ export function Testimonials() {
       author: {
         name: "Sarah Johnson",
         role: "Marketing Director",
-        avatar: "/placeholder.svg?height=40&width=40",
+        avatar: "/ap.png?height=40&width=40",
         initials: "SJ",
       },
       rating: 5,
@@ -28,7 +28,7 @@ export function Testimonials() {
       author: {
         name: "David Chen",
         role: "UX Designer",
-        avatar: "/placeholder.svg?height=40&width=40",
+        avatar: "/ap.png?height=40&width=40",
         initials: "DC",
       },
       rating: 5,
@@ -40,7 +40,7 @@ export function Testimonials() {
       author: {
         name: "Marie Dubois",
         role: "Startup Founder",
-        avatar: "/placeholder.svg?height=40&width=40",
+        avatar: "/ap.png?height=40&width=40",
         initials: "MD",
       },
       rating: 4,

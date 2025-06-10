@@ -6,7 +6,6 @@ import { motion } from "motion/react"
 import { Search, MapPin, Filter, ChevronDown } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Slider } from "@/components/ui/slider"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
@@ -15,16 +14,23 @@ import ProviderCard from "@/components/provider-card"
 import Map from "@/components/map"
 import { useGeolocation } from "@/hooks/use-geolocation"
 import LocationPermissionDialog from "@/components/location-permission-dialog"
-import { useGeolocationWithRadius } from "@/hooks/useGeolocation"
 import { Label } from "./ui/label"
 import { BASE_API_URL, searchProviders } from "@/services/services"
 import { ProvidersProps } from "@/types/datatypes"
+import { categories } from "@/constants/categories"
 
-interface Category {
-  id: string
-  name: string
-  slug: string
-}
+const cities = [
+  "Abidjan",
+  "Bouaké",
+  "Daloa",
+  "Korhogo",
+  "San Pedro",
+  "Yamoussoukro",
+  "Man",
+  "Gagnoa",
+  "Abengourou",
+  "Divo"
+]
 
 export default function SearchContent() {
   const router = useRouter()
@@ -32,6 +38,7 @@ export default function SearchContent() {
   const [profession, setProfession] = useState("")
   const [location, setLocation] = useState("")
   const [category, setCategory] = useState("")
+  const [selectedCity, setSelectedCity] = useState("")
 
   useEffect(() => {
     const prof = searchParams.get("profession")
@@ -44,29 +51,11 @@ export default function SearchContent() {
     if (cat) setCategory(cat)
   }, [searchParams])
 
-  const [distance, setDistance] = useState([20])
   const [showMap, setShowMap] = useState(false)
   const [filtersOpen, setFiltersOpen] = useState(false)
-  const [categories, setCategories] = useState<Category[]>([])
   const [providers, setProviders] = useState<ProvidersProps[]>([])
   const [showPermissionDialog, setShowPermissionDialog] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
-  
-
-  const { location: geoLoc, radius, setRadius, error: geoError } = useGeolocationWithRadius()
-
-  useEffect(() => {
-    if (geoLoc) {
-      const params = new URLSearchParams()
-      params.set("lat", geoLoc.lat.toString())
-      params.set("lng", geoLoc.lng.toString())
-      params.set("radius", radius.toString())
-
-      fetch(`${BASE_API_URL}/providers/search/?${params.toString()}`)
-        .then(res => res.json())
-        .then(data => {console.log(data);setProviders(data || [])})
-    }
-  }, [geoLoc, radius])
 
   const {
     loading: locationLoading,
@@ -76,28 +65,32 @@ export default function SearchContent() {
     getCurrentPosition,
   } = useGeolocation()
 
-
   // Load providers when filters change
   useEffect(() => {
     const loadProviders = async () => {
       setIsLoading(true)
-      try {
-        const params = {
-          profession,
-          location,
-          category,
-          distance: distance[0],
+      if (!profession && !location && (!category || category === "all") && (!selectedCity || selectedCity === "all")) {
+        fetch(`${BASE_API_URL}/providers/search/`)
+          .then(res => res.json())
+          .then(data => {console.log(data);setProviders(data || [])})
+      } else {
+        try {
+          const params = {
+            profession,
+            location: selectedCity === "all" ? location : selectedCity || location,
+            category: category === "all" ? "" : category,
+          }
+          const data = await searchProviders(params)
+          setProviders(data || [])
+        } catch (error) {
+          console.error("Error loading providers:", error)
+        } finally {
+          setIsLoading(false)
         }
-        const data = await searchProviders(params)
-        setProviders(data.results || [])
-      } catch (error) {
-        console.error("Error loading providers:", error)
-      } finally {
-        setIsLoading(false)
       }
     }
     loadProviders()
-  }, [profession, location, category, distance])
+  }, [profession, location, selectedCity, category])
 
   // Show permission dialog if needed
   useEffect(() => {
@@ -119,8 +112,9 @@ export default function SearchContent() {
     // Build the query string
     const params = new URLSearchParams()
     if (profession) params.set("profession", profession)
-    if (location) params.set("location", location)
-    if (category) params.set("categorie", category)
+    if (selectedCity && selectedCity !== "all") params.set("location", selectedCity)
+    else if (location) params.set("location", location)
+    if (category && category !== "all") params.set("categorie", category)
 
     // Update the URL without reloading the page
     const url = `/explore?${params.toString()}`
@@ -130,11 +124,11 @@ export default function SearchContent() {
   const resetFilters = () => {
     setProfession("")
     setLocation("")
-    setCategory("")
-    setDistance([20])
+    setCategory("all")
+    setSelectedCity("all")
 
     // Reset the URL
-    router.push("/explore")
+    router.push("/search")
   }
 
   const handleLocationPermissionAllow = () => {
@@ -147,7 +141,7 @@ export default function SearchContent() {
   }
 
   return (
-    <div className="pt-16 w-full px-4 md:px-8 lg:px-16">
+    <div className=" w-full px-4 md:px-8 lg:px-16 min-h-screen">
       <div className="bg-gray-50 dark:bg-gray-900 border-b dark:border-gray-800">
         <div className="container mx-auto px-4 py-6">
           <form onSubmit={handleSearch} className="flex flex-col md:flex-row gap-4">
@@ -212,61 +206,37 @@ export default function SearchContent() {
               {/* Category Filter */}
               <div>
                 <label className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 block">Catégorie</label>
-                <div className="relative">
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <Button variant="outline" role="combobox" className="w-full justify-between">
-                        {category
-                          ? categories.find((cat) => cat.slug === category)?.name || "Toutes les catégories"
-                          : "Toutes les catégories"}
-                        <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                      </Button>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-full p-0">
-                      <Command>
-                        <CommandInput placeholder="Rechercher une catégorie..." className="h-9" />
-                        <CommandList>
-                          <CommandEmpty>Aucune catégorie trouvée.</CommandEmpty>
-                          <CommandGroup className="max-h-64 overflow-auto">
-                            <CommandItem value="all" onSelect={() => setCategory("")} className="cursor-pointer">
-                              Toutes les catégories
-                            </CommandItem>
-                            {categories.map((cat) => (
-                              <CommandItem
-                                key={cat.id}
-                                value={cat.slug}
-                                onSelect={() => setCategory(cat.slug)}
-                                className="cursor-pointer"
-                              >
-                                {cat.name}
-                              </CommandItem>
-                            ))}
-                          </CommandGroup>
-                        </CommandList>
-                      </Command>
-                    </PopoverContent>
-                  </Popover>
-                </div>
+                <Select value={category} onValueChange={setCategory}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Toutes les catégories" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">Toutes les catégories</SelectItem>
+                    {categories.map((cat) => (
+                      <SelectItem key={`cfs${cat.id}`} value={String(cat.id)}>
+                        {cat.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </div>
 
-              {/* Distance Filter */}
+              {/* City Filter */}
               <div>
-                <label className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 block">
-                  Distance maximale: {distance[0]} km
-                </label>
-                <Slider value={distance} onValueChange={setDistance} max={100} step={5} />
-              </div>
-
-              <div className="space-y-4">
-                <Label className="text-sm font-medium">Rayon de recherche (km)</Label>
-                <Slider
-                  value={[radius]}
-                  onValueChange={(val) => setRadius(val[0])}
-                  min={1}
-                  max={100}
-                  step={1}
-                />
-                <span className="text-sm text-muted-foreground">{radius} km</span>
+                <label className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 block">Ville</label>
+                <Select value={selectedCity} onValueChange={setSelectedCity}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Toutes les villes" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">Toutes les villes</SelectItem>
+                    {cities.map((city) => (
+                      <SelectItem key={city} value={city}>
+                        {city}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </div>
 
               {/* Availability Filter */}
@@ -332,7 +302,7 @@ export default function SearchContent() {
                 <Map providers={providers} />
               </div>
             ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 md:flex md:flex-wrap gap-6">
                 {providers.length > 0 ? (
                   providers.map((provider, index) => (
                     <motion.div
@@ -340,6 +310,7 @@ export default function SearchContent() {
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.3, delay: index * 0.05 }}
+                      className="w-xs"
                     >
                       <ProviderCard provider={provider} />
                     </motion.div>

@@ -26,7 +26,7 @@ export default function Home() {
               <div className="flex flex-col items-center">
                 <div className="relative w-16 h-16 mb-2">
                   <Image
-                    src="/placeholder.svg?height=64&width=64"
+                    src="/ap.png?height=64&width=64"
                     alt="Freelancer profile"
                     width={64}
                     height={64}
@@ -81,7 +81,7 @@ export default function Home() {
             <div className="relative animate-slide-up">
               <div className="relative">
                 <Image
-                  src="/placeholder.svg?height=300&width=400"
+                  src="/ap.png?height=300&width=400"
                   alt="Fiverr Go interface"
                   width={400}
                   height={300}
@@ -133,7 +133,7 @@ export default function Home() {
               {[1, 2, 3].map((icon) => (
                 <div key={icon} className="w-20 h-20 flex items-center justify-center">
                   <Image
-                    src={`/placeholder.svg?height=80&width=80`}
+                    src={`/ap.png?height=80&width=80`}
                     alt={`Trusted company ${icon}`}
                     width={80}
                     height={80}
@@ -161,7 +161,7 @@ export default function Home() {
                 <div key={index} className="border border-gray-200 rounded-lg p-6 flex flex-col animate-fade-in">
                   <div className="mb-6">
                     <Image
-                      src={`/placeholder.svg?height=200&width=300`}
+                      src={`/ap.png?height=200&width=300`}
                       alt={step.title}
                       width={300}
                       height={200}
@@ -336,52 +336,52 @@ const firstSteps = [
 const categories = [
   {
     name: "Graphics & Design",
-    image: "/placeholder.svg?height=150&width=150",
+    image: "/ap.png?height=150&width=150",
     color: "#b5e3b8",
   },
   {
     name: "Programming & Tech",
-    image: "/placeholder.svg?height=150&width=150",
+    image: "/ap.png?height=150&width=150",
     color: "#a52a2a",
   },
   {
     name: "Digital Marketing",
-    image: "/placeholder.svg?height=150&width=150",
+    image: "/ap.png?height=150&width=150",
     color: "#ffd580",
   },
   {
     name: "Video & Animation",
-    image: "/placeholder.svg?height=150&width=150",
+    image: "/ap.png?height=150&width=150",
     color: "#f08080",
   },
   {
     name: "Writing & Translation",
-    image: "/placeholder.svg?height=150&width=150",
+    image: "/ap.png?height=150&width=150",
     color: "#8b4513",
   },
   {
     name: "Data",
-    image: "/placeholder.svg?height=150&width=150",
+    image: "/ap.png?height=150&width=150",
     color: "#add8e6",
   },
   {
     name: "Music & Audio",
-    image: "/placeholder.svg?height=150&width=150",
+    image: "/ap.png?height=150&width=150",
     color: "#d3d3d3",
   },
   {
     name: "Business",
-    image: "/placeholder.svg?height=150&width=150",
+    image: "/ap.png?height=150&width=150",
     color: "#90ee90",
   },
   {
     name: "Photography",
-    image: "/placeholder.svg?height=150&width=150",
+    image: "/ap.png?height=150&width=150",
     color: "#808080",
   },
   {
     name: "AI Services",
-    image: "/placeholder.svg?height=150&width=150",
+    image: "/ap.png?height=150&width=150",
     color: "#ff7f50",
   },
 ]

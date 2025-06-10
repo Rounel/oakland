@@ -14,6 +14,8 @@ import {
 
 import { cn } from "@/lib/utils"
 import { Label } from "@/components/ui/label"
+import { useState } from "react"
+import Image from "next/image"
 
 const Form = FormProvider
 
@@ -165,6 +167,50 @@ const FormMessage = React.forwardRef<
   )
 })
 FormMessage.displayName = "FormMessage"
+
+export const FormFileInput = React.forwardRef<
+  HTMLInputElement,
+  React.InputHTMLAttributes<HTMLInputElement> & { preview?: boolean }
+>(({ className, type, preview = true, ...props }, ref) => {
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null)
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (file) {
+      const url = URL.createObjectURL(file)
+      setPreviewUrl(url)
+    } else {
+      setPreviewUrl(null)
+    }
+    props.onChange?.(e)
+  }
+
+  return (
+    <div className="space-y-4">
+      <input
+        type={type}
+        className={cn(
+          "flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
+          className
+        )}
+        ref={ref}
+        onChange={handleChange}
+        {...props}
+      />
+      {preview && previewUrl && (
+        <div className="relative aspect-video w-full overflow-hidden rounded-lg border">
+          <Image
+            src={previewUrl}
+            alt="Preview"
+            fill
+            className="object-contain"
+          />
+        </div>
+      )}
+    </div>
+  )
+})
+FormFileInput.displayName = "FormFileInput"
 
 export {
   useFormField,

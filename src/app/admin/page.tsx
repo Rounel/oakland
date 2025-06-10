@@ -1,7 +1,6 @@
 "use client"
 
 import type React from "react"
-
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { motion } from "motion/react"
@@ -10,9 +9,11 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Alert, AlertDescription } from "@/components/ui/alert"
+import { useAuth } from "@/contexts/authContext"
 
 export default function AdminLoginPage() {
   const router = useRouter()
+  const { login } = useAuth()
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [error, setError] = useState("")
@@ -23,14 +24,12 @@ export default function AdminLoginPage() {
     setError("")
     setIsLoading(true)
 
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1000))
-
-    // Demo credentials
-    if (email === "admin@example.com" && password === "password") {
-      router.push("/admin/dashboard")
-    } else {
+    try {
+      await login(email, password)
+      router.push("/admin/dashboard/providers")
+    } catch (err) {
       setError("Identifiants incorrects. Veuillez réessayer.")
+    } finally {
       setIsLoading(false)
     }
   }
