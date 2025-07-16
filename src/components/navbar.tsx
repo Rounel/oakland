@@ -116,7 +116,7 @@ export default function Navbar() {
             <div className="container flex h-16 items-center justify-between mx-auto">
               <div className="ml-2  flex items-center gap-6 md:gap-10">
                 <Link href="/" className="flex items-center space-x-2">
-                  <span className="font-bold sm:inline-block text-3xl">Okland</span>
+                  <span className="font-bold sm:inline-block text-3xl">MonPresta</span>
                 </Link>
     
                 {/* Desktop Navigation */}
@@ -155,6 +155,11 @@ export default function Navbar() {
                           ))}
                         </ul>
                       </NavigationMenuContent>
+                    </NavigationMenuItem>
+                    <NavigationMenuItem>
+                      <Link href="/#pricing" legacyBehavior passHref>
+                        <NavigationMenuLink className={navigationMenuTriggerStyle()}>{t("nav.pricing")}</NavigationMenuLink>
+                      </Link>
                     </NavigationMenuItem>
                     <NavigationMenuItem>
                       <Link href="/about" legacyBehavior passHref>
@@ -209,7 +214,7 @@ export default function Navbar() {
                         <DropdownMenu>
                           <DropdownMenuTrigger>
                             <Avatar>
-                              <AvatarImage src={MEDIA_API_URL + user.photo_profile} alt="@shadcn" />
+                              <AvatarImage src={MEDIA_API_URL + user.profile_photo} alt="@shadcn" />
                               <AvatarFallback className="bg-purple-700 text-white">
                                 {getInitials(`${user.first_name} ${user.last_name}`)}
                               </AvatarFallback>

@@ -21,6 +21,7 @@ export default function HomeHeroSection() {
 
   const [profession, setProfession] = useState("")
   const [location, setLocation] = useState("")
+  const [category, setCategory] = useState("all")
 
 
   const allCategories = [...categories.filter(item => item.img), ...categories.filter(item => item.img), ...categories.filter(item => item.img), ...categories.filter(item => item.img), ...categories.filter(item => item.img), ...categories.filter(item => item.img)];
@@ -88,8 +89,12 @@ export default function HomeHeroSection() {
       searchParams.append("location", location)
     }
 
+    if (category && category !== "all") {
+      searchParams.append("category", category)
+    }
+
     const queryString = searchParams.toString()
-    const url = `/recherche${queryString ? `?${queryString}` : ""}`
+    const url = `/search${queryString ? `?${queryString}` : ""}`
 
     router.push(url)
   }
@@ -129,13 +134,13 @@ export default function HomeHeroSection() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
-          <div className={`transition-all duration-1000 transform ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-            {/* Badge */}
+          {/* <div className={`transition-all duration-1000 transform ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+            Badge
             <div className="bg-purple-100 text-purple-800 text-sm px-4 py-1 rounded-full mb-6 animate-pulse gap-2 flex items-center">
               <Target />
               Plus de 32 professionels trouvés autour de vous!
             </div>
-          </div>
+          </div> */}
           
           {/* Headline with staggered animation */}
           <div className={`transition-all duration-700 delay-300 transform ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
@@ -163,7 +168,7 @@ export default function HomeHeroSection() {
           <form onSubmit={handleSearch} className="flex flex-col md:flex-row gap-4">
             <div className="flex-1 relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
-              <Select>
+              <Select value={category} onValueChange={setCategory}>
                 <SelectTrigger className='pl-10'>
                   <SelectValue placeholder="Toutes les catégories" />
                 </SelectTrigger>

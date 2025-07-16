@@ -13,7 +13,7 @@ export function Header() {
       <div className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
           <div className="text-2xl font-bold bg-gradient-to-r from-primary to-blue-600 bg-clip-text text-transparent">
-            Okland Admin
+            MonPresta Admin
           </div>
 
           <div className="flex items-center space-x-4">

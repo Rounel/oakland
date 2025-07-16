@@ -63,24 +63,24 @@ export default function LoginPage() {
   }, [user, router])
 
   return (
-    <div className="min-h-screen w-full flex flex-col lg:flex-row bg-primary">
+    <div className="min-h-screen w-full flex flex-col lg:flex-row ">
       <section className="flex-1 flex items-center justify-center pt-8 pr-8 pb-8 pl-8 relative">
-        <div className="w-full bg-primary absolute top-5 left-5 ">
-          <Link href={"/"} className="text-2xl font-bold text-white">
-            Okland
+        <div className="w-full absolute top-5 left-5 ">
+          <Link href={"/"} className="text-2xl font-bold text-black">
+            MonPresta
           </Link>
         </div>
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="h-full flex items-center justify-center z-40">
           <Card className="bg-transparent border-none shadow-none">
             <CardHeader className="gap-6">
-              <CardTitle className="flex flex-col gap-5 text-white tracking-tighter text-4xl md:text-5xl font-semibold leading-tight">
-                {/* <Link href={"/"} className="text-5xl font-bold bg-linear-to-b/hsl from-purple-600 to-purple-900 rounded-2xl py-8 text-white">
-                  Okland
+              <CardTitle className="flex flex-col gap-5 text-black tracking-tighter text-4xl md:text-5xl font-semibold leading-tight">
+                {/* <Link href={"/"} className="text-5xl font-bold bg-linear-to-b/hsl from-purple-600 to-purple-900 rounded-2xl py-8 text-black">
+                  MonPresta
                 </Link>
                 <Separator /> */}
                 Welcome
               </CardTitle>
-              <CardDescription className="text-center text-zinc-400">
+              <CardDescription className=" text-zinc-700 text-lg">
                 Entrez votre email et mot de passe pour accéder à votre compte
               </CardDescription>
             </CardHeader>
@@ -93,20 +93,20 @@ export default function LoginPage() {
                     </div>
                   )}
                   <div className="grid gap-2">
-                    <Label htmlFor="email" className="  font-medium text-zinc-400">Email</Label>
+                    <Label htmlFor="email" className="  font-medium text-zinc-700 text-lg">Email</Label>
                     <Input
                       id="email"
                       type="email"
                       placeholder="name@example.com"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      className="bg-transparent h-14 text-white placeholder:text-zinc-400 border-gray-700"
+                      className="bg-transparent h-10 text-black placeholder:text-zinc-700 border-gray-700"
                       required
                     />
                   </div>
                   <div className="grid gap-2">
                     <div className="flex items-center justify-between">
-                      <Label htmlFor="password" className="  font-medium text-zinc-400">Mot de passe</Label>
+                      <Label htmlFor="password" className="text-lg font-medium text-zinc-700">Mot de passe</Label>
                       <Link
                         href="/auth/password-recovery"
                         className="text-sm  font-medium text-purple-400 underline-offset-4 hover:underline"
@@ -120,13 +120,13 @@ export default function LoginPage() {
                         type={showPassword ? "text" : "password"}
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
-                        className="bg-transparent h-14 text-white placeholder:text-zinc-400 border-gray-700"
+                        className="bg-transparent h-10 text-black placeholder:text-zinc-700 border-gray-700"
                         required
                       />
                       <button
                         type="button"
                         onClick={() => setShowPassword(!showPassword)}
-                        className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-300"
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-700 hover:text-zinc-300"
                       >
                         {showPassword ? (
                           <EyeOff className="h-4 w-4" />
@@ -138,11 +138,11 @@ export default function LoginPage() {
                   </div>
                   <div className="flex items-center space-x-2">
                     <Checkbox id="remember" className="bg-white data-[state=checked]:bg-purple-400" />
-                    <Label htmlFor="remember" className="text-sm  font-medium text-zinc-400">
+                    <Label htmlFor="remember" className="text-sm  font-medium text-zinc-700">
                       Se souvenir de moi pendant 30 jours
                     </Label>
                   </div>
-                  <Button type="submit" className="w-full bg-white text-primary" disabled={isLoading}>
+                  <Button type="submit" className="w-full bg-primary text-white text-lg" disabled={isLoading}>
                     {isLoading ? (
                       <>
                         <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Connexion en cours...

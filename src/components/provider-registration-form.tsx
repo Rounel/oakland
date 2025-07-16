@@ -204,7 +204,7 @@ export default function ProviderRegistrationForm() {
                   i === step
                     ? "bg-zinc-400 text-primary"
                     : i < step
-                      ? "bg-green-500 text-white"
+                      ? "bg-green-500 text-black"
                       : "bg-gray-200 text-gray-600 dark:bg-gray-700 dark:text-gray-400"
                 }`}
               >
@@ -232,7 +232,7 @@ export default function ProviderRegistrationForm() {
           <div className="inline-flex items-center justify-center w-16 h-16 mb-6 bg-green-100 rounded-full dark:bg-green-900">
             <Check className="w-8 h-8 text-green-600 dark:text-green-400" />
           </div>
-          <h2 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white">Demande envoyée avec succès !</h2>
+          <h2 className="text-2xl font-bold mb-4 text-gray-900 dark:text-black">Demande envoyée avec succès !</h2>
           <p className="text-gray-600 dark:text-gray-400 mb-6">
             Votre demande d'inscription a été envoyée et sera examinée dans les 48h. Vous recevrez un email de
             confirmation dès que votre profil sera validé.
@@ -253,16 +253,16 @@ export default function ProviderRegistrationForm() {
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -20 }}
               transition={{ duration: 0.3 }}
-              className="space-y-6"
+              className="space-y-4"
             >
-              <h2 className="text-2xl font-bold mb-6 text-white">Informations personnelles</h2>
+              <h2 className="text-2xl font-bold mb-6 text-black">Informations personnelles</h2>
 
               <FormField
                 control={form.control}
                 name="profilePhoto"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className=" text-zinc-400">Photo de profil</FormLabel>
+                    <FormLabel className=" text-zinc-700">Photo de profil</FormLabel>
                     <div className="border-2 border-dashed flex items-center border-gray-700 dark:border-gray-700 rounded-lg p-1 text-center gap-4">
                       <Button variant="outline" type="button" className="hover:bg-white/80" onClick={(e) => {
                         e.preventDefault()
@@ -272,7 +272,7 @@ export default function ProviderRegistrationForm() {
                       }}>
                         Parcourir
                       </Button>
-                      <p className="text-sm text-zinc-400 dark:text-gray-400">
+                      <p className="text-sm text-zinc-700 dark:text-gray-400">
                         Téléchargez une photo de profil professionnelle
                       </p>
                       <input
@@ -313,10 +313,10 @@ export default function ProviderRegistrationForm() {
                   name="firstName"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className=" text-zinc-400">Prénom</FormLabel>
+                      <FormLabel className=" text-zinc-700">Prénom</FormLabel>
                       <FormControl>
                         <Input placeholder="Votre prénom"
-                      className="bg-transparent h-14 text-white placeholder:text-zinc-400 border-gray-700" {...field} />
+                      className="bg-transparent h-10 text-black placeholder:text-zinc-700 border-gray-700" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -328,10 +328,10 @@ export default function ProviderRegistrationForm() {
                   name="lastName"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-zinc-400">Nom</FormLabel>
+                      <FormLabel className="text-zinc-700">Nom</FormLabel>
                       <FormControl>
                         <Input placeholder="Votre nom"
-                      className="bg-transparent h-14 text-white placeholder:text-zinc-400 border-gray-700" {...field} />
+                      className="bg-transparent h-10 text-black placeholder:text-zinc-700 border-gray-700" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -344,10 +344,10 @@ export default function ProviderRegistrationForm() {
                 name="email"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-zinc-400">Email</FormLabel>
+                    <FormLabel className="text-zinc-700">Email</FormLabel>
                     <FormControl>
                       <Input type="email"
-                      className="bg-transparent h-14 text-white placeholder:text-zinc-400 border-gray-700" placeholder="votre.email@exemple.com" {...field} />
+                      className="bg-transparent h-10 text-black placeholder:text-zinc-700 border-gray-700" placeholder="votre.email@exemple.com" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -359,13 +359,13 @@ export default function ProviderRegistrationForm() {
                 name="password"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-zinc-400">Mot de passe</FormLabel>
+                    <FormLabel className="text-zinc-700">Mot de passe</FormLabel>
                     <FormControl>
                       <div className="relative">
                         <Input
                           type={showPassword ? "text" : "password"}
                           placeholder="••••••••"
-                      className="bg-transparent h-14 text-white placeholder:text-zinc-400 border-gray-700"
+                      className="bg-transparent h-10 text-black placeholder:text-zinc-700 border-gray-700"
                           {...field}
                         />
                         <button
@@ -392,13 +392,13 @@ export default function ProviderRegistrationForm() {
                 name="confirmPassword"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-zinc-400">Confirmer le mot de passe</FormLabel>
+                    <FormLabel className="text-zinc-700">Confirmer le mot de passe</FormLabel>
                     <FormControl>
                       <div className="relative">
                         <Input
                           type={showConfirmPassword ? "text" : "password"}
                           placeholder="••••••••"
-                      className="bg-transparent h-14 text-white placeholder:text-zinc-400 border-gray-700"
+                      className="bg-transparent h-10 text-black placeholder:text-zinc-700 border-gray-700"
                           {...field}
                         />
                         <button
@@ -424,7 +424,7 @@ export default function ProviderRegistrationForm() {
                 name="phone"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-zinc-400">Téléphone</FormLabel>
+                    <FormLabel className="text-zinc-700">Téléphone</FormLabel>
                     <div className="flex gap-2">
                       <FormField
                         control={form.control}
@@ -433,7 +433,7 @@ export default function ProviderRegistrationForm() {
                           <Select onValueChange={ccField.onChange} value={ccField.value} defaultValue={ccField.value}>
                             <FormControl>
                               <SelectTrigger 
-                      className=" w-28 bg-transparent h-14 text-white placeholder:text-zinc-400 border-gray-700">
+                      className=" w-28 bg-transparent h-10 text-black placeholder:text-zinc-700 border-gray-700">
                                 <SelectValue />
                               </SelectTrigger>
                             </FormControl>
@@ -447,7 +447,7 @@ export default function ProviderRegistrationForm() {
                       />
                       <FormControl>
                         <Input placeholder="6 12 34 56 78" {...field} 
-                      className="bg-transparent h-14 text-white placeholder:text-zinc-400 border-gray-700 flex-1" />
+                      className="bg-transparent h-10 text-black placeholder:text-zinc-700 border-gray-700 flex-1" />
                       </FormControl>
                     </div>
                     <FormMessage />
@@ -465,17 +465,17 @@ export default function ProviderRegistrationForm() {
               transition={{ duration: 0.3 }}
               className="space-y-6"
             >
-              <h2 className="text-2xl font-bold mb-6 text-white">Informations professionnelles</h2>
+              <h2 className="text-2xl font-bold mb-6 text-black">Informations professionnelles</h2>
 
               <FormField
                 control={form.control}
                 name="companyName"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-zinc-400">Nom commercial</FormLabel>
+                    <FormLabel className="text-zinc-700">Nom commercial</FormLabel>
                     <FormControl>
                       <Input placeholder="Nom de votre entreprise"
-                      className="bg-transparent h-14 text-white placeholder:text-zinc-400 border-gray-700" {...field} />
+                      className="bg-transparent h-10 text-black placeholder:text-zinc-700 border-gray-700" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -487,12 +487,12 @@ export default function ProviderRegistrationForm() {
                 name="description"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-zinc-400">Description de votre activité</FormLabel>
+                    <FormLabel className="text-zinc-700">Description de votre activité</FormLabel>
                     <FormControl>
                       <Textarea
                         placeholder="Décrivez votre activité, vos services, votre expérience..."
                         
-                      className="bg-transparent h-14 text-white placeholder:text-zinc-400 border-gray-700 min-h-32"
+                      className="bg-transparent h-10 text-black placeholder:text-zinc-700 border-gray-700 min-h-32"
                         {...field}
                       />
                     </FormControl>
@@ -507,11 +507,11 @@ export default function ProviderRegistrationForm() {
                 name="category"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-zinc-400">Catégorie principale</FormLabel>
+                    <FormLabel className="text-zinc-700">Catégorie principale</FormLabel>
                     <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
                         <SelectTrigger
-                      className="bg-transparent h-14 text-white placeholder:text-zinc-400 border-gray-700">
+                      className="bg-transparent h-10 text-black placeholder:text-zinc-700 border-gray-700">
                           <SelectValue placeholder="Sélectionnez une catégorie" />
                         </SelectTrigger>
                       </FormControl>
@@ -533,10 +533,10 @@ export default function ProviderRegistrationForm() {
                 name="address"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-zinc-400">Adresse</FormLabel>
+                    <FormLabel className="text-zinc-700">Adresse</FormLabel>
                     <FormControl>
                       <Input placeholder="123 Rue de Paris"
-                      className="bg-transparent h-14 text-white placeholder:text-zinc-400 border-gray-700" {...field} />
+                      className="bg-transparent h-10 text-black placeholder:text-zinc-700 border-gray-700" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -549,10 +549,10 @@ export default function ProviderRegistrationForm() {
                   name="city"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-zinc-400">Ville</FormLabel>
+                      <FormLabel className="text-zinc-700">Ville</FormLabel>
                       <FormControl>
                         <Input placeholder="Paris"
-                      className="bg-transparent h-14 text-white placeholder:text-zinc-400 border-gray-700" {...field} />
+                      className="bg-transparent h-10 text-black placeholder:text-zinc-700 border-gray-700" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -564,10 +564,10 @@ export default function ProviderRegistrationForm() {
                   name="postalCode"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-zinc-400">Code postal</FormLabel>
+                      <FormLabel className="text-zinc-700">Code postal</FormLabel>
                       <FormControl>
                         <Input placeholder="75001"
-                      className="bg-transparent h-14 text-white placeholder:text-zinc-400 border-gray-700" {...field} />
+                      className="bg-transparent h-10 text-black placeholder:text-zinc-700 border-gray-700" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -585,8 +585,8 @@ export default function ProviderRegistrationForm() {
               transition={{ duration: 0.3 }}
               className="space-y-6"
             >
-              <h2 className="text-2xl font-bold mb-6  text-white">Conditions générales</h2>
-              <p className=" text-zinc-400 mb-6">
+              <h2 className="text-2xl font-bold mb-6  text-black">Conditions générales</h2>
+              <p className=" text-zinc-700 mb-6">
                 Veuillez lire et accepter les conditions générales d'utilisation.
               </p>
 
@@ -603,10 +603,10 @@ export default function ProviderRegistrationForm() {
                       />
                     </FormControl>
                     <div className="space-y-1 leading-none">
-                      <FormLabel className="text-white">
+                      <FormLabel className="text-black">
                         J'accepte les conditions générales d'utilisation
                       </FormLabel>
-                      <FormDescription className=" text-zinc-400">
+                      <FormDescription className=" text-zinc-700">
                         En cochant cette case, vous acceptez nos conditions générales d'utilisation.
                       </FormDescription>
                     </div>
@@ -624,7 +624,7 @@ export default function ProviderRegistrationForm() {
               transition={{ duration: 0.3 }}
               className="space-y-6"
             >
-              <h2 className="text-2xl font-bold mb-6 text-white">Validation</h2>
+              <h2 className="text-2xl font-bold mb-6 text-black">Validation</h2>
 
               <div className="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg p-4 mb-6">
                 <p className="text-yellow-800 dark:text-yellow-200">
@@ -641,14 +641,14 @@ export default function ProviderRegistrationForm() {
 
           <div className="flex justify-between pt-6">
             {step > 1 && (
-              <Button type="button" variant="outline" className="bg-white text-primary hover:bg-white/80" onClick={prevStep} disabled={isSubmitting}>
+              <Button type="button" variant="outline" className="bg-black text-white hover:bg-black/80" onClick={prevStep} disabled={isSubmitting}>
                 <ChevronLeft className="mr-2 h-4 w-4" />
                 Précédent
               </Button>
             )}
 
             {step < 4 && (
-              <Button type="button" onClick={nextStep} className="ml-auto bg-white text-primary hover:bg-white/80">
+              <Button type="button" onClick={nextStep} className="ml-auto bg-black text-white hover:bg-black/80">
                 Suivant
                 <ChevronRight className="ml-2 h-4 w-4" />
               </Button>
@@ -660,17 +660,17 @@ export default function ProviderRegistrationForm() {
   }
 
   return (
-    <div className="min-h-screen w-full flex flex-col lg:flex-row bg-primary">
+    <div className="min-h-screen w-full flex flex-col lg:flex-row">
       <section className="flex-1 flex items-center justify-center  relative">
-        <div className="w-full bg-primary absolute top-5 left-5 ">
-          <Link href={"/"} className="text-2xl font-bold text-white">
-            Okland
+        <div className="w-full absolute top-5 left-5 ">
+          <Link href={"/"} className="text-2xl font-bold text-black">
+            MonPresta
           </Link>
         </div>
         <div className="max-h-[90dvh] overflow-y-auto mx-auto px-4 py-12">
           <div className="max-w-3xl mx-auto">
-            <h1 className=" text-white tracking-tighter text-4xl md:text-5xl font-semibold leading-tight">Inscription Prestataire</h1>
-            <p className=" text-zinc-400 dark:text-gray-400 mb-12">
+            <h1 className=" text-black tracking-tighter text-4xl md:text-5xl font-semibold leading-tight">Inscription Prestataire</h1>
+            <p className=" text-zinc-700 dark:text-gray-400 mb-12">
               Rejoignez notre plateforme et développez votre activité en touchant de nouveaux clients.
             </p>
 

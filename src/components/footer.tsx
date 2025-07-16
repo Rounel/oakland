@@ -26,7 +26,7 @@ export default function Footer() {
                 <div className="space-y-4">
                   <h3 className="text-lg font-medium">
                     <Link href="/" className="text-muted-foreground hover:text-foreground text-2xl">
-                      Okland
+                      MonPresta
                     </Link>
                   </h3>
                 </div>
@@ -51,15 +51,15 @@ export default function Footer() {
                 <div className="space-y-4">
                   <h3 className="text-lg font-medium">Legal</h3>
                   <nav className="flex flex-col space-y-2">
-                    <Link href="/terms" className="text-muted-foreground hover:text-foreground">
+                    <Link href="/legal/terms" className="text-muted-foreground hover:text-foreground">
                       Terms of Service
                     </Link>
-                    <Link href="/privacy" className="text-muted-foreground hover:text-foreground">
+                    <Link href="/legal/privacy" className="text-muted-foreground hover:text-foreground">
                       Privacy Policy
                     </Link>
-                    <Link href="/cookies" className="text-muted-foreground hover:text-foreground">
+                    {/* <Link href="/cookies" className="text-muted-foreground hover:text-foreground">
                       Cookie Policy
-                    </Link>
+                    </Link> */}
                     <Link href="/faq" className="text-muted-foreground hover:text-foreground">
                       FAQ
                     </Link>
@@ -98,7 +98,7 @@ export default function Footer() {
               <div className="mt-8 border-t pt-8">
                 <div className="flex flex-col items-center justify-center gap-4 md:flex-row">
                   <p className="text-sm text-muted-foreground">
-                    &copy; {currentYear} Okland. {t("footer.rights")}
+                    &copy; {currentYear} MonPresta. {t("footer.rights")}
                   </p>
                   {/* <div className="flex space-x-4 text-sm text-muted-foreground">
                     <Link href="/contact" className="hover:text-foreground">

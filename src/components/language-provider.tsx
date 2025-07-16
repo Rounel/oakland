@@ -34,6 +34,10 @@ const translations: Translations = {
     en: "About",
     fr: "À propos",
   },
+  "nav.pricing": {
+    en: "Pricing",
+    fr: "Tarifications",
+  },
   "nav.login": {
     en: "Login",
     fr: "Connexion",

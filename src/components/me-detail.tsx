@@ -123,6 +123,33 @@ export default function MeDetail() {
     },
   })
 
+  // Synchroniser les formulaires avec les données du provider
+  useEffect(() => {
+    if (provider) {
+      profileForm.reset({
+        name: `${provider.first_name} ${provider.last_name}`,
+        profession: provider?.provider_info?.company_name ?? "",
+        description: provider?.provider_info?.description ?? "",
+      });
+      contactForm.reset({
+        phone: provider?.phone || "",
+        email: provider?.email || "",
+        address: provider?.provider_info?.address || "",
+        city: provider?.provider_info?.city || "",
+        postal_code: provider?.provider_info?.postal_code || "",
+      });
+      pricingForm.reset({
+        standardPrice: provider?.services.find(s => s.name === "Service standard")?.price?.toString() || "",
+        premiumPrice: provider?.services.find(s => s.name === "Service premium")?.price?.toString() || "",
+        dayPrice: provider?.services.find(s => s.name === "Forfait journée")?.price?.toString() || "",
+      });
+      scheduleForm.reset({
+        schedules: provider?.schedules?.map(s => ({ ...s, provider: provider.id })) || [],
+      });
+      // Pas besoin de reset pour galleryForm sauf si on veut pré-remplir les images
+    }
+  }, [provider]);
+
   // Fetch contacts
   const fetchContacts = async () => {
     try {
@@ -158,15 +185,13 @@ export default function MeDetail() {
       const nameParts = data.name.split(' ')
       const firstName = nameParts[0] || ''
       const lastName = nameParts.slice(1).join(' ') || ''
-      const response = await apiCall(`/providers/${provider?.provider_info.id}/`, {
+      await apiCall(`/providers/${provider?.id}/`, {
         method: 'PATCH',
         body: JSON.stringify({
           first_name: firstName,
           last_name: lastName,
-          provider_info: {
-            company_name: data.profession,
-            description: data.description
-          }
+          company_name: data.profession,
+          description: data.description,
         })
       })
       setProvider({ ...provider!, first_name: firstName, last_name: lastName, provider_info: { ...provider!.provider_info, company_name: data.profession, description: data.description } })
@@ -183,16 +208,14 @@ export default function MeDetail() {
   const onContactSubmit = async (data: ContactFormValues) => {
     try {
       setIsLoading(true)
-      const response = await apiCall(`/providers/${provider?.id}/`, {
+      await apiCall(`/providers/${provider?.id}/`, {
         method: 'PATCH',
         body: JSON.stringify({
           phone: data.phone || '',
           email: data.email || '',
-          provider_info: {
-            address: (data.address ?? '').toString(),
-            city: (data.city ?? '').toString(),
-            postal_code: (data.postal_code ?? '').toString(),
-          }
+          address: (data.address ?? '').toString(),
+          city: (data.city ?? '').toString(),
+          postal_code: (data.postal_code ?? '').toString(),
         })
       })
       setProvider({ ...provider!, phone: data.phone, email: data.email, provider_info: { ...provider!.provider_info, address: (data.address ?? '').toString(), city: (data.city ?? '').toString(), postal_code: (data.postal_code ?? '').toString() } })
@@ -209,11 +232,16 @@ export default function MeDetail() {
   const onServiceSubmit = async (data: ServiceFormValues) => {
     try {
       setIsLoading(true)
-      const response = await apiCall('/services/', {
+      await apiCall('/services/', {
         method: 'POST',
-        body: JSON.stringify({ ...data, provider: provider?.id })
+        body: JSON.stringify({
+          name: data.name,
+          description: data.description,
+          price: data.price,
+          duration: data.duration,
+        })
       })
-      setProvider({ ...provider!, services: [...(provider?.services || []), response] })
+      // Optionnel : recharger les services du provider ici
       setIsEditing(false)
       setActiveSection(null)
     } catch (err) {
@@ -228,15 +256,15 @@ export default function MeDetail() {
     try {
       setIsLoading(true)
       const services = [
-        { name: "Service standard", price: parseFloat(data.standardPrice), duration: "1h", provider: provider?.id },
-        { name: "Service premium", price: parseFloat(data.premiumPrice), duration: "1h", provider: provider?.id },
-        { name: "Forfait journée", price: parseFloat(data.dayPrice), duration: "8h", provider: provider?.id },
+        { name: "Service standard", price: parseFloat(data.standardPrice), duration: "1h" },
+        { name: "Service premium", price: parseFloat(data.premiumPrice), duration: "1h" },
+        { name: "Forfait journée", price: parseFloat(data.dayPrice), duration: "8h" },
       ]
-      const response = await apiCall(`/providers/${provider?.id}/`, {
+      await apiCall(`/providers/${provider?.id}/update_services/`, {
         method: 'PATCH',
         body: JSON.stringify({ services })
       })
-      setProvider({ ...provider!, services: response.services })
+      // Optionnel : recharger les services du provider ici
       setIsEditing(false)
       setActiveSection(null)
     } catch (err) {
@@ -251,20 +279,16 @@ export default function MeDetail() {
     try {
       setIsLoading(true)
       const formData = new FormData()
-      data.images.forEach((image: File) => {
+      data.images.forEach((image) => {
         formData.append('image', image)
       })
-      formData.append('provider', provider?.id.toString() || '')
-      const response = await fetch(`${BASE_API_URL}/gallery/`, {
+      // Si tu veux ajouter une description globale, décommente la ligne suivante :
+      // if (data.description) formData.append('description', data.description)
+      await fetch(`${BASE_API_URL}/gallery/`, {
         method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('access_token')}`,
-        },
+        headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` },
         body: formData,
       })
-      if (!response.ok) throw new Error('Upload failed')
-      const responseData = await response.json()
-      setProvider({ ...provider!, gallery: [...(provider?.gallery || []), responseData] })
       setIsEditing(false)
       setActiveSection(null)
     } catch (err) {
@@ -278,14 +302,18 @@ export default function MeDetail() {
   const onScheduleSubmit = async (data: ScheduleFormValues) => {
     try {
       setIsLoading(true)
-      const schedulePromises = data.schedules.map(schedule =>
+      const promises = data.schedules.map(schedule =>
         apiCall(`/schedules/${schedule.id}/`, {
           method: 'PUT',
-          body: JSON.stringify({ ...schedule, provider: provider?.id })
+          body: JSON.stringify({
+            day: schedule.day,
+            opening_time: schedule.opening_time,
+            closing_time: schedule.closing_time,
+            is_closed: schedule.is_closed,
+          })
         })
       )
-      const responses = await Promise.all(schedulePromises)
-      setProvider({ ...provider!, schedules: responses })
+      await Promise.all(promises)
       setIsEditing(false)
       setActiveSection(null)
     } catch (err) {
@@ -382,21 +410,21 @@ export default function MeDetail() {
           <form onSubmit={profileForm.handleSubmit(onProfileSubmit)} className="space-y-4">
             <div className="space-y-2">
               <label>Nom</label>
-              <Input {...profileForm.register("name")} />
+              <Input className="min-w-xs" {...profileForm.register("name")} />
               {profileForm.formState.errors.name && (
                 <p className="text-sm text-red-500">{profileForm.formState.errors.name.message}</p>
               )}
             </div>
             <div className="space-y-2">
               <label>Profession</label>
-              <Input {...profileForm.register("profession")} />
+              <Input className="min-w-xs" {...profileForm.register("profession")} />
               {profileForm.formState.errors.profession && (
                 <p className="text-sm text-red-500">{profileForm.formState.errors.profession.message}</p>
               )}
             </div>
             <div className="space-y-2">
               <label>Description</label>
-              <Textarea {...profileForm.register("description")} />
+              <Textarea className="min-w-xs" {...profileForm.register("description")} />
               {profileForm.formState.errors.description && (
                 <p className="text-sm text-red-500">{profileForm.formState.errors.description.message}</p>
               )}

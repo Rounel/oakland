@@ -107,10 +107,10 @@ export function FreelancerProfile({ freelancer }: FreelancerProfileProps) {
             </div>
           </div>
 
-          {/* Vetted by Okland */}
+          {/* Vetted by MonPresta */}
           <div className="mt-8">
-            <h2 className="text-lg font-bold mb-2">Vetted by Okland</h2>
-            <p className="text-gray-700">{freelancer.name} was selected by the Okland team for their expertise.</p>
+            <h2 className="text-lg font-bold mb-2">Vetted by MonPresta</h2>
+            <p className="text-gray-700">{freelancer.name} was selected by the MonPresta team for their expertise.</p>
           </div>
 
           {/* Vetted for */}
@@ -242,9 +242,9 @@ export function FreelancerProfile({ freelancer }: FreelancerProfileProps) {
                   </svg>
                 </div>
                 <div>
-                  <h4 className="font-bold mb-1">Okland satisfaction guarantee</h4>
+                  <h4 className="font-bold mb-1">MonPresta satisfaction guarantee</h4>
                   <p className="text-sm text-gray-600 mb-2">
-                    Okland providers deliver top-quality work. If you're not satisfied, we'll refund you.
+                    MonPresta providers deliver top-quality work. If you're not satisfied, we'll refund you.
                   </p>
                   <a href="#" className="text-sm font-medium hover:underline">
                     About satisfaction guarantee

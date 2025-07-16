@@ -18,7 +18,7 @@
 //       {/* Top Banner */}
 //       {/* <div className="bg-primary/10 py-2 text-center text-sm">
 //         <p>
-//           Bienvenue sur Okland |{" "}
+//           Bienvenue sur MonPresta |{" "}
 //           <span className="font-medium">
 //             Inscrivez-vous aujourd'hui et obtenez 20% de réduction sur votre première mission
 //           </span>
@@ -410,7 +410,7 @@
 //                       ))}
 //                     </div>
 //                     <p className="mb-4 text-sm">
-//                       "Okland m'a permis de trouver rapidement des clients de qualité. La plateforme est
+//                       "MonPresta m'a permis de trouver rapidement des clients de qualité. La plateforme est
 //                       intuitive et le système de paiement sécurisé me donne une tranquillité d'esprit."
 //                     </p>
 //                     <div className="flex items-center gap-3">
@@ -472,7 +472,7 @@
 //                       ))}
 //                     </div>
 //                     <p className="mb-4 text-sm">
-//                       "La qualité des projets sur Okland est impressionnante. J'ai pu développer mon portfolio
+//                       "La qualité des projets sur MonPresta est impressionnante. J'ai pu développer mon portfolio
 //                       et augmenter mes revenus de façon significative."
 //                     </p>
 //                     <div className="flex items-center gap-3">

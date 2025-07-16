@@ -10,7 +10,7 @@ import Footer from "@/components/footer"
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "Okland | Find Freelancers & Projects",
+  title: "MonPresta | Find Freelancers & Projects",
   description: "Connect with top providers or find your next project on our bilingual freelancing platform",
     generator: 'v0.dev'
 }

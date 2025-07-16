@@ -12,6 +12,7 @@ import Link from "next/link"
 import { FeaturedFreelancers } from "./home/featured-freelancers"
 import { searchProviders } from "@/services/services"
 import { ProvidersProps } from "@/types/datatypes"
+import PricingSection from "./pricing-section"
 
 export default function HomeContent() {
   const router = useRouter()
@@ -149,6 +150,8 @@ export default function HomeContent() {
           </Tabs>
         </div>
       </section>
+
+      <PricingSection />
 
       {/* CTA Section */}
       <section className="text-white bg-white my-10">

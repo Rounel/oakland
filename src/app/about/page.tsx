@@ -35,7 +35,7 @@ export default function AboutPage() {
             transition={{ duration: 0.5 }}
             className="text-4xl md:text-5xl font-bold mb-4 text-gray-900 dark:text-white"
           >
-            À propos de Okland
+            À propos de MonPresta
           </motion.h1>
           <motion.p
             initial={{ opacity: 0, y: 20 }}

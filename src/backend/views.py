@@ -399,6 +399,30 @@ class ProviderApplicationViewSet(viewsets.ModelViewSet):
         provider.save()
         return Response(self.get_serializer(provider).data)
 
+    @action(detail=True, methods=['patch'])
+    def update_services(self, request, pk=None):
+        provider = self.get_object()
+        services_data = request.data.get('services', [])
+        updated_services = []
+        for service_data in services_data:
+            name = service_data.get('name')
+            service, created = Service.objects.get_or_create(
+                provider=provider,
+                name=name,
+                defaults={
+                    'description': service_data.get('description', ''),
+                    'price': service_data.get('price', 0),
+                    'duration': service_data.get('duration', '1h'),
+                }
+            )
+            if not created:
+                service.description = service_data.get('description', service.description)
+                service.price = service_data.get('price', service.price)
+                service.duration = service_data.get('duration', service.duration)
+                service.save()
+            updated_services.append(service)
+        return Response({'services': ServiceSerializer(updated_services, many=True).data}, status=status.HTTP_200_OK)
+
 class ServiceViewSet(viewsets.ModelViewSet):
     serializer_class = ServiceSerializer
     permission_classes = [IsProviderOrReadOnly]
