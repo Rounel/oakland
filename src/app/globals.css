@@ -5,6 +5,8 @@
 
 @theme inline {
   --color-background: var(--background);
+  --color-background2: var(--background2);
+  --color-background3: var(--background3);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
@@ -29,6 +31,9 @@
   --color-accent: var(--accent);
   --color-muted-foreground: var(--muted-foreground);
   --color-muted: var(--muted);
+  --color-storm: var(--storm);
+  --color-mist: var(--mist);
+  --color-flax: var(--flax);
   --color-secondary-foreground: var(--secondary-foreground);
   --color-secondary: var(--secondary);
   --color-primary-foreground: var(--primary-foreground);
@@ -46,14 +51,19 @@
 :root {
   --radius: 0.625rem;
   --background: oklch(1 0 0);
+  --background2: #202A2B;
+  --background3: #EDECE6;
   --foreground: oklch(0.145 0 0);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.145 0 0);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
+  --primary: #2B323F;
   --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
+  --secondary: #354C51;
+  --storm: #354C51;
+  --mist: #CBD9CB;
+  --flax: #E5DCCA;
   --secondary-foreground: oklch(0.205 0 0);
   --muted: oklch(0.97 0 0);
   --muted-foreground: oklch(0.556 0 0);
@@ -117,7 +127,7 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background3 text-foreground;
   }
 }
 

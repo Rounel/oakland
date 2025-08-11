@@ -20,7 +20,7 @@ export default function Footer() {
       {
         !isAuthPage && !isAdminPage && (
           <footer className="border-t bg-background mx-auto">
-            <div className="container py-8 md:py-12">
+            <div className="py-8 md:py-12">
               <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4 px-2">
                 {/* Navigation */}
                 <div className="space-y-4">

@@ -40,10 +40,10 @@ export default function PricingSection() {
       name: "STANDARD",
       price: getPrice("STANDARD"),
       period: getPeriod("STANDARD"),
-      description: "Profil visible, jusqu’à 10 contacts/mois, support email.",
+      description: "Profil visible, jusqu'à 10 contacts/mois, support email.",
       features: [
         "Profil visible",
-        "Jusqu’à 10 contacts/mois",
+        "Jusqu'à 10 contacts/mois",
         "Position dans les résultats standard",
         "Support par email",
       ],
@@ -77,7 +77,7 @@ export default function PricingSection() {
       features: [
         "Tout dans PRO",
         "Gestion multi-profils : 4 prestataires inclus (chacun avec un compte PRO)",
-        "Possibilité d’ajouter d'autres prestataires (option payante)",
+        "Possibilité d'ajouter d'autres prestataires (option payante)",
         "Badge ENTREPRISE",
         "Support prioritaire",
         "Affichage préférentiel dans les résultats de recherche",
@@ -93,11 +93,11 @@ export default function PricingSection() {
   ]
 
   return (
-      <main id="pricing" className="container bg-amber-300 rounded-3xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div className="text-center mb-16">
-          <h1 className="text-5xl font-bold text-gray-900 mb-8 leading-tight">
+      <main id="pricing" className="container rounded-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20">
+        <div className="text-center mb-12 sm:mb-16">
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold text-gray-900 mb-6 sm:mb-8 leading-tight">
             We've got a plan
-            <br />
+            <br className="hidden sm:block" />
             that's perfect for you
           </h1>
 
@@ -105,7 +105,7 @@ export default function PricingSection() {
           <div className="inline-flex bg-gray-100 rounded-lg p-1">
             <button
               onClick={() => setBillingPeriod("monthly")}
-              className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+              className={`px-3 sm:px-4 py-2 rounded-md text-sm font-medium transition-colors ${
                 billingPeriod === "monthly" ? "bg-gray-900 text-white" : "text-gray-600 hover:text-gray-900"
               }`}
             >
@@ -113,7 +113,7 @@ export default function PricingSection() {
             </button>
             <button
               onClick={() => setBillingPeriod("annual")}
-              className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+              className={`px-3 sm:px-4 py-2 rounded-md text-sm font-medium transition-colors ${
                 billingPeriod === "annual" ? "bg-gray-900 text-white" : "text-gray-600 hover:text-gray-900"
               }`}
             >
@@ -123,67 +123,63 @@ export default function PricingSection() {
         </div>
 
         {/* Pricing Cards */}
-        <div className="grid md:grid-cols-3 gap-8 mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 mx-auto max-w-7xl">
           {plans.map((plan, index) => (
             <Card
               key={index}
-              className={`relative ${plan.popular ? "ring-2 ring-purple-500 bg-gray-900 text-white" : "bg-white"}`}
+              className={`relative ${plan.popular ? "ring-2 ring-flax bg-background2 text-white" : "bg-white"}`}
             >
               {plan.popular && (
                 <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
-                  <Badge className="bg-purple-500 text-white px-3 py-1 text-sm font-medium">Popular</Badge>
+                  <Badge className="bg-mist text-storm px-3 py-1 text-sm font-medium">Popular</Badge>
                 </div>
               )}
 
-              <CardHeader className="pb-8">
-                <h3 className={`text-xl font-semibold ${plan.popular ? "text-white" : "text-gray-900"}`}>
+              <CardHeader className="pb-6 sm:pb-8">
+                <h3 className={`text-lg sm:text-xl font-semibold ${plan.popular ? "text-white" : "text-gray-900"}`}>
                   {plan.name}
                 </h3>
-                <div className="mt-4">
-                  <span className={`text-5xl font-bold ${plan.popular ? "text-white" : "text-gray-900"}`}>
+                <div className="mt-3 sm:mt-4">
+                  <span className={`text-3xl sm:text-4xl lg:text-5xl font-bold ${plan.popular ? "text-white" : "text-gray-900"}`}>
                     {plan.price}
                   </span>
-                  <span className={`text-sm ml-2 ${plan.popular ? "text-gray-300" : "text-gray-600"}`}>
+                  <span className={`text-xs sm:text-sm ml-2 ${plan.popular ? "text-gray-300" : "text-gray-600"}`}>
                     {plan.period}
                   </span>
                 </div>
-                <p className={`mt-4 text-sm ${plan.popular ? "text-gray-300" : "text-gray-600"}`}>{plan.description}</p>
+                <p className={`mt-3 sm:mt-4 text-xs sm:text-sm ${plan.popular ? "text-gray-300" : "text-gray-600"}`}>
+                  {plan.description}
+                </p>
               </CardHeader>
 
-              <CardContent className="space-y-6">
-                <div className="space-y-4">
+              <CardContent className="space-y-4 sm:space-y-6">
+                <div className="space-y-3 sm:space-y-4">
                   <Button
                     className={`w-full ${
                       plan.popular
-                        ? "bg-purple-500 hover:bg-purple-600 text-white"
-                        : "bg-gray-900 hover:bg-gray-800 text-white"
+                        ? "bg-mist hover:bg-mist/90 text-storm"
+                        : "bg-storm hover:bg-storm/90 text-white"
                     }`}
                   >
                     {plan.buttonText}
                   </Button>
-                  {/* <Button
-                    variant="ghost"
-                    className={`w-full ${
-                      plan.popular ? "text-white hover:bg-gray-800" : "text-gray-600 hover:text-gray-900"
-                    }`}
-                  >
-                    Chat to sales
-                  </Button> */}
                 </div>
 
                 <div>
-                  <h4 className={`text-sm font-semibold mb-4 ${plan.popular ? "text-white" : "text-gray-900"}`}>
+                  <h4 className={`text-xs sm:text-sm font-semibold mb-3 sm:mb-4 ${plan.popular ? "text-white" : "text-gray-900"}`}>
                     FEATURES
                   </h4>
-                  <ul className="space-y-3">
+                  <ul className="space-y-2 sm:space-y-3">
                     {plan.features.map((feature, featureIndex) => (
-                      <li key={featureIndex} className="flex items-start space-x-3">
+                      <li key={featureIndex} className="flex items-start space-x-2 sm:space-x-3">
                         <Check
-                          className={`w-5 h-5 mt-0.5 flex-shrink-0 ${
-                            plan.popular ? "text-purple-400" : "text-purple-500"
+                          className={`w-4 h-4 sm:w-5 sm:h-5 mt-0.5 flex-shrink-0 ${
+                            plan.popular ? "text-flax" : "text-storm"
                           }`}
                         />
-                        <span className={`text-sm ${plan.popular ? "text-gray-300" : "text-gray-600"}`}>{feature}</span>
+                        <span className={`text-xs sm:text-sm ${plan.popular ? "text-gray-300" : "text-gray-600"}`}>
+                          {feature}
+                        </span>
                       </li>
                     ))}
                   </ul>

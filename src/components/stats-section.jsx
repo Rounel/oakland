@@ -7,10 +7,9 @@ export default function StatisticsBar() {
   
   // Animation for counting up numbers
   const [counts, setCounts] = useState({
-    percentage: 0,
-    years: 0,
-    millions: 0,
-    users: 0
+    pros: 0,
+    contacts: 0,
+    average: 0,
   });
   
   useEffect(() => {
@@ -29,10 +28,9 @@ export default function StatisticsBar() {
       const progress = Math.min(currentStep / steps, 1);
       
       setCounts({
-        percentage: Math.floor(progress * 95),
-        years: Math.floor(progress * 10),
-        millions: Math.floor(progress * 10),
-        users: Math.floor(progress * 50)
+        pros: Math.floor(progress * 4),
+        contacts: Math.floor(progress * 27),
+        average: Math.floor(progress * 4.5),
       });
       
       if (progress >= 1) {
@@ -45,27 +43,23 @@ export default function StatisticsBar() {
   
   const stats = [
     {
-      value: `${counts.percentage}%`,
-      label: "Customer satisfaction rate, reflecting our dedication"
+      value: `${counts.pros}k`,
+      label: "Pros vérifiés"
     },
     {
-      value: `${counts.years}+`,
-      label: "Innovation and insight to users' financial journeys"
+      value: `${counts.contacts}k`,
+      label: "Mises en relation"
     },
     {
-      value: `$${counts.millions}m`,
-      label: "Platform has ensuring secure and efficient financial"
+      value: `${counts.average}/5`,
+      label: "Moyenne d'avis"
     },
-    {
-      value: `${counts.users}m`,
-      label: "Users worldwide, providing them with financial solutions"
-    }
   ];
 
   return (
-    <div className={`w-full max-w-6xl mx-auto px-4 transition-all duration-1000 ${isVisible ? 'opacity-100' : 'opacity-0'}`}>
-      <div className="bg-white rounded-2xl px-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+    <div className={`bg-white w-full pb-8 px-4 transition-all duration-1000 ${isVisible ? 'opacity-100' : 'opacity-0'}`}>
+      <div className="max-w-6xl mx-auto rounded-2xl px-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {stats.map((stat, index) => (
             <div 
               key={index} 

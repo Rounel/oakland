@@ -13,6 +13,10 @@ import { FeaturedFreelancers } from "./home/featured-freelancers"
 import { searchProviders } from "@/services/services"
 import { ProvidersProps } from "@/types/datatypes"
 import PricingSection from "./pricing-section"
+import PopularCategoriesSection from "./popular-categories"
+import WhyUseItSection from "./why-use-it"
+import StatisticsBar from "./stats-section"
+import FaqSection from "./faq"
 
 export default function HomeContent() {
   const router = useRouter()
@@ -49,52 +53,57 @@ export default function HomeContent() {
   }
 
   return (
-    <div className="">
+    <div className="min-h-screen">
       {/* Hero Section */}
       <HomeHeroSection />
-
-      {/* How it works section */}
-      <HowItWorksSection />
+      
+      {/* Statistics Bar */}
+      <StatisticsBar />
 
       {/* Featured Deals Section */}
-      <section className="bg-muted/50 py-12 flex justify-center px-2">
-        <div className="container">
-          <div className="mb-8 flex items-center justify-between">
-            <h2 className="text-2xl font-bold tracking-tight md:text-3xl">Professionels trouvés autour de vous</h2>
-            <Link href="/search" className="flex items-center gap-1 text-sm font-medium text-primary">
+      <section className="py-8 sm:py-12 lg:py-16 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto">
+          <div className="mb-6 sm:mb-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold tracking-tight">
+              Professionels trouvés autour de vous
+            </h2>
+            <Link 
+              href="/search" 
+              className="flex items-center gap-1 text-sm font-medium text-primary hover:underline"
+            >
               Explorer tous les professionels <ChevronRight className="h-4 w-4" />
             </Link>
           </div>
 
-          <Tabs defaultValue="all" className="space-y-6">
-            <TabsList className="w-full justify-start rounded-none border-b bg-transparent p-0">
+          <Tabs defaultValue="all" className="space-y-4 sm:space-y-6">
+            <TabsList className="w-full justify-start rounded-none border-b bg-transparent p-0 overflow-x-auto">
               <TabsTrigger
                 value="all"
-                className="rounded-none border-b-2 border-transparent px-4 py-2 data-[state=active]:border-primary data-[state=active]:bg-transparent"
+                className="rounded-none border-b-2 border-transparent px-3 sm:px-4 py-2 text-sm sm:text-base whitespace-nowrap data-[state=active]:border-primary data-[state=active]:bg-transparent"
               >
                 Tous
               </TabsTrigger>
               <TabsTrigger
                 value="maçon"
-                className="rounded-none border-b-2 border-transparent px-4 py-2 data-[state=active]:border-primary data-[state=active]:bg-transparent"
+                className="rounded-none border-b-2 border-transparent px-3 sm:px-4 py-2 text-sm sm:text-base whitespace-nowrap data-[state=active]:border-primary data-[state=active]:bg-transparent"
               >
                 Maçon
               </TabsTrigger>
               <TabsTrigger
                 value="mecano"
-                className="rounded-none border-b-2 border-transparent px-4 py-2 data-[state=active]:border-primary data-[state=active]:bg-transparent"
+                className="rounded-none border-b-2 border-transparent px-3 sm:px-4 py-2 text-sm sm:text-base whitespace-nowrap data-[state=active]:border-primary data-[state=active]:bg-transparent"
               >
                 Mecanicien
               </TabsTrigger>
               <TabsTrigger
                 value="menuisier"
-                className="rounded-none border-b-2 border-transparent px-4 py-2 data-[state=active]:border-primary data-[state=active]:bg-transparent"
+                className="rounded-none border-b-2 border-transparent px-3 sm:px-4 py-2 text-sm sm:text-base whitespace-nowrap data-[state=active]:border-primary data-[state=active]:bg-transparent"
               >
                 Menuisier
               </TabsTrigger>
               <TabsTrigger
                 value="electricien"
-                className="rounded-none border-b-2 border-transparent px-4 py-2 data-[state=active]:border-primary data-[state=active]:bg-transparent"
+                className="rounded-none border-b-2 border-transparent px-3 sm:px-4 py-2 text-sm sm:text-base whitespace-nowrap data-[state=active]:border-primary data-[state=active]:bg-transparent"
               >
                 Electricien
               </TabsTrigger>
@@ -110,8 +119,8 @@ export default function HomeContent() {
               <div className="text-center py-12 text-gray-500">Aucun prestataire trouvé</div>
             ) : (
               <>
-                <TabsContent value="all" className="mt-6">
-                  <div className="grid grid-cols-2 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+                <TabsContent value="all" className="mt-4 sm:mt-6">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
                     {getProvidersByCategory('all').map((provider) => (
                       <FeaturedFreelancers
                         key={provider.id}
@@ -128,8 +137,8 @@ export default function HomeContent() {
                 </TabsContent>
 
                 {['maçon', 'mecano', 'menuisier', 'electricien'].map((category) => (
-                  <TabsContent key={category} value={category} className="mt-6">
-                    <div className="grid grid-cols-2 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+                  <TabsContent key={category} value={category} className="mt-4 sm:mt-6">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
                       {getProvidersByCategory(category).map((provider) => (
                         <FeaturedFreelancers
                           key={provider.id}
@@ -151,18 +160,46 @@ export default function HomeContent() {
         </div>
       </section>
 
+      <WhyUseItSection />
+
+      {/* How it works section */}
+      <HowItWorksSection />
+
       <PricingSection />
 
+      <section id="faq" className="w-full py-16 sm:py-20 md:py-24 lg:py-32 bg-white px-4 sm:px-6 lg:px-8">
+        <div className="max-w-6xl mx-auto">
+          <div className="mx-auto text-center space-y-3">
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight">
+              {"Foire aux questions"}
+            </h2>
+            <p className="text-muted-foreground text-base sm:text-lg max-w-2xl mx-auto">
+              {"Besoin d'aide ? Voici les réponses aux questions les plus courantes."}
+            </p>
+          </div>
+          <div className="mt-8 sm:mt-10">
+            <FaqSection />
+          </div>
+        </div>
+      </section>
+
       {/* CTA Section */}
-      <section className="text-white bg-white my-10">
-        <div className="container py-16 mx-auto px-4 bg-[url('/loginbg.jpg')] bg-cover bg-no-repeat bg-bottom rounded-2xl overflow-hidden max-w-4xl relative">
-          <div className=" bg-black/70 size-full absolute top-0 left-0 "></div>
-          <div className="max-w-3xl mx-auto text-center relative z-20">
-            <h2 className="text-3xl font-bold mb-6">Vous êtes un prestataire de services ?</h2>
-            <p className="text-xl mb-8 text-white/90">
+      <section className="text-white px-4 sm:px-6 lg:px-8">
+        <div className="py-12 sm:py-16 mx-auto bg-[url('/loginbg.jpg')] bg-cover bg-no-repeat bg-bottom rounded-2xl overflow-hidden relative">
+          <div className="bg-black/70 size-full absolute top-0 left-0"></div>
+          <div className="max-w-3xl mx-auto text-center relative z-20 px-4">
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-4 sm:mb-6">
+              Vous êtes un prestataire de services ?
+            </h2>
+            <p className="text-lg sm:text-xl mb-6 sm:mb-8 text-white/90">
               Rejoignez notre plateforme et développez votre activité en touchant de nouveaux clients.
             </p>
-            <Button variant="secondary" size="lg" onClick={() => router.push("/auth/register")}>
+            <Button 
+              variant="secondary" 
+              className="bg-flax text-white hover:bg-flax/90" 
+              size="lg" 
+              onClick={() => router.push("/auth/register")}
+            >
               Je m'inscris
             </Button>
           </div>

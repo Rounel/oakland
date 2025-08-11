@@ -118,57 +118,51 @@ export default function Navbar() {
                 <Link href="/" className="flex items-center space-x-2">
                   <span className="font-bold sm:inline-block text-3xl">MonPresta</span>
                 </Link>
-    
-                {/* Desktop Navigation */}
-                <NavigationMenu className="hidden md:flex">
-                  <NavigationMenuList>
-                    {/* <NavigationMenuItem>
-                      <Link href="/" legacyBehavior passHref>
-                        <NavigationMenuLink className={navigationMenuTriggerStyle()}>{t("nav.home")}</NavigationMenuLink>
-                      </Link>
-                    </NavigationMenuItem> */}
-                    <NavigationMenuItem>
-                      <Link href="/search" legacyBehavior passHref>
-                        <NavigationMenuLink className={navigationMenuTriggerStyle()}>{t("nav.explore")}</NavigationMenuLink>
-                      </Link>
-                    </NavigationMenuItem>
-                    {/* <NavigationMenuItem>
-                      <Link href="/post-project" legacyBehavior passHref>
-                        <NavigationMenuLink className={navigationMenuTriggerStyle()}>{t("nav.post")}</NavigationMenuLink>
-                      </Link>
-                    </NavigationMenuItem> */}
-                    <NavigationMenuItem>
-                      <NavigationMenuTrigger>{t("nav.categories")}</NavigationMenuTrigger>
-                      <NavigationMenuContent>
-                        <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-4 lg:w-[1000px]">
-                          {categories.map((category) => (
-                            <li key={category.name}>
-                              <NavigationMenuLink asChild>
-                                <Link
-                                  href={category.path}
-                                  className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
-                                >
-                                  <div className="text-sm font-medium leading-none">{category.name}</div>
-                                </Link>
-                              </NavigationMenuLink>
-                            </li>
-                          ))}
-                        </ul>
-                      </NavigationMenuContent>
-                    </NavigationMenuItem>
-                    <NavigationMenuItem>
-                      <Link href="/#pricing" legacyBehavior passHref>
-                        <NavigationMenuLink className={navigationMenuTriggerStyle()}>{t("nav.pricing")}</NavigationMenuLink>
-                      </Link>
-                    </NavigationMenuItem>
-                    <NavigationMenuItem>
-                      <Link href="/about" legacyBehavior passHref>
-                        <NavigationMenuLink className={navigationMenuTriggerStyle()}>{t("nav.about")}</NavigationMenuLink>
-                      </Link>
-                    </NavigationMenuItem>
-                  </NavigationMenuList>
-                </NavigationMenu>
               </div>
+  
+              {/* Desktop Navigation */}
+              <NavigationMenu className="hidden md:flex">
+                <NavigationMenuList>
+                  
+                  <NavigationMenuItem>
+                    <Link href="/search" legacyBehavior passHref>
+                      <NavigationMenuLink className={navigationMenuTriggerStyle()}>{t("nav.explore")}</NavigationMenuLink>
+                    </Link>
+                  </NavigationMenuItem>
+
+                  <NavigationMenuItem>
+                    <NavigationMenuTrigger>{t("nav.categories")}</NavigationMenuTrigger>
+                    <NavigationMenuContent>
+                      <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-4 lg:w-[1000px]">
+                        {categories.map((category) => (
+                          <li key={category.name}>
+                            <NavigationMenuLink asChild>
+                              <Link
+                                href={category.path}
+                                className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
+                              >
+                                <div className="text-sm font-medium leading-none">{category.name}</div>
+                              </Link>
+                            </NavigationMenuLink>
+                          </li>
+                        ))}
+                      </ul>
+                    </NavigationMenuContent>
+                  </NavigationMenuItem>
+
+                  <NavigationMenuItem>
+                    <Link href="/#pricing" legacyBehavior passHref>
+                      <NavigationMenuLink className={navigationMenuTriggerStyle()}>{t("nav.pricing")}</NavigationMenuLink>
+                    </Link>
+                  </NavigationMenuItem>
+
+                  <NavigationMenuItem>
+                    <Link href="/about" legacyBehavior passHref>
+                      <NavigationMenuLink className={navigationMenuTriggerStyle()}>{t("nav.about")}</NavigationMenuLink>
+                    </Link>
+                  </NavigationMenuItem>
+                </NavigationMenuList>
+              </NavigationMenu>
     
               {/* Right side - Search, Language, Auth */}
               <div className="flex items-center gap-2">
