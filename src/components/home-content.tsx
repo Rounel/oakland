@@ -53,7 +53,7 @@ export default function HomeContent() {
   }
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-[100dvh]">
       {/* Hero Section */}
       <HomeHeroSection />
       
@@ -61,7 +61,7 @@ export default function HomeContent() {
       <StatisticsBar />
 
       {/* Featured Deals Section */}
-      <section className="py-8 sm:py-12 lg:py-16 px-4 sm:px-6 lg:px-8">
+      <section className="py-8 sm:py-12 lg:py-16 px-4 sm:px-6 lg:px-8 max-w-[100dvw] overflow-hidden">
         <div className="max-w-7xl mx-auto">
           <div className="mb-6 sm:mb-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold tracking-tight">

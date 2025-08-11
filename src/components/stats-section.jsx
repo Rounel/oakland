@@ -57,9 +57,9 @@ export default function StatisticsBar() {
   ];
 
   return (
-    <div className={`bg-white w-full pb-8 px-4 transition-all duration-1000 ${isVisible ? 'opacity-100' : 'opacity-0'}`}>
+    <div className={`bg-white w-full pb-8 pt-8 lg:pt-0 px-4 transition-all duration-1000 ${isVisible ? 'opacity-100' : 'opacity-0'}`}>
       <div className="max-w-6xl mx-auto rounded-2xl px-6">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-3 gap-8">
           {stats.map((stat, index) => (
             <div 
               key={index} 

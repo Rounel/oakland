@@ -1,18 +1,7 @@
 "use client"
+
 import * as React from "react"
-
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "@/components/ui/carousel"
-import { categories } from "@/constants/categories"
-import Link from "next/link"
 import Image from "next/image"
-
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "./ui/button"
 import { BadgeDollarSign, BarChart3, Clock3, Images, MapPin, Megaphone, MessageCircle, Rocket, ShieldCheck, Star, Trophy, Wrench } from "lucide-react"
 
@@ -39,7 +28,6 @@ function CardAdvantage({
         </div>
     )
 }
-  
 
 export default function WhyUseItSection() {
 
@@ -47,21 +35,21 @@ export default function WhyUseItSection() {
     <div className="py-8 sm:py-12 lg:py-16 xl:py-20 bg-background2 flex justify-center flex-col items-center gap-8 sm:gap-10 lg:gap-16 xl:gap-20 px-4 sm:px-6 lg:px-8">
         {/* title */}
         <div className="space-y-3 text-center text-mist max-w-4xl">
-            <h2 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold tracking-tight">
-                {"Pourquoi utiliser notre plateforme ?"}
-            </h2>
-            <p className="text-flax text-base sm:text-lg lg:text-xl">
-                {
-                "Gagnez du temps, comparez en confiance, et trouvez le bon pro au bon prix."
-                }
-            </p>
+          <h2 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold tracking-tight">
+            {"Pourquoi utiliser notre plateforme ?"}
+          </h2>
+          <p className="text-flax text-base sm:text-lg lg:text-xl">
+            {
+              "Gagnez du temps, comparez en confiance, et trouvez le bon pro au bon prix."
+            }
+          </p>
         </div>
 
       {/* as user */}
       <div className="container px-4 md:px-6 max-w-7xl">
-        <div className="grid items-center gap-8 sm:gap-10 lg:gap-12 xl:gap-16 md:grid-cols-12">
+        <div className="grid items-center gap-8 sm:gap-10 lg:gap-12 xl:gap-16 lg:grid-cols-12">
           {/* Left */}
-          <div className="md:col-span-7 space-y-6 text-white flex flex-col justify-between">
+          <div className="lg:col-span-7 space-y-6 text-white flex flex-col justify-between">
             <div className="space-y-3">
               <h2 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold tracking-tight text-mist">
                 {"En tant qu'utilisateur"}
@@ -73,8 +61,7 @@ export default function WhyUseItSection() {
               </p>
             </div>
 
-            
-            <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="grid gap-4 sm:gap-6 grid-cols-2 lg:grid-cols-3">
                 <CardAdvantage
                     icon={<Clock3 className="h-5 w-5 sm:h-6 sm:w-6 text-foreground" aria-hidden="true" />}
                     title="Rapidité"
@@ -116,8 +103,8 @@ export default function WhyUseItSection() {
           </div>
 
           {/* Right */}
-          <div className="md:col-span-5">
-            <div className="relative aspect-[4/3] w-full overflow-hidden rounded-xl border bg-muted">
+          <div className="lg:col-span-5 row-start-1 lg:row-start-auto md:col-start-1">
+            <div className="relative aspect-[4/3] md:aspect-auto md:w-full md:h-[300px] w-full overflow-hidden rounded-xl border bg-muted">
               <Image
                 src="/1.jpg"
                 alt="Illustration des métiers ou carte géographique des professionnels"

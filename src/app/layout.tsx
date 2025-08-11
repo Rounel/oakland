@@ -26,7 +26,7 @@ export default function RootLayout({
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
           <LanguageProvider>
             <AuthProvider>
-              <div className="flex min-h-screen flex-col">
+              <div className="flex min-h-[100dvh] flex-col">
                 <Navbar />
                 <main className="flex-1 flex justify-center">{children}</main>
                 <Footer />

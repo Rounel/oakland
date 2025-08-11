@@ -122,9 +122,12 @@ export default function HomeHeroSection() {
   }
 
   return (
-    <div className="min-h-[100dvh] max-h-[100dvh] w-full overflow-hidden items-center bg-white relative">
+    <div className="lg:min-h-[100dvh] max-h-[100dvh] w-[100dvw] max-w-[100dvw] overflow-hidden items-center bg-white relative mx-auto">
       {/* Hero Content */}
-      <div className="absolute w-full md:w-auto rounded-md z-10 bottom-0 lg:bottom-20 left-1/2 -translate-x-1/2 bg-white to-90% flex flex-col items-center justify-center text-center px-4 py-6 lg:px-16 xl:px-28">
+      <div className="w-full flex flex-col items-center justify-center text-center px-4 py-6 text-white bg-primary
+      md:w-auto
+      lg:rounded-md lg:bg-white lg:text-foreground z-10 lg:left-1/2 lg:-translate-x-1/2 lg:absolute lg:bottom-20 lg:px-16 
+      xl:px-28">
         <motion.h1
           className="flex flex-col items-center justify-center text-center"
           initial={{ opacity: 0, y: 20 }}
@@ -133,7 +136,7 @@ export default function HomeHeroSection() {
         >
           {/* Headline with staggered animation */}
           <div className={`transition-all duration-700 delay-300 transform ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-gray-800 max-w-2xl sm:max-w-3xl mb-3 sm:mb-4 leading-tight">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold  max-w-2xl sm:max-w-3xl mb-3 sm:mb-4 leading-tight">
               Trouvez le professionel 
               <br className="hidden sm:block" />
               le plus proche de vous
@@ -143,7 +146,7 @@ export default function HomeHeroSection() {
         
         {/* Subheadline */}
         <div className={`transition-all duration-700 delay-500 transform ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-          <p className="text-sm sm:text-base text-gray-600 max-w-lg sm:max-w-xl mb-4 sm:mb-6">
+          <p className="text-sm sm:text-base max-w-lg sm:max-w-xl mb-4 sm:mb-6">
             Connectez-vous avec des milliers de professionels dans le bâtiment, l'artisanat, l'automobile et plus encore.
           </p>
         </div>
@@ -156,9 +159,9 @@ export default function HomeHeroSection() {
         >
           <form onSubmit={handleSearch} className="flex flex-col sm:flex-row gap-3 sm:gap-4">
             <div className="flex-1 relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2" size={18} />
               <Select value={category} onValueChange={setCategory}>
-                <SelectTrigger className='pl-9 sm:pl-10 text-sm sm:text-base'>
+                <SelectTrigger className='text-foreground pl-9 sm:pl-10 text-sm sm:text-base'>
                   <SelectValue placeholder="Toutes les catégories" />
                 </SelectTrigger>
                 <SelectContent>
@@ -172,7 +175,7 @@ export default function HomeHeroSection() {
               </Select>
             </div>
             <div className="flex-1 relative">
-              <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
+              <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2" size={18} />
               <Input
                 type="text"
                 placeholder={locationLoading ? "Détection de votre position..." : "Où ? (ville, code postal)"}
@@ -194,7 +197,7 @@ export default function HomeHeroSection() {
       </div>
       
       {/* Infinite Scroll Carousel */}
-      <div className="mb-4">
+      <div className="mb-4 hidden lg:block">
         {
           [
             allCategories,
