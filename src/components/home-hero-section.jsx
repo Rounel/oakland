@@ -126,7 +126,7 @@ export default function HomeHeroSection() {
       {/* Hero Content */}
       <div className="w-full flex flex-col items-center justify-center text-center px-4 py-6 text-white bg-primary
       md:w-auto
-      lg:rounded-md lg:bg-white lg:text-foreground z-10 lg:left-1/2 lg:-translate-x-1/2 lg:absolute lg:bottom-20 lg:px-16 
+      lg:rounded-md lg:bg-white lg:text-foreground z-10 lg:left-1/2 lg:-translate-x-1/2 lg:absolute lg:bottom-20 lg:px-8 lg:w-[900px] 
       xl:px-28">
         <motion.h1
           className="flex flex-col items-center justify-center text-center"
@@ -136,7 +136,7 @@ export default function HomeHeroSection() {
         >
           {/* Headline with staggered animation */}
           <div className={`transition-all duration-700 delay-300 transform ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold  max-w-2xl sm:max-w-3xl mb-3 sm:mb-4 leading-tight">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold  max-w-2xl sm:max-w-3xl lg:max-w-6xl mb-3 sm:mb-4 leading-tight">
               Trouvez le professionel 
               <br className="hidden sm:block" />
               le plus proche de vous

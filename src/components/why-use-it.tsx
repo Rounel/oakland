@@ -18,13 +18,13 @@ function CardAdvantage({
 }: CardAdvantageProps) {
     return (
         <div className="h-full">
-            <div className="flex mb-3 h-8 w-8 sm:h-10 sm:w-10 items-center justify-center rounded-md bg-mist">{icon}</div>
-            <div className="flex flex-row items-center gap-3 space-y-0">
-                <p className="text-sm sm:text-base font-medium">{title}</p>
-            </div>
-            <div className="pt-0">
-                <p className="text-xs sm:text-sm text-zinc-400">{text}</p>
-            </div>
+          <div className="flex mb-3 h-8 w-8 sm:h-10 sm:w-10 items-center justify-center rounded-md bg-mist">{icon}</div>
+          <div className="flex flex-row items-center gap-3 space-y-0">
+              <p className="text-sm sm:text-base font-medium">{title}</p>
+          </div>
+          <div className="pt-0">
+              <p className="text-xs sm:text-sm text-zinc-400">{text}</p>
+          </div>
         </div>
     )
 }
@@ -33,21 +33,21 @@ export default function WhyUseItSection() {
 
   return (
     <div className="py-8 sm:py-12 lg:py-16 xl:py-20 bg-background2 flex justify-center flex-col items-center gap-8 sm:gap-10 lg:gap-16 xl:gap-20 px-4 sm:px-6 lg:px-8">
-        {/* title */}
-        <div className="space-y-3 text-center text-mist max-w-4xl">
-          <h2 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold tracking-tight">
-            {"Pourquoi utiliser notre plateforme ?"}
-          </h2>
-          <p className="text-flax text-base sm:text-lg lg:text-xl">
-            {
-              "Gagnez du temps, comparez en confiance, et trouvez le bon pro au bon prix."
-            }
-          </p>
-        </div>
+      {/* title */}
+      <div className="space-y-3 text-center text-mist max-w-4xl">
+        <h2 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold tracking-tight">
+          {"Pourquoi utiliser notre plateforme ?"}
+        </h2>
+        <p className="text-flax text-base sm:text-lg lg:text-xl">
+          {
+            "Gagnez du temps, comparez en confiance, et trouvez le bon pro au bon prix."
+          }
+        </p>
+      </div>
 
       {/* as user */}
-      <div className="container px-4 md:px-6 max-w-7xl">
-        <div className="grid items-center gap-8 sm:gap-10 lg:gap-12 xl:gap-16 lg:grid-cols-12">
+      <div className=" max-w-[90rem]">
+        <div className="grid grid-cols-1 items-center gap-8 sm:gap-10 lg:gap-12 xl:gap-16 lg:grid-cols-12">
           {/* Left */}
           <div className="lg:col-span-7 space-y-6 text-white flex flex-col justify-between">
             <div className="space-y-3">
@@ -62,36 +62,36 @@ export default function WhyUseItSection() {
             </div>
 
             <div className="grid gap-4 sm:gap-6 grid-cols-2 lg:grid-cols-3">
-                <CardAdvantage
-                    icon={<Clock3 className="h-5 w-5 sm:h-6 sm:w-6 text-foreground" aria-hidden="true" />}
-                    title="Rapidité"
-                    text="Trouvez un professionnel en quelques clics."
-                />
-                <CardAdvantage
-                    icon={<MapPin className="h-5 w-5 sm:h-6 sm:w-6 text-foreground" aria-hidden="true" />}
-                    title="Géolocalisation"
-                    text="Repérez les pros proches de chez vous."
-                />
-                <CardAdvantage
-                    icon={<Wrench className="h-5 w-5 sm:h-6 sm:w-6 text-foreground" aria-hidden="true" />}
-                    title="Large choix"
-                    text="Accédez à des dizaines de métiers et services."
-                />
-                <CardAdvantage
-                    icon={<Star className="h-5 w-5 sm:h-6 sm:w-6 text-foreground" aria-hidden="true" />}
-                    title="Avis vérifiés"
-                    text="Décidez en confiance grâce aux évaluations."
-                />
-                <CardAdvantage
-                    icon={<MessageCircle className="h-5 w-5 sm:h-6 sm:w-6 text-foreground" aria-hidden="true" />}
-                    title="Contact direct"
-                    text="Échangez via la messagerie intégrée."
-                />
-                <CardAdvantage
-                    icon={<BadgeDollarSign className="h-5 w-5 sm:h-6 sm:w-6 text-foreground" aria-hidden="true" />}
-                    title="Devis express"
-                    text="Recevez plusieurs propositions rapidement."
-                />
+              <CardAdvantage
+                  icon={<Clock3 className="h-5 w-5 sm:h-6 sm:w-6 text-foreground" aria-hidden="true" />}
+                  title="Rapidité"
+                  text="Trouvez un professionnel en quelques clics."
+              />
+              <CardAdvantage
+                  icon={<MapPin className="h-5 w-5 sm:h-6 sm:w-6 text-foreground" aria-hidden="true" />}
+                  title="Géolocalisation"
+                  text="Repérez les pros proches de chez vous."
+              />
+              <CardAdvantage
+                  icon={<Wrench className="h-5 w-5 sm:h-6 sm:w-6 text-foreground" aria-hidden="true" />}
+                  title="Large choix"
+                  text="Accédez à des dizaines de métiers et services."
+              />
+              <CardAdvantage
+                  icon={<Star className="h-5 w-5 sm:h-6 sm:w-6 text-foreground" aria-hidden="true" />}
+                  title="Avis vérifiés"
+                  text="Décidez en confiance grâce aux évaluations."
+              />
+              <CardAdvantage
+                  icon={<MessageCircle className="h-5 w-5 sm:h-6 sm:w-6 text-foreground" aria-hidden="true" />}
+                  title="Contact direct"
+                  text="Échangez via la messagerie intégrée."
+              />
+              <CardAdvantage
+                  icon={<BadgeDollarSign className="h-5 w-5 sm:h-6 sm:w-6 text-foreground" aria-hidden="true" />}
+                  title="Devis express"
+                  text="Recevez plusieurs propositions rapidement."
+              />
             </div>
 
             {/* CTA banner */}
@@ -118,11 +118,11 @@ export default function WhyUseItSection() {
       </div>
 
       {/* as pro */}
-      <div className="container px-4 md:px-6 max-w-7xl">
-        <div className="grid items-center gap-8 sm:gap-10 lg:gap-12 xl:gap-16 md:grid-cols-12">
+      <div className=" max-w-[90rem]">
+        <div className="grid grid-cols-1 items-center gap-8 sm:gap-10 lg:gap-12 xl:gap-16 lg:grid-cols-12">
           {/* Left */}
-          <div className="md:col-span-5 order-2 md:order-1">
-            <div className="relative aspect-[4/3] w-full overflow-hidden rounded-xl border bg-muted">
+          <div className="lg:col-span-5">
+            <div className="relative aspect-[4/3] md:aspect-auto md:w-full md:h-[300px] w-full overflow-hidden rounded-xl border bg-muted">
               <Image
                 src="/2.jpg"
                 alt="Illustration des métiers ou carte géographique des professionnels"
@@ -134,7 +134,7 @@ export default function WhyUseItSection() {
           </div>
 
           {/* Right */}
-          <div className="md:col-span-7 space-y-6 text-white flex flex-col justify-between order-1 md:order-2">
+          <div className="lg:col-span-7 space-y-6 text-white flex flex-col justify-between">
             <div className="space-y-3">
               <h2 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold tracking-tight text-mist">
                 {"En tant que professionnel"}
@@ -147,7 +147,7 @@ export default function WhyUseItSection() {
             </div>
 
             
-            <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="grid gap-4 sm:gap-6 grid-cols-2 lg:grid-cols-3">
                 <CardAdvantage
                 icon={<Megaphone className="h-5 w-5 sm:h-6 sm:w-6 text-foreground" aria-hidden="true" />}
                 title="Visibilité accrue"

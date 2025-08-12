@@ -5,7 +5,13 @@ import { useLanguage } from "./language-provider"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { categories } from "@/constants/categories"
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible"
 import { usePathname } from "next/navigation"
+import { ChevronsUpDown } from "lucide-react"
 
 export default function Footer() {
   const { t } = useLanguage()
@@ -83,16 +89,23 @@ export default function Footer() {
 
               {/* Categories */}
               <div className="space-y-4 border-t mt-8 pt-8 px-2">
-                <h3 className="text-lg font-medium">{t("nav.categories")}</h3>
-                <nav className="grid grid-cols-1 gap-2 md:grid-cols-2 lg:grid-cols-4">
-                  {
-                    categories.map(category => (
-                      <Link key={category.name} href={category.path} className="text-muted-foreground hover:text-foreground">
-                        {category.name}
-                      </Link>
-                    ))
-                  }
-                </nav>
+                <Collapsible>
+                  <CollapsibleTrigger className="flex justify-between items-center w-full">
+                    <h3 className="text-lg font-medium">{t("nav.categories")}</h3>
+                    <ChevronsUpDown />
+                  </CollapsibleTrigger>
+                  <CollapsibleContent>
+                    <nav className="grid grid-cols-1 gap-2 md:grid-cols-2 lg:grid-cols-4 mt-4">
+                      {
+                        categories.map(category => (
+                          <Link key={category.name} href={category.path} className="text-muted-foreground hover:text-foreground">
+                            {category.name}
+                          </Link>
+                        ))
+                      }
+                    </nav>
+                  </CollapsibleContent>
+                </Collapsible>
               </div>
 
               <div className="mt-8 border-t pt-8">

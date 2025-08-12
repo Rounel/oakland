@@ -57,19 +57,19 @@ export default function StatisticsBar() {
   ];
 
   return (
-    <div className={`bg-white w-full pb-8 pt-8 lg:pt-0 px-4 transition-all duration-1000 ${isVisible ? 'opacity-100' : 'opacity-0'}`}>
-      <div className="max-w-6xl mx-auto rounded-2xl px-6">
-        <div className="grid grid-cols-3 gap-8">
+    <div className={`bg-white pb-8 pt-8 lg:pt-0 px-4 transition-all duration-1000 ${isVisible ? 'opacity-100' : 'opacity-0'}`}>
+      <div className="max-w-6xl sm:w-auto mx-auto">
+        <div className="grid grid-cols-3 gap-2 md:gap-8">
           {stats.map((stat, index) => (
             <div 
               key={index} 
-              className={`text-center transition-all duration-1000 delay-200 transform ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}`}
+              className={`text-center flex flex-col justify-center items-center mx-auto max-w-[5rem] transition-all duration-1000 delay-200 transform ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}`}
               style={{ transitionDelay: `${200 + index * 100}ms` }}
             >
-              <div className="text-5xl md:text-6xl font-bold text-gray-900 mb-3">
+              <div className="text-3xl md:text-6xl font-bold text-gray-900 mb-3">
                 {stat.value}
               </div>
-              <p className="text-sm text-gray-500 leading-relaxed">
+              <p className="text-xs md:text-sm text-gray-500 leading-relaxed">
                 {stat.label}
               </p>
             </div>

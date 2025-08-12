@@ -61,8 +61,8 @@ export default function HomeContent() {
       <StatisticsBar />
 
       {/* Featured Deals Section */}
-      <section className="py-8 sm:py-12 lg:py-16 px-4 sm:px-6 lg:px-8 max-w-[100dvw] overflow-hidden">
-        <div className="max-w-7xl mx-auto">
+      <section className="py-8 sm:py-12 lg:py-16 px-2 sm:px-6 lg:px-8 max-w-[100dvw] overflow-hidden">
+        <div className="max-w-[90rem] mx-auto">
           <div className="mb-6 sm:mb-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold tracking-tight">
               Professionels trouvés autour de vous
@@ -76,7 +76,7 @@ export default function HomeContent() {
           </div>
 
           <Tabs defaultValue="all" className="space-y-4 sm:space-y-6">
-            <TabsList className="w-full justify-start rounded-none border-b bg-transparent p-0 overflow-x-auto">
+            <TabsList className="w-full justify-start rounded-none border-b bg-transparent p-0 overflow-x-auto overflow-y-hidden">
               <TabsTrigger
                 value="all"
                 className="rounded-none border-b-2 border-transparent px-3 sm:px-4 py-2 text-sm sm:text-base whitespace-nowrap data-[state=active]:border-primary data-[state=active]:bg-transparent"
@@ -114,7 +114,7 @@ export default function HomeContent() {
                 <Loader2 className="h-8 w-8 animate-spin text-primary" />
               </div>
             ) : error ? (
-              <div className="text-center py-12 text-red-500">{error}</div>
+              <div className="text-center py-12 text-foreground">{error}</div>
             ) : providers.length === 0 ? (
               <div className="text-center py-12 text-gray-500">Aucun prestataire trouvé</div>
             ) : (
@@ -184,8 +184,8 @@ export default function HomeContent() {
       </section>
 
       {/* CTA Section */}
-      <section className="text-white px-4 sm:px-6 lg:px-8">
-        <div className="py-12 sm:py-16 mx-auto bg-[url('/loginbg.jpg')] bg-cover bg-no-repeat bg-bottom rounded-2xl overflow-hidden relative">
+      <section className="text-white">
+        <div className="py-12 sm:py-16 mx-auto bg-[url('/loginbg.jpg')] bg-cover bg-no-repeat bg-bottom overflow-hidden relative">
           <div className="bg-black/70 size-full absolute top-0 left-0"></div>
           <div className="max-w-3xl mx-auto text-center relative z-20 px-4">
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-4 sm:mb-6">
