@@ -4,6 +4,7 @@ import * as React from "react"
 import Image from "next/image"
 import { Button } from "./ui/button"
 import { BadgeDollarSign, BarChart3, Clock3, Images, MapPin, Megaphone, MessageCircle, Rocket, ShieldCheck, Star, Trophy, Wrench } from "lucide-react"
+import { useLanguage } from "./language-provider"
 
 type CardAdvantageProps = {
     icon?: React.ReactNode
@@ -30,18 +31,17 @@ function CardAdvantage({
 }
 
 export default function WhyUseItSection() {
+  const { t } = useLanguage()
 
   return (
     <div className="py-8 sm:py-12 lg:py-16 xl:py-20 bg-background2 flex justify-center flex-col items-center gap-8 sm:gap-10 lg:gap-16 xl:gap-20 px-4 sm:px-6 lg:px-8">
       {/* title */}
       <div className="space-y-3 text-center text-mist max-w-4xl">
         <h2 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold tracking-tight">
-          {"Pourquoi utiliser notre plateforme ?"}
+          {t("why.use.title")}
         </h2>
         <p className="text-flax text-base sm:text-lg lg:text-xl">
-          {
-            "Gagnez du temps, comparez en confiance, et trouvez le bon pro au bon prix."
-          }
+          {t("why.use.subtitle")}
         </p>
       </div>
 
@@ -52,52 +52,50 @@ export default function WhyUseItSection() {
           <div className="lg:col-span-7 space-y-6 text-white flex flex-col justify-between">
             <div className="space-y-3">
               <h2 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold tracking-tight text-mist">
-                {"En tant qu'utilisateur"}
+                {t("why.use.as.user.title")}
               </h2>
               <p className="text-flax text-base sm:text-lg lg:text-xl">
-                {
-                  "Prêt à trouver le bon pro ?"
-                }
+                {t("why.use.as.user.subtitle")}
               </p>
             </div>
 
             <div className="grid gap-4 sm:gap-6 grid-cols-2 lg:grid-cols-3">
               <CardAdvantage
                   icon={<Clock3 className="h-5 w-5 sm:h-6 sm:w-6 text-foreground" aria-hidden="true" />}
-                  title="Rapidité"
-                  text="Trouvez un professionnel en quelques clics."
+                  title={t("why.use.user.speed.title")}
+                  text={t("why.use.user.speed.text")}
               />
               <CardAdvantage
                   icon={<MapPin className="h-5 w-5 sm:h-6 sm:w-6 text-foreground" aria-hidden="true" />}
-                  title="Géolocalisation"
-                  text="Repérez les pros proches de chez vous."
+                  title={t("why.use.user.geolocation.title")}
+                  text={t("why.use.user.geolocation.text")}
               />
               <CardAdvantage
                   icon={<Wrench className="h-5 w-5 sm:h-6 sm:w-6 text-foreground" aria-hidden="true" />}
-                  title="Large choix"
-                  text="Accédez à des dizaines de métiers et services."
+                  title={t("why.use.user.choice.title")}
+                  text={t("why.use.user.choice.text")}
               />
               <CardAdvantage
                   icon={<Star className="h-5 w-5 sm:h-6 sm:w-6 text-foreground" aria-hidden="true" />}
-                  title="Avis vérifiés"
-                  text="Décidez en confiance grâce aux évaluations."
+                  title={t("why.use.user.reviews.title")}
+                  text={t("why.use.user.reviews.text")}
               />
               <CardAdvantage
                   icon={<MessageCircle className="h-5 w-5 sm:h-6 sm:w-6 text-foreground" aria-hidden="true" />}
-                  title="Contact direct"
-                  text="Échangez via la messagerie intégrée."
+                  title={t("why.use.user.contact.title")}
+                  text={t("why.use.user.contact.text")}
               />
               <CardAdvantage
                   icon={<BadgeDollarSign className="h-5 w-5 sm:h-6 sm:w-6 text-foreground" aria-hidden="true" />}
-                  title="Devis express"
-                  text="Recevez plusieurs propositions rapidement."
+                  title={t("why.use.user.quotes.title")}
+                  text={t("why.use.user.quotes.text")}
               />
             </div>
 
             {/* CTA banner */}
             <div className="mt-8 sm:mt-10 flex flex-col sm:flex-row items-center gap-3">
                 <Button size="lg" className="w-full sm:w-auto bg-mist text-background2 hover:bg-mist/50">
-                {"Lancer une recherche"}
+                {t("why.use.user.cta")}
                 </Button>
             </div>
           </div>
@@ -137,12 +135,10 @@ export default function WhyUseItSection() {
           <div className="lg:col-span-7 space-y-6 text-white flex flex-col justify-between">
             <div className="space-y-3">
               <h2 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold tracking-tight text-mist">
-                {"En tant que professionnel"}
+                {t("why.use.as.pro.title")}
               </h2>
               <p className="text-flax text-base sm:text-lg lg:text-xl">
-                {
-                  "Développez votre activité dès aujourd'hui."
-                }
+                {t("why.use.as.pro.subtitle")}
               </p>
             </div>
 
@@ -150,43 +146,43 @@ export default function WhyUseItSection() {
             <div className="grid gap-4 sm:gap-6 grid-cols-2 lg:grid-cols-3">
                 <CardAdvantage
                 icon={<Megaphone className="h-5 w-5 sm:h-6 sm:w-6 text-foreground" aria-hidden="true" />}
-                title="Visibilité accrue"
-                text="Touchez des clients qualifiés près de vous."
+                title={t("why.use.pro.visibility.title")}
+                text={t("why.use.pro.visibility.text")}
                 />
                 <CardAdvantage
                 icon={<Images className="h-5 w-5 sm:h-6 sm:w-6 text-foreground" aria-hidden="true" />}
-                title="Profil valorisé"
-                text="Mettez en avant vos réalisations et expertises."
+                title={t("why.use.pro.profile.title")}
+                text={t("why.use.pro.profile.text")}
                 />
                 <CardAdvantage
                 icon={<Trophy className="h-5 w-5 sm:h-6 sm:w-6 text-foreground" aria-hidden="true" />}
-                title="Réputation"
-                text="Renforcez la confiance avec les avis clients."
+                title={t("why.use.pro.reputation.title")}
+                text={t("why.use.pro.reputation.text")}
                 />
                 <CardAdvantage
                 icon={<BarChart3 className="h-5 w-5 sm:h-6 sm:w-6 text-foreground" aria-hidden="true" />}
-                title="Outils de gestion"
-                text="Centralisez demandes, devis et rendez-vous."
+                title={t("why.use.pro.tools.title")}
+                text={t("why.use.pro.tools.text")}
                 />
                 <CardAdvantage
                 icon={<Rocket className="h-5 w-5 sm:h-6 sm:w-6 text-foreground" aria-hidden="true" />}
-                title="Opportunités"
-                text="Gagnez des contrats que vous auriez manqués."
+                title={t("why.use.pro.opportunities.title")}
+                text={t("why.use.pro.opportunities.text")}
                 />
                 <CardAdvantage
                 icon={<ShieldCheck className="h-5 w-5 sm:h-6 sm:w-6 text-foreground" aria-hidden="true" />}
-                title="Sécurité & conformité"
-                text="Echanges et paiements sécurisés."
+                title={t("why.use.pro.security.title")}
+                text={t("why.use.pro.security.text")}
                 />
             </div>
 
             {/* CTA banner for pros (optional micro-copy) */}
             <div className="mt-8 sm:mt-10 gap-3 sm:gap-4 flex flex-col sm:flex-row items-center">
                 <Button size="lg" className="w-full sm:w-auto bg-mist text-background2 hover:bg-mist/50">
-                {"Créer mon profil pro"}
+                {t("why.use.pro.cta.primary")}
                 </Button>
                 <Button size="lg" variant="ghost" className="w-full sm:w-auto bg-white text-primary hover:bg-white/70">
-                {"Découvrir comment ça marche"}
+                {t("why.use.pro.cta.secondary")}
                 </Button>
             </div>
           </div>

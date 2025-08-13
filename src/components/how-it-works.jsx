@@ -1,10 +1,11 @@
 "use client"
 
-
 import Image from 'next/image';
 import { useState, useEffect } from 'react';
+import { useLanguage } from './language-provider';
 
 export default function HowItWorksSection() {
+  const { t } = useLanguage()
   const [activeStep, setActiveStep] = useState(0);
   const [isVisible, setIsVisible] = useState(false);
   
@@ -22,8 +23,8 @@ export default function HowItWorksSection() {
   const steps = [
     {
       id: 1,
-      title: "Lancez une recherche d'un métier",
-      description: "Définissez votre besoin et trouvez les meilleurs talents dans votre région en quelques clics.",
+      title: t("hiw.step1.title"),
+      description: t("hiw.step1.description"),
       img: "/zoom.png",
       icon: () => (<svg className="w-full h-full" viewBox="0 0 200 200" width="300" height="300" xmlns="http://www.w3.org/2000/svg">
         <circle cx="100" cy="100" r="95" fill="#f5f5f5"/>
@@ -77,8 +78,8 @@ export default function HowItWorksSection() {
     },
     {
       id: 2,
-      title: "Choisissez le prestataire de votre choix",
-      description: "Comparez les profils, évaluations et expertises pour trouver le professionnel idéal pour votre projet.",
+      title: t("hiw.step2.title"),
+      description: t("hiw.step2.description"),
       img: "/candidate.png",
       icon: () => (
         <svg className="w-full h-full" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -116,8 +117,8 @@ export default function HowItWorksSection() {
     },
     {
       id: 3,
-      title: "Contactez le",
-      description: "Établissez une connexion directe avec le prestataire pour discuter de votre projet et démarrer votre collaboration.",
+      title: t("hiw.step3.title"),
+      description: t("hiw.step3.description"),
       img: "/contact.png",
       icon: () => (<svg
         viewBox="0 0 200 200"
@@ -204,10 +205,10 @@ export default function HowItWorksSection() {
       <div className="max-w-7xl mx-auto">
         <div className={`text-center mb-12 sm:mb-16 transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
           <h2 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold text-storm mb-3 sm:mb-4">
-            Comment ça marche
+            {t("hiw.title")}
           </h2>
           <p className="text-base sm:text-lg lg:text-xl text-storm max-w-2xl mx-auto">
-            Trouvez rapidement le professionnel idéal pour votre projet en trois étapes simples
+            {t("hiw.subtitle")}
           </p>
         </div>
         

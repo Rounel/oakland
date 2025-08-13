@@ -25,29 +25,29 @@ export default function Footer() {
     <>
       {
         !isAuthPage && !isAdminPage && (
-          <footer className="border-t bg-background mx-auto">
+          <footer className="bg-background4 w-full mx-auto">
             <div className="py-8 md:py-12">
               <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4 px-2">
                 {/* Navigation */}
                 <div className="space-y-4">
                   <h3 className="text-lg font-medium">
-                    <Link href="/" className="text-muted-foreground hover:text-foreground text-2xl">
-                      MonPresta
+                    <Link href="/" className="text-white hover:text-white text-2xl">
+                      {t("footer.brand.name")}
                     </Link>
                   </h3>
                 </div>
 
                 {/* Quick links */}
                 <div className="space-y-4">
-                  <h3 className="text-lg font-medium">Quick links</h3>
+                  <h3 className="text-lg text-zinc-300 font-medium">{t("footer.quick.links")}</h3>
                   <nav className="flex flex-col space-y-2">
-                    <Link href="/search" className="text-muted-foreground hover:text-foreground">
+                    <Link href="/search" className="text-zinc-400 hover:text-white">
                       {t("nav.explore")}
                     </Link>
-                    <Link href="/about" className="text-muted-foreground hover:text-foreground">
+                    <Link href="/about" className="text-zinc-400 hover:text-white">
                       {t("nav.about")}
                     </Link>
-                    <Link href="/how-it-works" className="text-muted-foreground hover:text-foreground">
+                    <Link href="/how-it-works" className="text-zinc-400 hover:text-white">
                       {t("footer.hiw")}
                     </Link>
                   </nav>
@@ -55,29 +55,29 @@ export default function Footer() {
 
                 {/* Legal */}
                 <div className="space-y-4">
-                  <h3 className="text-lg font-medium">Legal</h3>
+                  <h3 className="text-lg text-zinc-300 font-medium">{t("footer.legal")}</h3>
                   <nav className="flex flex-col space-y-2">
-                    <Link href="/legal/terms" className="text-muted-foreground hover:text-foreground">
-                      Terms of Service
+                    <Link href="/legal/terms" className="text-zinc-400 hover:text-white">
+                      {t("footer.terms")}
                     </Link>
-                    <Link href="/legal/privacy" className="text-muted-foreground hover:text-foreground">
-                      Privacy Policy
+                    <Link href="/legal/privacy" className="text-zinc-400 hover:text-white">
+                      {t("footer.privacy")}
                     </Link>
-                    {/* <Link href="/cookies" className="text-muted-foreground hover:text-foreground">
-                      Cookie Policy
+                    {/* <Link href="/cookies" className="text-zinc-400 hover:text-white">
+                      {t("footer.cookies")}
                     </Link> */}
-                    <Link href="/faq" className="text-muted-foreground hover:text-foreground">
-                      FAQ
+                    <Link href="/faq" className="text-zinc-400 hover:text-white">
+                      {t("footer.faq")}
                     </Link>
                   </nav>
                 </div>
 
                 {/* Newsletter */}
                 <div className="space-y-4">
-                  <h3 className="text-lg font-medium">{t("footer.newsletter")}</h3>
+                  <h3 className="text-lg text-zinc-300 font-medium">{t("footer.newsletter")}</h3>
                   <div className="flex flex-col space-y-2">
-                    <p className="text-sm text-muted-foreground">
-                      Stay updated with the latest freelancing trends and opportunities.
+                    <p className="text-sm text-zinc-400">
+                      {t("footer.newsletter.description")}
                     </p>
                     <div className="flex space-x-2">
                       <Input type="email" placeholder={t("footer.newsletter.placeholder")} className="max-w-[220px]" />
@@ -88,17 +88,17 @@ export default function Footer() {
               </div>
 
               {/* Categories */}
-              <div className="space-y-4 border-t mt-8 pt-8 px-2">
+              <div className="space-y-4 border-t border-zinc-600 mt-8 pt-8 px-2">
                 <Collapsible>
                   <CollapsibleTrigger className="flex justify-between items-center w-full">
-                    <h3 className="text-lg font-medium">{t("nav.categories")}</h3>
-                    <ChevronsUpDown />
+                    <h3 className="text-lg text-zinc-300 font-medium">{t("nav.categories")}</h3>
+                    <ChevronsUpDown className="text-zinc-300" />
                   </CollapsibleTrigger>
                   <CollapsibleContent>
                     <nav className="grid grid-cols-1 gap-2 md:grid-cols-2 lg:grid-cols-4 mt-4">
                       {
                         categories.map(category => (
-                          <Link key={category.name} href={category.path} className="text-muted-foreground hover:text-foreground">
+                          <Link key={category.name} href={category.path} className="text-zinc-400 hover:text-white">
                             {category.name}
                           </Link>
                         ))
@@ -108,16 +108,16 @@ export default function Footer() {
                 </Collapsible>
               </div>
 
-              <div className="mt-8 border-t pt-8">
+              <div className="mt-8 border-t border-zinc-600 pt-8">
                 <div className="flex flex-col items-center justify-center gap-4 md:flex-row">
-                  <p className="text-sm text-muted-foreground">
-                    &copy; {currentYear} MonPresta. {t("footer.rights")}
+                  <p className="text-sm text-zinc-400">
+                    &copy; {currentYear} {t("footer.brand.name")}. {t("footer.rights")}
                   </p>
-                  {/* <div className="flex space-x-4 text-sm text-muted-foreground">
-                    <Link href="/contact" className="hover:text-foreground">
+                  {/* <div className="flex space-x-4 text-sm text-zinc-400">
+                    <Link href="/contact" className="hover:text-white">
                       Contact
                     </Link>
-                    <Link href="/sitemap" className="hover:text-foreground">
+                    <Link href="/sitemap" className="hover:text-white">
                       Sitemap
                     </Link>
                   </div> */}

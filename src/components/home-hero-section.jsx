@@ -11,8 +11,10 @@ import Image from 'next/image';
 import { motion } from "framer-motion"
 import { useGeolocation } from "@/hooks/use-geolocation"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { useLanguage } from './language-provider';
 
 export default function HomeHeroSection() {
+  const { t } = useLanguage()
   const [isVisible, setIsVisible] = useState(false);
   const [isHovering, setIsHovering] = useState(null);
   const carouselRef = useRef(null);
@@ -137,9 +139,7 @@ export default function HomeHeroSection() {
           {/* Headline with staggered animation */}
           <div className={`transition-all duration-700 delay-300 transform ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
             <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold  max-w-2xl sm:max-w-3xl lg:max-w-6xl mb-3 sm:mb-4 leading-tight">
-              Trouvez le professionel 
-              <br className="hidden sm:block" />
-              le plus proche de vous
+              {t("hero.main.title")}
             </h1>
           </div>
         </motion.h1>
@@ -147,7 +147,7 @@ export default function HomeHeroSection() {
         {/* Subheadline */}
         <div className={`transition-all duration-700 delay-500 transform ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
           <p className="text-sm sm:text-base max-w-lg sm:max-w-xl mb-4 sm:mb-6">
-            Connectez-vous avec des milliers de professionels dans le bâtiment, l'artisanat, l'automobile et plus encore.
+            {t("hero.main.subtitle")}
           </p>
         </div>
 
@@ -162,10 +162,10 @@ export default function HomeHeroSection() {
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2" size={18} />
               <Select value={category} onValueChange={setCategory}>
                 <SelectTrigger className='text-foreground pl-9 sm:pl-10 text-sm sm:text-base'>
-                  <SelectValue placeholder="Toutes les catégories" />
+                  <SelectValue placeholder={t("hero.search.category.placeholder")} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="all">Toutes les catégories</SelectItem>
+                  <SelectItem value="all">{t("hero.search.category.placeholder")}</SelectItem>
                   {categories.map((cat) => (
                     <SelectItem key={`cfs${cat.id}`} value={String(cat.id)}>
                       {cat.name}
@@ -178,7 +178,7 @@ export default function HomeHeroSection() {
               <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2" size={18} />
               <Input
                 type="text"
-                placeholder={locationLoading ? "Détection de votre position..." : "Où ? (ville, code postal)"}
+                placeholder={locationLoading ? t("hero.search.location.detecting") : t("hero.search.location.placeholder")}
                 className="pl-9 sm:pl-10 text-sm sm:text-base"
                 value={location}
                 onChange={(e) => setLocation(e.target.value)}
@@ -190,7 +190,7 @@ export default function HomeHeroSection() {
               )}
             </div>
             <Button type="submit" className="md:w-auto text-sm sm:text-base">
-              Rechercher
+              {t("hero.search.button")}
             </Button>
           </form>
         </motion.div>
@@ -243,7 +243,7 @@ export default function HomeHeroSection() {
                         />}
                         {isHovering === `${category.name}${index}` && (
                           <div className="absolute inset-0 bg-black/45 flex items-center justify-center transition-opacity duration-300">
-                            <span className="px-3 sm:px-4 py-2 bg-white bg-opacity-90 rounded-full text-xs sm:text-sm font-medium">View category</span>
+                            <span className="px-3 sm:px-4 py-2 bg-white bg-opacity-90 rounded-full text-xs sm:text-sm font-medium">{t("hero.carousel.view.category")}</span>
                           </div>
                         )}
                       </div>

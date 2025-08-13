@@ -17,9 +17,11 @@ import PopularCategoriesSection from "./popular-categories"
 import WhyUseItSection from "./why-use-it"
 import StatisticsBar from "./stats-section"
 import FaqSection from "./faq"
+import { useLanguage } from "./language-provider"
 
 export default function HomeContent() {
   const router = useRouter()
+  const { t } = useLanguage()
   const [providers, setProviders] = useState<ProvidersProps[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -30,7 +32,7 @@ export default function HomeContent() {
         const response = await searchProviders({})
         setProviders(response.results || [])
       } catch (err) {
-        setError("Erreur lors du chargement des prestataires")
+        setError(t("home.error.loading"))
         console.error(err)
       } finally {
         setIsLoading(false)
@@ -65,13 +67,13 @@ export default function HomeContent() {
         <div className="max-w-[90rem] mx-auto">
           <div className="mb-6 sm:mb-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold tracking-tight">
-              Professionels trouvés autour de vous
+              {t("home.professionals.title")}
             </h2>
             <Link 
               href="/search" 
               className="flex items-center gap-1 text-sm font-medium text-primary hover:underline"
             >
-              Explorer tous les professionels <ChevronRight className="h-4 w-4" />
+              {t("home.professionals.explore")} <ChevronRight className="h-4 w-4" />
             </Link>
           </div>
 
@@ -81,31 +83,31 @@ export default function HomeContent() {
                 value="all"
                 className="rounded-none border-b-2 border-transparent px-3 sm:px-4 py-2 text-sm sm:text-base whitespace-nowrap data-[state=active]:border-primary data-[state=active]:bg-transparent"
               >
-                Tous
+                {t("home.categories.all")}
               </TabsTrigger>
               <TabsTrigger
                 value="maçon"
                 className="rounded-none border-b-2 border-transparent px-3 sm:px-4 py-2 text-sm sm:text-base whitespace-nowrap data-[state=active]:border-primary data-[state=active]:bg-transparent"
               >
-                Maçon
+                {t("home.categories.mason")}
               </TabsTrigger>
               <TabsTrigger
                 value="mecano"
                 className="rounded-none border-b-2 border-transparent px-3 sm:px-4 py-2 text-sm sm:text-base whitespace-nowrap data-[state=active]:border-primary data-[state=active]:bg-transparent"
               >
-                Mecanicien
+                {t("home.categories.mechanic")}
               </TabsTrigger>
               <TabsTrigger
                 value="menuisier"
                 className="rounded-none border-b-2 border-transparent px-3 sm:px-4 py-2 text-sm sm:text-base whitespace-nowrap data-[state=active]:border-primary data-[state=active]:bg-transparent"
               >
-                Menuisier
+                {t("home.categories.carpenter")}
               </TabsTrigger>
               <TabsTrigger
                 value="electricien"
                 className="rounded-none border-b-2 border-transparent px-3 sm:px-4 py-2 text-sm sm:text-base whitespace-nowrap data-[state=active]:border-primary data-[state=active]:bg-transparent"
               >
-                Electricien
+                {t("home.categories.electrician")}
               </TabsTrigger>
             </TabsList>
 
@@ -116,7 +118,7 @@ export default function HomeContent() {
             ) : error ? (
               <div className="text-center py-12 text-foreground">{error}</div>
             ) : providers.length === 0 ? (
-              <div className="text-center py-12 text-gray-500">Aucun prestataire trouvé</div>
+              <div className="text-center py-12 text-gray-500">{t("home.no.providers")}</div>
             ) : (
               <>
                 <TabsContent value="all" className="mt-4 sm:mt-6">
@@ -171,10 +173,10 @@ export default function HomeContent() {
         <div className="max-w-6xl mx-auto">
           <div className="mx-auto text-center space-y-3">
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight">
-              {"Foire aux questions"}
+              {t("home.faq.title")}
             </h2>
             <p className="text-muted-foreground text-base sm:text-lg max-w-2xl mx-auto">
-              {"Besoin d'aide ? Voici les réponses aux questions les plus courantes."}
+              {t("home.faq.subtitle")}
             </p>
           </div>
           <div className="mt-8 sm:mt-10">
@@ -189,10 +191,10 @@ export default function HomeContent() {
           <div className="bg-black/70 size-full absolute top-0 left-0"></div>
           <div className="max-w-3xl mx-auto text-center relative z-20 px-4">
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-4 sm:mb-6">
-              Vous êtes un prestataire de services ?
+              {t("home.cta.title")}
             </h2>
             <p className="text-lg sm:text-xl mb-6 sm:mb-8 text-white/90">
-              Rejoignez notre plateforme et développez votre activité en touchant de nouveaux clients.
+              {t("home.cta.subtitle")}
             </p>
             <Button 
               variant="secondary" 
@@ -200,7 +202,7 @@ export default function HomeContent() {
               size="lg" 
               onClick={() => router.push("/auth/register")}
             >
-              Je m'inscris
+              {t("home.cta.button")}
             </Button>
           </div>
         </div>

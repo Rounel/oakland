@@ -6,9 +6,11 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Check } from "lucide-react"
 import Link from "next/link"
+import { useLanguage } from "./language-provider"
 
 export default function PricingSection() {
   const [billingPeriod, setBillingPeriod] = useState("monthly")
+  const { t } = useLanguage()
 
   // Définition des prix selon la période
   const getPrice = (plan: string) => {
@@ -26,67 +28,80 @@ export default function PricingSection() {
 
   const getPeriod = (plan: string) => {
     if (billingPeriod === "monthly") {
-      return "/mois"
+      return t("period.month")
     } else {
-      if (plan === "STANDARD") return "/an (2 mois offerts)"
-      if (plan === "PRO") return "/an (2,5 mois offerts)"
-      if (plan === "ENTREPRISE") return "/an (2 mois offerts)"
-      return "/an"
+      if (plan === "STANDARD") return t("period.year.standard")
+      if (plan === "PRO") return t("period.year.pro")
+      if (plan === "ENTREPRISE") return t("period.year.enterprise")
+      return t("period.year")
     }
+  }
+
+  const getPlanFeatures = (plan: string) => {
+    if (plan === "STANDARD") {
+      return [
+        t("plan.standard.feature1"),
+        t("plan.standard.feature2"),
+        t("plan.standard.feature3"),
+        t("plan.standard.feature4"),
+      ]
+    }
+    if (plan === "PRO") {
+      return [
+        t("plan.pro.feature1"),
+        t("plan.pro.feature2"),
+        t("plan.pro.feature3"),
+        t("plan.pro.feature4"),
+        t("plan.pro.feature5"),
+        t("plan.pro.feature6"),
+        t("plan.pro.feature7"),
+      ]
+    }
+    if (plan === "ENTREPRISE") {
+      return [
+        t("plan.enterprise.feature1"),
+        t("plan.enterprise.feature2"),
+        t("plan.enterprise.feature3"),
+        t("plan.enterprise.feature4"),
+        t("plan.enterprise.feature5"),
+        t("plan.enterprise.feature6"),
+        t("plan.enterprise.feature7"),
+        t("plan.enterprise.feature8"),
+        t("plan.enterprise.feature9"),
+        t("plan.enterprise.feature10"),
+      ]
+    }
+    return []
   }
 
   const plans = [
     {
-      name: "STANDARD",
+      name: t("plan.standard"),
       price: getPrice("STANDARD"),
       period: getPeriod("STANDARD"),
-      description: "Profil visible, jusqu'à 10 contacts/mois, support email.",
-      features: [
-        "Profil visible",
-        "Jusqu'à 10 contacts/mois",
-        "Position dans les résultats standard",
-        "Support par email",
-      ],
-      buttonText: "Choisir STANDARD",
+      description: t("plan.standard.description"),
+      features: getPlanFeatures("STANDARD"),
+      buttonText: `${t("pricing.choose")} ${t("plan.standard")}`,
       buttonVariant: "default" as const,
       popular: false,
     },
     {
-      name: "PRO",
+      name: t("plan.pro"),
       price: getPrice("PRO"),
       period: getPeriod("PRO"),
-      description: "Visibilité renforcée, badge PRO, avis client, statistiques, réponses auto, suivi perf.",
-      features: [
-        "Tout dans STANDARD",
-        "Visibilité renforcée (profil prioritaire dans la zone)",
-        "Badge PRO vérifié",
-        "Avis client activé",
-        "Statistiques de consultation",
-        "Réponses automatiques configurables",
-        "Suivi des performances mensuelles",
-      ],
-      buttonText: "Choisir PRO",
+      description: t("plan.pro.description"),
+      features: getPlanFeatures("PRO"),
+      buttonText: `${t("pricing.choose")} ${t("plan.pro")}`,
       buttonVariant: "default" as const,
       popular: true,
     },
     {
-      name: "ENTREPRISE",
+      name: t("plan.enterprise"),
       price: getPrice("ENTREPRISE"),
       period: getPeriod("ENTREPRISE"),
-      description: "Gestion multi-profils, badge ENTREPRISE, support prioritaire, dashboard entreprise.",
-      features: [
-        "Tout dans PRO",
-        "Gestion multi-profils : 4 prestataires inclus (chacun avec un compte PRO)",
-        "Possibilité d'ajouter d'autres prestataires (option payante)",
-        "Badge ENTREPRISE",
-        "Support prioritaire",
-        "Affichage préférentiel dans les résultats de recherche",
-        "Accès à un dashboard entreprise avec :",
-        "• Vue sur les activités des prestataires liés à l'entreprise",
-        "• Suivi des demandes clients par zone géographique",
-        "• Statistiques consolidées sur la performance globale",
-      ],
-      buttonText: "Choisir ENTREPRISE",
+      description: t("plan.enterprise.description"),
+      features: getPlanFeatures("ENTREPRISE"),
+      buttonText: `${t("pricing.choose")} ${t("plan.enterprise")}`,
       buttonVariant: "default" as const,
       popular: false,
     },
@@ -96,9 +111,7 @@ export default function PricingSection() {
       <main id="pricing" className="container rounded-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20">
         <div className="text-center mb-12 sm:mb-16">
           <h1 className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold text-gray-900 mb-6 sm:mb-8 leading-tight">
-            We've got a plan
-            <br className="hidden sm:block" />
-            that's perfect for you
+            {t("pricing.title")}
           </h1>
 
           {/* Billing Toggle */}
@@ -109,7 +122,7 @@ export default function PricingSection() {
                 billingPeriod === "monthly" ? "bg-gray-900 text-white" : "text-gray-600 hover:text-gray-900"
               }`}
             >
-              Monthly billing
+              {t("pricing.monthly")}
             </button>
             <button
               onClick={() => setBillingPeriod("annual")}
@@ -117,7 +130,7 @@ export default function PricingSection() {
                 billingPeriod === "annual" ? "bg-gray-900 text-white" : "text-gray-600 hover:text-gray-900"
               }`}
             >
-              Annual billing
+              {t("pricing.annual")}
             </button>
           </div>
         </div>
@@ -131,7 +144,7 @@ export default function PricingSection() {
             >
               {plan.popular && (
                 <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
-                  <Badge className="bg-mist text-storm px-3 py-1 text-sm font-medium">Popular</Badge>
+                  <Badge className="bg-mist text-storm px-3 py-1 text-sm font-medium">{t("pricing.popular")}</Badge>
                 </div>
               )}
 
@@ -167,7 +180,7 @@ export default function PricingSection() {
 
                 <div>
                   <h4 className={`text-xs sm:text-sm font-semibold mb-3 sm:mb-4 ${plan.popular ? "text-white" : "text-gray-900"}`}>
-                    FEATURES
+                    {t("pricing.features")}
                   </h4>
                   <ul className="space-y-2 sm:space-y-3">
                     {plan.features.map((feature, featureIndex) => (

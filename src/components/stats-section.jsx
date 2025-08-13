@@ -1,8 +1,10 @@
 "use client"
 
 import { useState, useEffect } from 'react';
+import { useLanguage } from './language-provider';
 
 export default function StatisticsBar() {
+  const { t } = useLanguage();
   const [isVisible, setIsVisible] = useState(false);
   
   // Animation for counting up numbers
@@ -44,15 +46,15 @@ export default function StatisticsBar() {
   const stats = [
     {
       value: `${counts.pros}k`,
-      label: "Pros vérifiés"
+      label: t("stats.verified.pros")
     },
     {
       value: `${counts.contacts}k`,
-      label: "Mises en relation"
+      label: t("stats.connections")
     },
     {
       value: `${counts.average}/5`,
-      label: "Moyenne d'avis"
+      label: t("stats.average.rating")
     },
   ];
 

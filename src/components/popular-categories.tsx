@@ -9,17 +9,20 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel"
-import { categories } from "@/constants/categories"
+import { useLocalizedCategories } from "@/components/language-provider"
+import { useLanguage } from "@/components/language-provider"
 import Link from "next/link"
 import Image from "next/image"
 
 export default function PopularCategoriesSection() {
+  const { t } = useLanguage();
+  const categories = useLocalizedCategories();
 
   return (
     <div className="py-8 sm:py-12 lg:py-16 xl:py-20 flex justify-center flex-col items-center px-4 sm:px-6 lg:px-8">
         <div className="w-full max-w-6xl mx-auto text-center mb-6 sm:mb-8">
             <h2 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold mb-3 sm:mb-4">
-              Services populaires dans votre zone
+              {t("popular.categories.title")}
             </h2>
         </div>
         <Carousel className="w-full max-w-6xl mx-auto">
